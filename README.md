@@ -1,6 +1,6 @@
 # dpp.vim
 
-> Dark Powered Plugin manager for neovim/Vim8
+> Dark Powered Plugin manager for Vim/neovim
 
 If you don't want to configure plugins, you don't have to use the plugin. It
 does not work with zero configuration. You can use other plugins.
@@ -9,7 +9,7 @@ does not work with zero configuration. You can use other plugins.
 
 Please read [help](doc/dpp.txt) for details.
 
-Dpp is the abbreviation of "dark powered plugin manager".
+Dpp is the abbreviation of "Dark Powered Plugin manager".
 
 The development is supported by
 [github sponsors](https://github.com/sponsors/Shougo/). Thank you!
