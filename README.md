@@ -5,7 +5,7 @@
 If you don't want to configure plugins, you don't have to use the plugin. It
 does not work with zero configuration. You can use other plugins.
 
-[![Doc](https://img.shields.io/badge/doc-%3Ah%20ddx-orange.svg)](doc/ddx.txt)
+[![Doc](https://img.shields.io/badge/doc-%3Ah%20dpp-orange.svg)](doc/dpp.txt)
 
 Please read [help](doc/dpp.txt) for details.
 
