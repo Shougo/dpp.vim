@@ -50,19 +50,19 @@ You can install dpp.vim by your vimrc/init.vim.
 
 ```vim
 let $CACHE = expand('~/.cache')
-if !isdirectory($CACHE)
+if !($CACHE->isdirectory())
   call mkdir($CACHE, 'p')
 endif
 if &runtimepath !~# '/dpp.vim'
-  let s:dir = fnamemodify('dpp.vim', ':p')
-  if !isdirectory(s:dir)
+  let s:dir = 'dpp.vim'->fnamemodify(':p')
+  if !(s:dir->isdirectory())
     let s:dir = $CACHE .. '/dpp/repos/github.com/Shougo/dpp.vim'
-    if !isdirectory(s:dir)
+    if !(s:dir->isdirectory())
       execute '!git clone https://github.com/Shougo/dpp.vim' s:dir
     endif
   endif
-  execute 'set runtimepath^=' .. substitute(
-        \ fnamemodify(s:dir, ':p') , '[/\\]$', '', '')
+  execute 'set runtimepath^=' .. s:dir->fnamemodify(':p')->
+      \ substitute('[/\\]$', '', '')
 endif
 ```
 
