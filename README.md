@@ -92,10 +92,10 @@ execute 'set runtimepath+=' .. s:dpp_src
 " Call dpp initialization (required)
 call dpp#begin(s:dpp_base)
 
-call dpp#add(s:dpp_src)
+call dpp#add(#{ repo: s:dpp_src })
 
 " Your plugins go here:
-"call dpp#add('Shougo/ddc.vim')
+"call dpp#add(#{ repo: 'Shougo/ddc.vim' })
 
 " Finish dpp initialization (required)
 call dpp#end()
