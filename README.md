@@ -31,7 +31,7 @@ The development is supported by
 
 ## Install
 
-**Note:** Dpp.vim requires Neovim (0.8.0+ and of course, **latest** is
+**Note:** Dpp.vim requires Neovim (0.10.0+ and of course, **latest** is
 recommended) or Vim 9.0.1276. See [requirements](#requirements) if you aren't
 sure whether you have this.
 
@@ -40,7 +40,7 @@ sure whether you have this.
 
 ### Prerequisites
 
-- **Vim** (v9.0.1276 or higher) or **NeoVim** (v0.8.0 or higher)
+- **Vim** (v9.0.1276 or higher) or **NeoVim** (v0.10.0 or higher)
 - **Git** should be installed (v2.4.11 or higher)
 
 
