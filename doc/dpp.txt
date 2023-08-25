@@ -1,0 +1,93 @@
+*dpp.txt*	Dark powered plugin manager for Vim/neovim
+
+Author: Shougo <Shougo.Matsu at gmail.com>
+License: MIT license
+
+CONTENTS                                                        *dpp-contents*
+
+Introduction		|dpp-introduction|
+Install			|dpp-install|
+Interface		|dpp-interface|
+Examples		|dpp-examples|
+FAQ			|dpp-faq|
+Compatibility		|dpp-compatibility|
+
+
+==============================================================================
+INTRODUCTION                                                *dpp-introduction*
+
+*dpp* is the abbreviation of "Dark Powered Plugin manager".  It provides
+extensible plugin manager features.
+
+If you don't want to configure plugins, you don't have to use the plugin.
+It does not work with zero configuration.  You can use other plugins.
+
+
+==============================================================================
+INSTALL                                                          *dpp-install*
+
+NOTE: dpp.vim requires Neovim (0.10.0+) or Vim 9.0.1276+ (latest is
+recommended).
+
+Please install both Deno and "denops.vim".
+
+https://deno.land/
+https://github.com/vim-denops/denops.vim
+
+NOTE: dpp.vim does not include any extensions.
+You must install them you want manually.
+You can search dpp.vim plugins from https://github.com/topics/dpp-vim.
+
+
+==============================================================================
+INTERFACE                                                      *dpp-interface*
+
+==============================================================================
+EXAMPLES                                                        *dpp-examples*
+>
+	" Ward off unexpected things that your distro might have made, as
+	" well as sanely reset options when re-sourcing .vimrc
+	set nocompatible
+	
+	" Set dpp base path (required)
+	let s:dpp_base = '~/.cache/dpp/'
+	
+	" Set dpp source path (required)
+	let s:dpp_src = '~/.cache/dpp/repos/github.com/Shougo/dpp.vim'
+	
+	" Set dpp runtime path (required)
+	execute 'set runtimepath+=' .. s:dpp_src
+	
+	" Call dpp initialization (required)
+	call dpp#begin(s:dpp_base)
+	
+	call dpp#add(#{ repo: s:dpp_src })
+	
+	" Your plugins go here:
+	"call dpp#add(#{ repo: 'Shougo/ddc.vim' })
+	
+	" Finish dpp initialization (required)
+	call dpp#end()
+	
+	" Attempt to determine the type of a file based on its name and
+	" possibly its " contents. Use this to allow intelligent auto-indenting
+	" for each filetype, and for plugins that are filetype specific.
+	filetype indent plugin on
+	
+	" Enable syntax highlighting
+	if has('syntax')
+	  syntax on
+	endif
+<
+
+==============================================================================
+FAQ                                                                  *dpp-faq*
+
+------------------------------------------------------------------------------
+                                                                   *dpp-faq-1*
+
+==============================================================================
+COMPATIBILITY                                              *dpp-compatibility*
+
+==============================================================================
+vim:tw=78:ts=8:ft=help:norl:noet:fen:noet:
