@@ -4,6 +4,14 @@ function dpp#util#_error(msg) abort
   endfor
 endfunction
 
+function dpp#util#_get_plugins(plugins) abort
+  return a:plugins->empty() ?
+        \ g:dpp#_plugins->values() :
+        \ dpp#util#_convert2list(a:plugins)
+        \ ->map({ _, val -> val->type() == v:t_dict ? val : dpp#get(val) })
+        \ ->filter({ _, val -> !(val->empty()) })
+endfunction
+
 function dpp#util#_get_base_path() abort
   return g:dpp#_base_path
 endfunction
@@ -84,6 +92,74 @@ function dpp#util#_substitute_path(path) abort
         \ a:path->tr('\', '/') : a:path
 endfunction
 
+function dpp#util#_call_hook(hook_name, plugins = []) abort
+  const hook = 'hook_' .. a:hook_name
+  let plugins = dpp#util#_tsort(dpp#util#_get_plugins(a:plugins))
+        \ ->filter({ _, val ->
+        \    ((a:hook_name !=# 'source'
+        \      && a:hook_name !=# 'post_source') || val.sourced)
+        \    && val->has_key(hook) && val.path->isdirectory()
+        \    && (!(val->has_key('if')) || val.if->eval())
+        \ })
+  for plugin in plugins
+    call dpp#util#_execute_hook(plugin, hook, plugin[hook])
+  endfor
+endfunction
+function dpp#util#_execute_hook(plugin, hook_name, hook) abort
+  " Skip twice call
+  if !(a:plugin->has_key('called'))
+    let a:plugin.called = {}
+  endif
+  if a:plugin.called->has_key(a:hook->string())
+    return
+  endif
+
+  try
+    if a:hook->type() == v:t_string
+      let cmds = a:hook->split('\n')
+      if !(cmds->empty()) && cmds[0] =~# '^\s*vim9script' && exists(':vim9')
+        vim9 call execute(cmds[1 : ], '')
+      else
+        call execute(cmds, '')
+      endif
+    else
+      call call(a:hook, [])
+    endif
+
+    let a:plugin.called[string(a:hook)] = v:true
+  catch
+    call dpp#util#_error(
+          \ printf('Error occurred while executing %s: %s',
+          \        a:hook_name,
+          \        a:plugin->get('name', 'g:dpp#_hook_add')))
+    call dpp#util#_error(v:exception)
+  endtry
+endfunction
+
+function dpp#util#_tsort(plugins) abort
+  let sorted = []
+  let mark = {}
+  for target in a:plugins
+    call s:tsort_impl(target, mark, sorted)
+  endfor
+
+  return sorted
+endfunction
 function s:msg2list(expr) abort
   return a:expr->type() ==# v:t_list ? a:expr : a:expr->split('\n')
+endfunction
+
+function s:tsort_impl(target, mark, sorted) abort
+  if a:target->empty() || a:mark->has_key(a:target.name)
+    return
+  endif
+
+  let a:mark[a:target.name] = 1
+  if a:target->has_key('depends')
+    for depend in a:target.depends
+      call s:tsort_impl(dpp#get(depend), a:mark, a:sorted)
+    endfor
+  endif
+
+  call add(a:sorted, a:target)
 endfunction
