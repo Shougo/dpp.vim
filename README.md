@@ -18,16 +18,13 @@ The development is supported by
 
 - [Introduction](#introduction)
 - [Install](#install)
-- [Getting started](#getting-started)
-  - [Prerequisites](#prerequisites)
+  - [Requirements](#requirements)
   - [Basic installation](#basic-installation)
-  - [Command line installation](#command-line-installation)
   - [Config example](#config-example)
 
 <!-- vim-markdown-toc -->
 
 ## Introduction
-
 
 ## Install
 
@@ -35,14 +32,12 @@ The development is supported by
 recommended) or Vim 9.0.1276. See [requirements](#requirements) if you aren't
 sure whether you have this.
 
-## Getting started
+### Requirements
 
+Dpp.vim requires both Deno and denops.vim.
 
-### Prerequisites
-
-- **Vim** (v9.0.1276 or higher) or **NeoVim** (v0.10.0 or higher)
-- **Git** should be installed (v2.4.11 or higher)
-
+- <https://deno.land/>
+- <https://github.com/vim-denops/denops.vim>
 
 ### Basic installation
 
@@ -66,7 +61,6 @@ if &runtimepath !~# '/dpp.vim'
 endif
 ```
 
-
 ### Config example
 
 <details>
@@ -81,24 +75,20 @@ endif
 set nocompatible
 
 " Set dpp base path (required)
-let s:dpp_base = '~/.cache/dpp/'
+const s:dpp_base = '~/.cache/dpp/'
 
 " Set dpp source path (required)
-let s:dpp_src = '~/.cache/dpp/repos/github.com/Shougo/dpp.vim'
+const s:dpp_src = '~/.cache/dpp/repos/github.com/Shougo/dpp.vim'
+const s:denops_src = '~/.cache/dpp/repos/github.com/denops/denops.vim'
 
 " Set dpp runtime path (required)
 execute 'set runtimepath+=' .. s:dpp_src
 
-" Call dpp initialization (required)
-call dpp#begin(s:dpp_base)
-
-call dpp#add(#{ repo: s:dpp_src })
-
-" Your plugins go here:
-"call dpp#add(#{ repo: 'Shougo/ddc.vim' })
-
-" Finish dpp initialization (required)
-call dpp#end()
+if dpp#load_state(s:dpp_base)
+  " NOTE: dpp#make_state() requires denops.vim
+  execute 'set runtimepath+=' .. s:denops_src
+  call dpp#make_state(s:dpp_base, '{your script path}')
+endif
 
 " Attempt to determine the type of a file based on its name and
 " possibly its " contents. Use this to allow intelligent auto-indenting
@@ -110,4 +100,5 @@ if has('syntax')
   syntax on
 endif
 ```
+
 </details>
