@@ -1,10 +1,12 @@
 import { Denops, ensure, is, toFileUrl } from "./deps.ts";
+import { ContextBuilder } from "./context.ts";
 import { Dpp } from "./dpp.ts";
 import { Loader } from "./loader.ts";
 
 export function main(denops: Denops) {
   const loader = new Loader();
   const dpp = new Dpp(loader);
+  const contextBuilder = new ContextBuilder();
 
   denops.dispatcher = {
     async makeState(arg1: unknown, arg2: unknown): Promise<void> {
@@ -17,7 +19,7 @@ export function main(denops: Denops) {
         `${toFileUrl(scriptPath).href}#${performance.now()}`
       );
       const obj = new mod.Config();
-      await obj.config({ denops, basePath });
+      await obj.config({ denops, basePath, contextBuilder });
 
       return Promise.resolve();
     },

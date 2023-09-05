@@ -150,10 +150,9 @@ function patchDppOptions(
 class Custom {
   global: Partial<DppOptions> = {};
 
-  get(userOptions: UserOptions): DppOptions {
+  get(): DppOptions {
     return foldMerge(mergeDppOptions, defaultDppOptions, [
       this.global,
-      userOptions,
     ]);
   }
 
@@ -172,9 +171,8 @@ export class ContextBuilder {
 
   async get(
     denops: Denops,
-    options: UserOptions,
   ): Promise<[Context, DppOptions]> {
-    const userOptions = this.custom.get(options);
+    const userOptions = this.custom.get();
 
     await this.validate(denops, "options", userOptions, defaultDppOptions());
 

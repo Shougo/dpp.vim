@@ -87,12 +87,14 @@ execute 'set runtimepath+=' .. s:dpp_src
 if dpp#load_state(s:dpp_base)
   " NOTE: dpp#make_state() requires denops.vim
   execute 'set runtimepath+=' .. s:denops_src
-  call dpp#make_state(s:dpp_base, '{your script path}')
+  autocmd dpp User DenopsReady
+  \ call dpp#make_state(s:dpp_base, '{your script path}')
 endif
 
 " Attempt to determine the type of a file based on its name and
-" possibly its " contents. Use this to allow intelligent auto-indenting
-" for each filetype, and for plugins that are filetype specific.
+" possibly its " contents. Use this to allow intelligent
+" auto-indenting " for each filetype, and for plugins that are
+" filetype specific.
 filetype indent plugin on
 
 " Enable syntax highlighting
