@@ -56,8 +56,8 @@ if &runtimepath !~# '/dpp.vim'
       execute '!git clone https://github.com/Shougo/dpp.vim' s:dir
     endif
   endif
-  execute 'set runtimepath^=' .. s:dir
-  \ ->fnamemodify(':p')->substitute('[/\\]$', '', '')
+  execute 'set runtimepath^='
+        \ .. s:dir->fnamemodify(':p')->substitute('[/\\]$', '', '')
 endif
 ```
 
