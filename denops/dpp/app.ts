@@ -11,15 +11,15 @@ export function main(denops: Denops) {
   denops.dispatcher = {
     async makeState(arg1: unknown, arg2: unknown): Promise<void> {
       const basePath = ensure(arg1, is.String);
-      const scriptPath = ensure(arg2, is.String);
+      const configPath = ensure(arg2, is.String);
 
       // NOTE: Import module with fragment so that reload works properly.
       // https://github.com/vim-denops/denops.vim/issues/227
       const mod = await import(
-        `${toFileUrl(scriptPath).href}#${performance.now()}`
+        `${toFileUrl(configPath).href}#${performance.now()}`
       );
       const obj = new mod.Config();
-      await obj.config({ denops, basePath, contextBuilder });
+      await obj.config({ denops, basePath, contextBuilder, dpp });
 
       return Promise.resolve();
     },

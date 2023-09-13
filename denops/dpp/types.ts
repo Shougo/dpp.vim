@@ -1,5 +1,6 @@
 import { BaseExtParams } from "./base/ext.ts";
 import { BaseProtocolParams } from "./base/protocol.ts";
+import { Denops } from "./deps.ts";
 
 export { BaseConfig } from "./base/config.ts";
 export { BaseExt } from "./base/ext.ts";
@@ -15,6 +16,7 @@ export type DppExtType = "ext" | "protocol";
 
 export type ExtName = string;
 export type ProtocolName = string;
+export type ActionName = string;
 
 export type Context = {
   // TODO: remove placeholder
@@ -38,4 +40,29 @@ export type ExtOptions = {
 export type ProtocolOptions = {
   // TODO: remove placeholder
   placeholder?: unknown;
+};
+
+export type BaseActionParams = Record<string, unknown>;
+
+export type ActionArguments<Params extends BaseActionParams> = {
+  denops: Denops;
+  context: Context;
+  options: DppOptions;
+  extOptions: ExtOptions;
+  extParams: Params;
+  actionParams: unknown;
+};
+
+export type ActionCallback<Params extends BaseExtParams> = (
+  args: ActionArguments<Params>,
+) => unknown;
+
+export type Actions<Params extends BaseActionParams> = Record<
+  ActionName,
+  Action<Params>
+>;
+
+export type Action<Params extends BaseActionParams> = {
+  description: string;
+  callback: ActionCallback<Params>;
 };

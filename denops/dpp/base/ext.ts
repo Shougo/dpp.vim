@@ -1,4 +1,4 @@
-import { Denops } from "../deps.ts";
+import { Actions } from "../types.ts";
 
 export type BaseExtParams = Record<string, unknown>;
 
@@ -10,4 +10,6 @@ export abstract class BaseExt<Params extends BaseExtParams> {
   isInitialized = false;
 
   abstract params(): Params;
+
+  actions: Actions<Params> = {};
 }

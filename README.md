@@ -87,7 +87,7 @@ execute 'set runtimepath+=' .. s:dpp_src
 if dpp#load_state(s:dpp_base)
   " NOTE: dpp#make_state() requires denops.vim
   execute 'set runtimepath+=' .. s:denops_src
-  autocmd dpp User DenopsReady
+  autocmd User DenopsReady
   \ call dpp#make_state(s:dpp_base, '{your script path}')
 endif
 

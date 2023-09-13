@@ -150,6 +150,15 @@ function dpp#source(plugins = g:dpp#_plugins->values()) abort
   return dpp#source#_source(a:plugins)
 endfunction
 
+function dpp#make_state(base_path, config_path) abort
+  if !(a:config_path->filereadable())
+    call dpp#util#print_error(printf('"%s" is not found.', a:config_path))
+    return
+  endif
+
+  return dpp#denops#_notify('makeState', [a:base_path, a:config_path])
+endfunction
+
 function dpp#is_sudo() abort
   return $SUDO_USER !=# '' && $USER !=# $SUDO_USER
         \ && $HOME !=# ('~'.$USER)->expand()
