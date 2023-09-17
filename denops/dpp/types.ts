@@ -66,3 +66,7 @@ export type Action<Params extends BaseActionParams> = {
   description: string;
   callback: ActionCallback<Params>;
 };
+
+export type Plugin = {
+  name: string;
+};
