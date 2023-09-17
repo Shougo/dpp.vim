@@ -1,8 +1,12 @@
+import { ContextBuilder } from "../context.ts";
 import { Denops } from "../deps.ts";
+import { Dpp } from "../types.ts";
 
 export type ConfigArguments = {
   denops: Denops;
   basePath: string;
+  contextBuilder: ContextBuilder;
+  dpp: Dpp;
 };
 
 export abstract class BaseConfig {

@@ -16,7 +16,7 @@ type Mod = {
 };
 
 export class Loader {
-  private extensions: Record<string, Extension> = {};
+  private extension: Extension = new Extension();
   private mods: Record<DppExtType, Record<string, Mod>> = {
     ext: {},
     protocol: {},
@@ -48,32 +48,21 @@ export class Loader {
     });
   }
 
-  getExt(index: string, name: ExtName): BaseExt<BaseExtParams> | null {
+  getExt(name: ExtName): BaseExt<BaseExtParams> | null {
     const mod = this.mods.ext[name];
     if (!mod) {
       return null;
     }
 
-    return this.getExtension(index).getExt(mod, name);
+    return this.extension.getExt(mod, name);
   }
-  getProtocol(
-    index: string,
-    name: ProtocolName,
-  ): BaseProtocol<BaseProtocolParams> | null {
+  getProtocol(name: ProtocolName): BaseProtocol<BaseProtocolParams> | null {
     const mod = this.mods.protocol[name];
     if (!mod) {
       return null;
     }
 
-    return this.getExtension(index).getProtocol(mod, name);
-  }
-
-  private getExtension(index: string): Extension {
-    if (!this.extensions[index]) {
-      this.extensions[index] = new Extension();
-    }
-
-    return this.extensions[index];
+    return this.extension.getProtocol(mod, name);
   }
 
   private async register(type: DppExtType, path: string) {
