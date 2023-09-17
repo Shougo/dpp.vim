@@ -55,7 +55,7 @@ export type ActionArguments<Params extends BaseActionParams> = {
 
 export type ActionCallback<Params extends BaseExtParams> = (
   args: ActionArguments<Params>,
-) => unknown;
+) => undefined | unknown;
 
 export type Actions<Params extends BaseActionParams> = Record<
   ActionName,
