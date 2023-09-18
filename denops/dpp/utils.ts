@@ -28,3 +28,16 @@ export async function errorException(
     console.error(e);
   }
 }
+
+export async function isDirectory(path: string) {
+  // NOTE: Deno.stat() may be failed
+  try {
+    if ((await Deno.stat(path)).isDirectory) {
+      return true;
+    }
+  } catch (_e: unknown) {
+    // Ignore
+  }
+
+  return false;
+}

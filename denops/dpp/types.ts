@@ -68,5 +68,11 @@ export type Action<Params extends BaseActionParams> = {
 };
 
 export type Plugin = {
+  frozen?: boolean;
+  lazy?: boolean;
+  local?: boolean;
+  merged?: boolean;
   name: string;
+  path: string;
+  repo: string;
 };

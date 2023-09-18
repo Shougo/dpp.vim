@@ -1,3 +1,5 @@
+const s:is_windows = has('win32') || has('win64')
+
 function dpp#util#_error(msg) abort
   for mes in s:msg2list(a:msg)
     echohl WarningMsg | echomsg '[dpp] ' .. mes | echohl None
@@ -84,8 +86,8 @@ function dpp#util#_expand(path) abort
         \ (a:path =~# '^\$\h\w*') ? a:path
         \ ->substitute('^\$\h\w*', '\=eval(submatch(0))', '') :
         \ a:path
-  return (s:is_windows && path =~# '\\') ?
-        \ dpp#util#_substitute_path(path) : path
+  return ((s:is_windows && path =~# '\\') ?
+        \ dpp#util#_substitute_path(path) : path)->substitute('/$', '', '')
 endfunction
 function dpp#util#_substitute_path(path) abort
   return ((s:is_windows || has('win32unix')) && a:path =~# '\\') ?
