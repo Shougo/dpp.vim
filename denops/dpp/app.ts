@@ -21,6 +21,8 @@ export function main(denops: Denops) {
       const obj = new mod.Config();
       await obj.config({ denops, basePath, contextBuilder, dpp });
 
+      await dpp.makeState();
+
       return Promise.resolve();
     },
   };

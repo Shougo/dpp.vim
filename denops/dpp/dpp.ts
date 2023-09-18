@@ -61,6 +61,9 @@ export class Dpp {
     return ret;
   }
 
+  async makeState() {
+  }
+
   private async getExt(
     denops: Denops,
     extName: ExtName,
