@@ -6,7 +6,6 @@ import {
   DppOptions,
   ExtOptions,
   ProtocolOptions,
-  UserOptions,
 } from "./types.ts";
 
 // where

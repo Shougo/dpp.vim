@@ -1,5 +1,3 @@
-import { Denops } from "../deps.ts";
-
 export type BaseProtocolParams = Record<string, unknown>;
 
 export abstract class BaseProtocol<Params extends BaseProtocolParams> {
