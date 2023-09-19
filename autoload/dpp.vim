@@ -11,14 +11,7 @@ function dpp#begin(path, options = {}) abort
     call dpp#_init()
   endif
 
-  if a:path ==# '' || g:dpp#_block_level != 0
-    call dpp#util#_error('Invalid begin/end block usage.')
-    return 1
-  endif
-
   let g:dpp#_options = extend(g:dpp#_options, a:options)
-
-  let g:dpp#_block_level += 1
 
   let g:dpp#_base_path = dpp#util#_expand(a:path)
   if g:dpp#_base_path[-1:] ==# '/'
@@ -78,13 +71,6 @@ function dpp#begin(path, options = {}) abort
   endfor
 endfunction
 function dpp#end() abort
-  if g:dpp#_block_level != 1
-    call dpp#util#_error('Invalid begin/end block usage.')
-    return 1
-  endif
-
-  let g:dpp#_block_level -= 1
-
   if !has('vim_starting')
     call dpp#source(g:dpp#_plugins->values()
           \ ->filter({ _, val ->
@@ -168,8 +154,6 @@ endfunction
 function dpp#_init() abort
   let g:dpp#_plugins = {}
   let g:dpp#_options = {}
-
-  let g:dpp#_block_level = 0
 
   const g:dpp#_progname = has('nvim') && exists('$NVIM_APPNAME') ?
         \ $NVIM_APPNAME : v:progname->fnamemodify(':r')
