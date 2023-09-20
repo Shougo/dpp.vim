@@ -68,11 +68,32 @@ export type Action<Params extends BaseActionParams> = {
 };
 
 export type Plugin = {
+  augroup?: string;
+  build?: string;
+  depends?: string[];
   frozen?: boolean;
+  ftplugin?: Record<string, string>;
+  if?: boolean | string;
   lazy?: boolean;
   local?: boolean;
+  merge_ftdetect?: string;
   merged?: boolean;
   name: string;
-  path: string;
-  repo: string;
+  on_cmd?: string | string[];
+  on_event?: string | string[];
+  on_ft?: string | string[];
+  on_func?: string | string[];
+  on_if?: string | string[];
+  on_lua?: string | string[];
+  on_map?: string | string[];
+  on_path?: string | string[];
+  on_source?: string | string[];
+  path?: string;
+  protocol?: string;
+  repo?: string;
+  rev?: string;
+  rtp?: string;
+  script_type?: string;
+  timeout?: number;
+  trusted?: boolean;
 };
