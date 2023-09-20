@@ -7,6 +7,7 @@ import {
   DppOptions,
   ExtName,
   ExtOptions,
+  Plugin,
 } from "./types.ts";
 import {
   defaultContext,
@@ -61,7 +62,8 @@ export class Dpp {
     return ret;
   }
 
-  async makeState() {
+  async makeState(basePath: string, plugins: Plugin[]) {
+    // Initialize plugins
   }
 
   private async getExt(

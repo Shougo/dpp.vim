@@ -19,9 +19,14 @@ export function main(denops: Denops) {
         `${toFileUrl(configPath).href}#${performance.now()}`
       );
       const obj = new mod.Config();
-      await obj.config({ denops, basePath, contextBuilder, dpp });
+      const plugins = await obj.config({
+        denops,
+        basePath,
+        contextBuilder,
+        dpp,
+      });
 
-      await dpp.makeState();
+      await dpp.makeState(basePath, plugins);
 
       return Promise.resolve();
     },
