@@ -27,8 +27,6 @@ export function main(denops: Denops) {
       });
 
       await dpp.makeState(denops, basePath, plugins);
-
-      return Promise.resolve();
     },
   };
 }

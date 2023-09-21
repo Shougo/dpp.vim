@@ -95,5 +95,4 @@ export type Plugin = {
   rtp?: string;
   script_type?: string;
   timeout?: number;
-  trusted?: boolean;
 };

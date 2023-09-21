@@ -1,4 +1,4 @@
-import { assertEquals, Denops, is } from "./deps.ts";
+import { assertEquals, Denops, is, vars } from "./deps.ts";
 import {
   ActionName,
   BaseExt,
@@ -19,7 +19,7 @@ import {
 } from "./context.ts";
 import { Loader } from "./loader.ts";
 import { defaultExtOptions } from "./base/ext.ts";
-import { errorException } from "./utils.ts";
+import { errorException, isDirectory } from "./utils.ts";
 
 export class Dpp {
   private loader: Loader;
@@ -63,16 +63,38 @@ export class Dpp {
   }
 
   async makeState(denops: Denops, basePath: string, plugins: Plugin[]) {
-    // Check sudo
-    const isSudo = await denops.call("dpp#is_sudo") as boolean;
-
     // Initialize plugins
     const recordPlugins: Record<string, Plugin> = {};
     for (const plugin of plugins) {
-      recordPlugins[plugin.name] = initPlugin(plugin, basePath, isSudo);
+      recordPlugins[plugin.name] = initPlugin(plugin, basePath);
+    }
+
+    console.log(recordPlugins);
+
+    if (!isDirectory(basePath)) {
+      await Deno.mkdir(basePath, { recursive: true });
     }
 
     // Write state file
+    const progname = await vars.g.get(denops, "dpp#_progname");
+    const stateFile = `${basePath}/cache_${progname}`;
+
+    const cacheVersion = await vars.g.get(denops, "dpp#_cache_version");
+    const initRuntimepath = await vars.g.get(denops, "dpp#_init_runtimepath");
+    const stateLines = [
+      `if g:dpp#_cache_version !=# ${cacheVersion} || ` +
+      `g:dpp#_init_runtimepath !=# '${initRuntimepath}' | ` +
+      " | throw ''Cache loading error'' | endif",
+      "let [s:plugins, s:ftplugin] = dpp#min#_load_cache_raw()",
+      "if s:plugins->empty() | throw 'Cache loading error' | endif",
+      "let g:dpp#_plugins = s:plugins",
+      "let g:dpp#ftplugin = s:ftplugin",
+      `let g:dpp#_base_path = '${basePath}'`,
+      `let &runtimepath = `,
+    ];
+
+    console.log(stateFile);
+    console.log(stateLines);
   }
 
   private async getExt(
@@ -160,10 +182,10 @@ function extArgs<
   return [o, p];
 }
 
-function initPlugin(plugin: Plugin, basePath: string, isSudo: boolean): Plugin {
+function initPlugin(plugin: Plugin, basePath: string): Plugin {
   if (!plugin.path) {
     // Set default path from basePath
-    plugin.path = `${basePath}/repos/${plugin.name}`;
+    plugin.path = `${basePath}/repos/${plugin.repo ?? plugin.name}`;
   }
 
   if (plugin.rev && plugin.rev.length > 0) {
@@ -178,13 +200,10 @@ function initPlugin(plugin: Plugin, basePath: string, isSudo: boolean): Plugin {
 
   // Set rtp
   if (!plugin.rtp || plugin.rtp.length != 0) {
-    plugin.rtp = `${plugin.path}/${plugin.rtp}`;
+    plugin.rtp = !plugin.rtp ? plugin.path : `${plugin.path}/${plugin.rtp}`;
   }
   // Chomp
   plugin.rtp = plugin.rtp.replace(/\/$/, "");
-  if (isSudo && !plugin.trusted) {
-    plugin.rtp = "";
-  }
 
   if (plugin.depends && is.String(plugin.depends)) {
     plugin.depends = [plugin.depends];
@@ -223,7 +242,7 @@ Deno.test("initPlugin", () => {
       rev: "[hoge]",
       script_type: "foo",
       rtp: "autoload",
-    }, "base", false),
+    }, "base"),
     {
       name: "foo",
       path: "base/repos/foo__hoge_/foo",
@@ -235,30 +254,16 @@ Deno.test("initPlugin", () => {
     },
   );
 
-  // sudo
-  assertEquals(
-    initPlugin({
-      name: "foo",
-    }, "base", true),
-    {
-      name: "foo",
-      path: "base/repos/foo",
-      rtp: "",
-      lazy: false,
-      merged: true,
-    },
-  );
-
   // lazy
   assertEquals(
     initPlugin({
       name: "foo",
       on_ft: "foo",
-    }, "base", true),
+    }, "base"),
     {
       name: "foo",
       path: "base/repos/foo",
-      rtp: "",
+      rtp: "base/repos/foo",
       lazy: true,
       merged: false,
       on_ft: "foo",

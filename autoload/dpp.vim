@@ -1,14 +1,12 @@
-function dpp#load_state(path) abort
+function dpp#load_state(base_path) abort
+  if !('#dpp'->exists())
+    call dpp#min#_init()
+  endif
 endfunction
 
 function dpp#begin(path, options = {}) abort
-  if !has('patch-9.0.1276') && !has('nvim-0.10')
-    call dpp#util#_error('dpp.vim requires Vim 9.0.1276+ or NeoVim 0.10+.')
-    return 1
-  endif
-
   if !('#dpp'->exists())
-    call dpp#_init()
+    call dpp#min#_init()
   endif
 
   let g:dpp#_options = extend(g:dpp#_options, a:options)
@@ -119,12 +117,6 @@ function dpp#end() abort
   if !(depends->empty())
     call dpp#source(depends)
   endif
-
-  if !has('vim_starting')
-    call dpp#call_hook('add')
-    call dpp#call_hook('source')
-    call dpp#call_hook('post_source')
-  endif
 endfunction
 
 function dpp#get(name = '') abort
@@ -137,29 +129,24 @@ function dpp#source(plugins = g:dpp#_plugins->values()) abort
 endfunction
 
 function dpp#make_state(base_path, config_path) abort
+  if !has('patch-9.0.1276') && !has('nvim-0.10')
+    call dpp#util#_error('dpp.vim requires Vim 9.0.1276+ or NeoVim 0.10+.')
+    return 1
+  endif
+
   if !(a:config_path->filereadable())
     call dpp#util#print_error(printf('"%s" is not found.', a:config_path))
+    return 1
+  endif
+
+  if !('#dpp'->exists())
+    call dpp#min#_init()
+  endif
+
+  " Check sudo
+  if g:dpp#_is_sudo
     return
   endif
 
   return dpp#denops#_notify('makeState', [a:base_path, a:config_path])
-endfunction
-
-function dpp#is_sudo() abort
-  return $SUDO_USER !=# '' && $USER !=# $SUDO_USER
-        \ && $HOME !=# ('~'.$USER)->expand()
-        \ && $HOME ==# ('~'.$SUDO_USER)->expand()
-endfunction
-
-function dpp#_init() abort
-  let g:dpp#_plugins = {}
-  let g:dpp#_options = {}
-
-  const g:dpp#_progname = has('nvim') && exists('$NVIM_APPNAME') ?
-        \ $NVIM_APPNAME : v:progname->fnamemodify(':r')
-  const g:dpp#_init_runtimepath = &runtimepath
-
-  augroup dpp
-    autocmd!
-  augroup END
 endfunction
