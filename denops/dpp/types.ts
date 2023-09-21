@@ -70,7 +70,7 @@ export type Action<Params extends BaseActionParams> = {
 export type Plugin = {
   augroup?: string;
   build?: string;
-  depends?: string[];
+  depends?: string | string[];
   frozen?: boolean;
   ftplugin?: Record<string, string>;
   if?: boolean | string;

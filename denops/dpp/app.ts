@@ -26,7 +26,7 @@ export function main(denops: Denops) {
         dpp,
       });
 
-      await dpp.makeState(basePath, plugins);
+      await dpp.makeState(denops, basePath, plugins);
 
       return Promise.resolve();
     },

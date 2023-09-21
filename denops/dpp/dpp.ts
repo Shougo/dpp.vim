@@ -1,4 +1,4 @@
-import { Denops } from "./deps.ts";
+import { assertEquals, Denops, is } from "./deps.ts";
 import {
   ActionName,
   BaseExt,
@@ -62,8 +62,17 @@ export class Dpp {
     return ret;
   }
 
-  async makeState(basePath: string, plugins: Plugin[]) {
+  async makeState(denops: Denops, basePath: string, plugins: Plugin[]) {
+    // Check sudo
+    const isSudo = await denops.call("dpp#is_sudo") as boolean;
+
     // Initialize plugins
+    const recordPlugins: Record<string, Plugin> = {};
+    for (const plugin of plugins) {
+      recordPlugins[plugin.name] = initPlugin(plugin, basePath, isSudo);
+    }
+
+    // Write state file
   }
 
   private async getExt(
@@ -150,3 +159,109 @@ function extArgs<
   ]);
   return [o, p];
 }
+
+function initPlugin(plugin: Plugin, basePath: string, isSudo: boolean): Plugin {
+  if (!plugin.path) {
+    // Set default path from basePath
+    plugin.path = `${basePath}/repos/${plugin.name}`;
+  }
+
+  if (plugin.rev && plugin.rev.length > 0) {
+    // Add revision path
+    plugin.path += `_${plugin.rev.replaceAll(/[^\w.-]/g, "_")}`;
+  }
+
+  if (plugin.script_type && plugin.script_type.length > 0) {
+    // Add script_type path
+    plugin.path += `/${plugin.script_type}`;
+  }
+
+  // Set rtp
+  if (!plugin.rtp || plugin.rtp.length != 0) {
+    plugin.rtp = `${plugin.path}/${plugin.rtp}`;
+  }
+  // Chomp
+  plugin.rtp = plugin.rtp.replace(/\/$/, "");
+  if (isSudo && !plugin.trusted) {
+    plugin.rtp = "";
+  }
+
+  if (plugin.depends && is.String(plugin.depends)) {
+    plugin.depends = [plugin.depends];
+  }
+
+  if (!plugin.lazy) {
+    plugin.lazy = [
+      "on_ft",
+      "on_cmd",
+      "on_func",
+      "on_lua",
+      "on_map",
+      "on_path",
+      "on_if",
+      "on_event",
+      "on_source",
+    ].filter((key) => key in plugin).length > 0;
+  }
+
+  if (!plugin.merged) {
+    plugin.merged = !plugin.lazy && [
+          "local",
+          "build",
+          "if",
+          "hook_post_update",
+        ].filter((key) => key in plugin).length <= 0;
+  }
+
+  return plugin;
+}
+
+Deno.test("initPlugin", () => {
+  assertEquals(
+    initPlugin({
+      name: "foo",
+      rev: "[hoge]",
+      script_type: "foo",
+      rtp: "autoload",
+    }, "base", false),
+    {
+      name: "foo",
+      path: "base/repos/foo__hoge_/foo",
+      rtp: "base/repos/foo__hoge_/foo/autoload",
+      rev: "[hoge]",
+      script_type: "foo",
+      lazy: false,
+      merged: true,
+    },
+  );
+
+  // sudo
+  assertEquals(
+    initPlugin({
+      name: "foo",
+    }, "base", true),
+    {
+      name: "foo",
+      path: "base/repos/foo",
+      rtp: "",
+      lazy: false,
+      merged: true,
+    },
+  );
+
+  // lazy
+  assertEquals(
+    initPlugin({
+      name: "foo",
+      on_ft: "foo",
+    }, "base", true),
+    {
+      name: "foo",
+      path: "base/repos/foo",
+      rtp: "",
+      lazy: true,
+      merged: false,
+      on_ft: "foo",
+    },
+  );
+});
