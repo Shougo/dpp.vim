@@ -1,4 +1,4 @@
-import { assertEquals, Denops, is, vars } from "./deps.ts";
+import { assertEquals, Denops, is, op, vars } from "./deps.ts";
 import {
   ActionName,
   BaseExt,
@@ -71,13 +71,72 @@ export class Dpp {
 
     console.log(recordPlugins);
 
-    if (!isDirectory(basePath)) {
+    if (!await isDirectory(basePath)) {
       await Deno.mkdir(basePath, { recursive: true });
     }
 
     // Write state file
     const progname = await vars.g.get(denops, "dpp#_progname");
-    const stateFile = `${basePath}/cache_${progname}`;
+
+    // Get runtimepath
+    const dppRuntimepath = await denops.call(
+      "dpp#util#_expand",
+      `${basePath}/.dpp`,
+    ) as string;
+    console.log(dppRuntimepath);
+    if (!await isDirectory(dppRuntimepath)) {
+      await Deno.mkdir(dppRuntimepath, { recursive: true });
+    }
+    const currentRuntimepath = await op.runtimepath.getGlobal(denops);
+
+    const rtps = await denops.call(
+      "dpp#util#_split_rtp",
+      currentRuntimepath,
+    ) as string[];
+
+    const runtimeIndex = rtps.indexOf(
+      await denops.call("dpp#util#_get_runtime_path") as string,
+    );
+
+    // Add plugins runtimepath
+    for (
+      const plugin of Object.values(recordPlugins).filter((plugin) =>
+        !plugin.lazy
+      )
+    ) {
+      if (plugin.rtp && await isDirectory(plugin.rtp)) {
+        plugin.sourced = true;
+        rtps.splice(runtimeIndex, 0, plugin.rtp);
+
+        // TODO: Load dependencies
+
+        const afterDir = `${plugin.rtp}/after`;
+        if (await isDirectory(afterDir)) {
+          rtps.splice(
+            rtps.indexOf(
+              await denops.call("dpp#util#_get_runtime_path") as string,
+            ) + 1,
+            0,
+            afterDir,
+          );
+        }
+      }
+    }
+    rtps.splice(
+      rtps.indexOf(
+        await denops.call("dpp#util#_get_runtime_path") as string,
+      ),
+      0,
+      dppRuntimepath,
+    );
+    rtps.push(`${dppRuntimepath}/after`);
+
+    const newRuntimepath = await denops.call(
+      "dpp#util#_join_rtp",
+      rtps,
+      currentRuntimepath,
+      dppRuntimepath,
+    );
 
     const cacheVersion = await vars.g.get(denops, "dpp#_cache_version");
     const initRuntimepath = await vars.g.get(denops, "dpp#_init_runtimepath");
@@ -90,11 +149,27 @@ export class Dpp {
       "let g:dpp#_plugins = s:plugins",
       "let g:dpp#ftplugin = s:ftplugin",
       `let g:dpp#_base_path = '${basePath}'`,
-      `let &runtimepath = `,
+      `let &runtimepath = '${newRuntimepath}'`,
     ];
 
-    console.log(stateFile);
+    const stateFile = await denops.call(
+      "dpp#util#_expand",
+      `${basePath}/state_${progname}`,
+    ) as string;
+    await Deno.writeTextFile(stateFile, stateLines.join("\n"));
+
+    const cacheFile = await denops.call(
+      "dpp#util#_expand",
+      `${basePath}/cache_${progname}`,
+    ) as string;
+    const cacheLines = [
+      JSON.stringify([plugins, {}]),
+    ];
+    await Deno.writeTextFile(cacheFile, cacheLines.join("\n"));
+
     console.log(stateLines);
+    console.log(cacheLines);
+    //console.log(rtps);
   }
 
   private async getExt(
@@ -183,6 +258,8 @@ function extArgs<
 }
 
 function initPlugin(plugin: Plugin, basePath: string): Plugin {
+  plugin.sourced = false;
+
   if (!plugin.path) {
     // Set default path from basePath
     plugin.path = `${basePath}/repos/${plugin.repo ?? plugin.name}`;

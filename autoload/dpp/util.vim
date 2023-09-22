@@ -14,31 +14,8 @@ function dpp#util#_get_plugins(plugins) abort
         \ ->filter({ _, val -> !(val->empty()) })
 endfunction
 
-function dpp#util#_get_base_path() abort
-  return g:dpp#_base_path
-endfunction
 function dpp#util#_get_runtime_path() abort
-  if g:dpp#_runtime_path !=# ''
-    return g:dpp#_runtime_path
-  endif
-
-  const g:dpp#_runtime_path = dpp#util#_get_cache_path() .. '/.dpp'
-  call dpp#util#_safe_mkdir(g:dpp#_runtime_path)
-  return g:dpp#_runtime_path
-endfunction
-function dpp#util#_get_cache_path() abort
-  if g:dpp#_cache_path !=# ''
-    return g:dpp#_cache_path
-  endif
-
-  const vimrc_path = has('nvim') && exists('$NVIM_APPNAME') ?
-        \ $NVIM_APPNAME :
-        \ dpp#util#_get_myvimrc()->fnamemodify(':t')
-  const g:dpp#_cache_path = dpp#util#_substitute_path(
-        \ g:->get('dpp#cache_directory', g:dpp#_base_path)
-        \ .. '/.cache/' .. vimrc_path)
-  call dpp#util#_safe_mkdir(g:dpp#_cache_path)
-  return g:dpp#_cache_path
+  return dpp#util#_substitute_path($VIMRUNTIME)
 endfunction
 function dpp#util#_get_vimrcs(vimrcs) abort
   return !(a:vimrcs->empty()) ?

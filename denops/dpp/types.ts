@@ -94,5 +94,6 @@ export type Plugin = {
   rev?: string;
   rtp?: string;
   script_type?: string;
+  sourced?: boolean;
   timeout?: number;
 };

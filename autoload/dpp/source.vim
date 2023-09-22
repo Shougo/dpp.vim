@@ -10,7 +10,7 @@ function dpp#autoload#_source(plugins) abort
   endif
 
   let rtps = dpp#util#_split_rtp(&runtimepath)
-  const index = rtps->index(dpp#util#_get_runtime_path())
+  const index = rtps->index(g:dpp#_runtime_path)
   if index < 0
     return []
   endif
