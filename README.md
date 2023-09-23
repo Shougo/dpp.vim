@@ -82,11 +82,11 @@ const s:dpp_src = '~/.cache/dpp/repos/github.com/Shougo/dpp.vim'
 const s:denops_src = '~/.cache/dpp/repos/github.com/denops/denops.vim'
 
 " Set dpp runtime path (required)
-execute 'set runtimepath+=' .. s:dpp_src
+execute 'set runtimepath^=' .. s:dpp_src
 
 if dpp#load_state(s:dpp_base)
   " NOTE: dpp#make_state() requires denops.vim
-  execute 'set runtimepath+=' .. s:denops_src
+  execute 'set runtimepath^=' .. s:denops_src
   autocmd User DenopsReady
   \ call dpp#make_state(s:dpp_base, '{your script path}')
 endif
