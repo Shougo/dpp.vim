@@ -6,23 +6,23 @@ export async function errorException(
   message: string,
 ) {
   await denops.call(
-    "dpp#util#print_error",
+    "dpp#util#_error",
     message,
   );
   if (e instanceof Error) {
     await denops.call(
-      "dpp#util#print_error",
+      "dpp#util#_error",
       e.message,
     );
     if (e.stack) {
       await denops.call(
-        "dpp#util#print_error",
+        "dpp#util#_error",
         e.stack,
       );
     }
   } else {
     await denops.call(
-      "dpp#util#print_error",
+      "dpp#util#_error",
       "unknown error object",
     );
     console.error(e);

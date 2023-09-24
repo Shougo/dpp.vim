@@ -74,7 +74,7 @@ EXAMPLES                                                        *dpp-examples*
 	" Set dpp runtime path (required)
 	execute 'set runtimepath^=' .. s:dpp_src
 	
-	if dpp#load_state(s:dpp_base)
+	if dpp#min#load_state(s:dpp_base)
 	  " NOTE: dpp#make_state() requires denops.vim
 	  execute 'set runtimepath^=' .. s:denops_src
 	  autocmd User DenopsReady

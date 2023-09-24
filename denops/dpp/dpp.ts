@@ -44,7 +44,7 @@ export class Dpp {
     const action = ext.actions[actionName];
     if (!action) {
       await denops.call(
-        "ddu#util#print_error",
+        "ddu#util#_error",
         `Not found UI action: ${actionName}`,
       );
       return;
@@ -79,10 +79,7 @@ export class Dpp {
     const progname = await vars.g.get(denops, "dpp#_progname");
 
     // Get runtimepath
-    const dppRuntimepath = await denops.call(
-      "dpp#util#_expand",
-      `${basePath}/.dpp`,
-    ) as string;
+    const dppRuntimepath = `${basePath}/.dpp`;
     console.log(dppRuntimepath);
     if (!await isDirectory(dppRuntimepath)) {
       await Deno.mkdir(dppRuntimepath, { recursive: true });
@@ -152,16 +149,10 @@ export class Dpp {
       `let &runtimepath = '${newRuntimepath}'`,
     ];
 
-    const stateFile = await denops.call(
-      "dpp#util#_expand",
-      `${basePath}/state_${progname}`,
-    ) as string;
+    const stateFile = `${basePath}/state_${progname}`;
     await Deno.writeTextFile(stateFile, stateLines.join("\n"));
 
-    const cacheFile = await denops.call(
-      "dpp#util#_expand",
-      `${basePath}/cache_${progname}`,
-    ) as string;
+    const cacheFile = `${basePath}/cache_${progname}`;
     const cacheLines = [
       JSON.stringify([plugins, {}]),
     ];
@@ -190,7 +181,7 @@ export class Dpp {
     if (!ext) {
       if (extName.length !== 0) {
         await denops.call(
-          "dpp#util#print_error",
+          "dpp#util#_error",
           `Not found ext: "${extName}"`,
         );
       }

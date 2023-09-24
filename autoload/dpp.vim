@@ -1,9 +1,3 @@
-function dpp#load_state(base_path) abort
-  if !('#dpp'->exists())
-    call dpp#min#_init()
-  endif
-endfunction
-
 function dpp#get(name = '') abort
   return a:name ==# '' ?
         \ g:dpp#_plugins->copy() : g:dpp#_plugins->get(a:name, {})
@@ -19,8 +13,11 @@ function dpp#make_state(base_path, config_path) abort
     return 1
   endif
 
-  if !(a:config_path->filereadable())
-    call dpp#util#print_error(printf('"%s" is not found.', a:config_path))
+  const config_path = dpp#util#_expand(a:config_path)
+  const base_path = dpp#util#_expand(a:base_path)
+
+  if !(config_path->filereadable())
+    call dpp#util#_error(printf('"%s" is not found.', a:config_path))
     return 1
   endif
 
@@ -33,5 +30,5 @@ function dpp#make_state(base_path, config_path) abort
     return
   endif
 
-  return dpp#denops#_notify('makeState', [a:base_path, a:config_path])
+  return dpp#denops#_notify('makeState', [base_path, config_path])
 endfunction

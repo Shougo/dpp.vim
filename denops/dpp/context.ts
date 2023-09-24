@@ -192,7 +192,7 @@ export class ContextBuilder {
     for (const key in options) {
       if (!(key in defaults)) {
         await denops.call(
-          "dpp#util#print_error",
+          "dpp#util#_error",
           `Invalid ${name}: "${key}"`,
         );
       }

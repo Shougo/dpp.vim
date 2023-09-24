@@ -40,7 +40,6 @@ export class Ext extends BaseExt<Params> {
             name: plugin.name ?? basename(plugin.repo ?? ""),
           };
         });
-        console.log(plugins);
 
         return plugins;
       },

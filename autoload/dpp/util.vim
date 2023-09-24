@@ -59,10 +59,11 @@ function dpp#util#_add_after(rtps, path) abort
 endfunction
 
 function dpp#util#_expand(path) abort
-  const path = (a:path =~# '^\~') ? a:path->fnamemodify(':p') :
-        \ (a:path =~# '^\$\h\w*') ? a:path
-        \ ->substitute('^\$\h\w*', '\=eval(submatch(0))', '') :
-        \ a:path
+  let path = (a:path =~# '^\$\h\w*') ? a:path->substitute(
+        \ '^\$\h\w*', '\=eval(submatch(0))', '') : a:path
+  if path =~# '^\~'
+    let path = path->fnamemodify(':p')
+  endif
   return ((s:is_windows && path =~# '\\') ?
         \ dpp#util#_substitute_path(path) : path)->substitute('/$', '', '')
 endfunction
