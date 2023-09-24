@@ -69,8 +69,6 @@ export class Dpp {
       recordPlugins[plugin.name] = initPlugin(plugin, basePath);
     }
 
-    console.log(recordPlugins);
-
     if (!await isDirectory(basePath)) {
       await Deno.mkdir(basePath, { recursive: true });
     }
@@ -80,7 +78,6 @@ export class Dpp {
 
     // Get runtimepath
     const dppRuntimepath = `${basePath}/.dpp`;
-    console.log(dppRuntimepath);
     if (!await isDirectory(dppRuntimepath)) {
       await Deno.mkdir(dppRuntimepath, { recursive: true });
     }
@@ -138,9 +135,9 @@ export class Dpp {
     const cacheVersion = await vars.g.get(denops, "dpp#_cache_version");
     const initRuntimepath = await vars.g.get(denops, "dpp#_init_runtimepath");
     const stateLines = [
-      `if g:dpp#_cache_version !=# ${cacheVersion} || ` +
-      `g:dpp#_init_runtimepath !=# '${initRuntimepath}' | ` +
-      " | throw ''Cache loading error'' | endif",
+      `if g:dpp#_cache_version !=# ${cacheVersion} ` +
+      `|| g:dpp#_init_runtimepath !=# '${initRuntimepath}' | ` +
+      "throw 'Cache loading error' | endif",
       "let [s:plugins, s:ftplugin] = dpp#min#_load_cache_raw()",
       "if s:plugins->empty() | throw 'Cache loading error' | endif",
       "let g:dpp#_plugins = s:plugins",
@@ -149,17 +146,19 @@ export class Dpp {
       `let &runtimepath = '${newRuntimepath}'`,
     ];
 
-    const stateFile = `${basePath}/state_${progname}`;
+    const stateFile = `${basePath}/state_${progname}.vim`;
+    console.log(stateFile);
     await Deno.writeTextFile(stateFile, stateLines.join("\n"));
 
-    const cacheFile = `${basePath}/cache_${progname}`;
+    const cacheFile = `${basePath}/cache_${progname}.vim`;
     const cacheLines = [
       JSON.stringify([plugins, {}]),
     ];
+    console.log(cacheFile);
     await Deno.writeTextFile(cacheFile, cacheLines.join("\n"));
 
     console.log(stateLines);
-    console.log(cacheLines);
+    //console.log(cacheLines);
     //console.log(rtps);
   }
 

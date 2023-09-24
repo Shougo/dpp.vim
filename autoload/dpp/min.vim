@@ -16,7 +16,7 @@ function dpp#min#_init() abort
 endfunction
 function! dpp#min#_load_cache_raw(vimrcs=[]) abort
   let g:dpp#_vimrcs = a:vimrcs
-  const cache = g:dpp#_base_path .. '/cache_' .. g:dpp#_progname
+  const cache = printf('%s/cache_%s.vim', g:dpp#_base_path, g:dpp#_progname)
   const time = cache->getftime()
   if !(g:dpp#_vimrcs->copy()
         \ ->map({ _, val -> getftime(expand(val)) })
@@ -33,7 +33,7 @@ function! dpp#min#load_state(path) abort
   if g:dpp#_is_sudo | return 1 | endif
   let g:dpp#_base_path = a:path->expand()
 
-  const state = g:dpp#_base_path .. '/state_' .. g:dpp#_progname .. '.vim'
+  const state = printf('%s/state_%s.vim', g:dpp#_base_path, g:dpp#_progname)
   if !(state->filereadable()) | return 1 | endif
   try
     execute 'source' state->fnameescape()
