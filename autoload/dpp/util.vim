@@ -144,7 +144,7 @@ function s:tsort_impl(target, mark, sorted) abort
   call add(a:sorted, a:target)
 endfunction
 
-function! dpp#util#_clear_state() abort
+function dpp#util#_clear_state() abort
   const base = g:dpp#_base_path
   for cache in (base .. '/state_*.vim')->glob(v:true, v:true)
         \ + (base .. '/cache_*')->glob(v:true, v:true)
