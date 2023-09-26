@@ -32,3 +32,7 @@ function dpp#make_state(base_path, config_path) abort
 
   return dpp#denops#_notify('makeState', [base_path, config_path])
 endfunction
+
+function dpp#recache_runtimepath() abort
+  call dpp#util#_clear_state()
+endfunction

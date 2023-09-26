@@ -128,6 +128,11 @@ dpp#min#load_state({base-path})
 
 		It returns 1, if the cache script is old or invalid or not
 		found.
+                                                   *dpp#recache_runtimepath()*
+dpp#recache_runtimepath()
+		Re-make the dpp runtimepath cache and execute |:helptags|.
+		It is called automatically after the installation.
+
                                                                 *dpp#source()*
 dpp#source([{name}])
 		|:source|  the plugins specified by {plugins}.
