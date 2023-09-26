@@ -17,7 +17,5 @@ export type ConfigReturn = {
 export abstract class BaseConfig {
   apiVersion = 1;
 
-  config(_args: ConfigArguments): ConfigReturn[] | Promise<ConfigReturn[]> {
-    return [];
-  }
+  abstract config(_args: ConfigArguments): ConfigReturn | Promise<ConfigReturn>;
 }
