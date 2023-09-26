@@ -48,7 +48,7 @@ export class Ext extends BaseExt<Params> {
       callback: (args: {
         actionParams: unknown;
       }) => {
-        const params = args.actionParams as MakeStateArgs;
+        const _params = args.actionParams as MakeStateArgs;
 
         // TODO: Support dummy mappings/commands
 
