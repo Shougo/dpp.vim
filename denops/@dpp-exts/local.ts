@@ -1,7 +1,7 @@
 import { Actions, BaseExt, Plugin } from "../dpp/types.ts";
 import { Denops, fn } from "../dpp/deps.ts";
 import { isDirectory } from "../dpp/utils.ts";
-import { basename } from "https://deno.land/std@0.201.0/path/mod.ts";
+import { basename } from "https://deno.land/std@0.202.0/path/mod.ts";
 
 type Params = Record<string, never>;
 
