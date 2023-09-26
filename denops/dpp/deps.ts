@@ -16,7 +16,11 @@ export {
   assertEquals,
   equal,
 } from "https://deno.land/std@0.201.0/assert/mod.ts";
-export { parse, toFileUrl } from "https://deno.land/std@0.201.0/path/mod.ts";
+export {
+  extname,
+  parse,
+  toFileUrl,
+} from "https://deno.land/std@0.201.0/path/mod.ts";
 export {
   deadline,
   DeadlineError,

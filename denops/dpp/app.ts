@@ -19,14 +19,16 @@ export function main(denops: Denops) {
         `${toFileUrl(configPath).href}#${performance.now()}`
       );
       const obj = new mod.Config();
-      const plugins = await obj.config({
+      const configReturn = await obj.config({
         denops,
         basePath,
         contextBuilder,
         dpp,
       });
 
-      await dpp.makeState(denops, basePath, plugins);
+      const [_, options] = await contextBuilder.get(denops);
+
+      await dpp.makeState(denops, options, basePath, configReturn);
     },
   };
 }

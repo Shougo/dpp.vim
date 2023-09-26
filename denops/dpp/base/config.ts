@@ -9,10 +9,15 @@ export type ConfigArguments = {
   dpp: Dpp;
 };
 
+export type ConfigReturn = {
+  plugins: Plugin[];
+  stateLines: string[];
+};
+
 export abstract class BaseConfig {
   apiVersion = 1;
 
-  config(_args: ConfigArguments): Plugin[] | Promise<Plugin[]> {
+  config(_args: ConfigArguments): ConfigReturn[] | Promise<ConfigReturn[]> {
     return [];
   }
 }

@@ -1,4 +1,4 @@
-import { assertEquals, Denops, is, op, vars } from "./deps.ts";
+import { assertEquals, Denops, extname, is, op, vars } from "./deps.ts";
 import {
   ActionName,
   BaseExt,
@@ -19,6 +19,7 @@ import {
 } from "./context.ts";
 import { Loader } from "./loader.ts";
 import { defaultExtOptions } from "./base/ext.ts";
+import { ConfigReturn } from "./base/config.ts";
 import { errorException, isDirectory } from "./utils.ts";
 
 export class Dpp {
@@ -44,7 +45,7 @@ export class Dpp {
     const action = ext.actions[actionName];
     if (!action) {
       await denops.call(
-        "ddu#util#_error",
+        "dpp#util#_error",
         `Not found UI action: ${actionName}`,
       );
       return;
@@ -62,10 +63,15 @@ export class Dpp {
     return ret;
   }
 
-  async makeState(denops: Denops, basePath: string, plugins: Plugin[]) {
+  async makeState(
+    denops: Denops,
+    options: DppOptions,
+    basePath: string,
+    configReturn: ConfigReturn,
+  ) {
     // Initialize plugins
     const recordPlugins: Record<string, Plugin> = {};
-    for (const plugin of plugins) {
+    for (const plugin of configReturn.plugins) {
       recordPlugins[plugin.name] = initPlugin(plugin, basePath);
     }
 
@@ -134,7 +140,7 @@ export class Dpp {
 
     const cacheVersion = await vars.g.get(denops, "dpp#_cache_version");
     const initRuntimepath = await vars.g.get(denops, "dpp#_init_runtimepath");
-    const stateLines = [
+    let stateLines = [
       `if g:dpp#_cache_version !=# ${cacheVersion} ` +
       `|| g:dpp#_init_runtimepath !=# '${initRuntimepath}' | ` +
       "throw 'Cache loading error' | endif",
@@ -146,13 +152,40 @@ export class Dpp {
       `let &runtimepath = '${newRuntimepath}'`,
     ];
 
+    if (await vars.g.get(denops, "did_load_filetypes", false)) {
+      stateLines.push("filetype off");
+    }
+    if (
+      await vars.b.get(denops, "did_indent", false) ||
+      await vars.b.get(denops, "did_ftplugin", false)
+    ) {
+      stateLines.push("filetype plugin indent off");
+    }
+
+    for await (
+      const vimrc of options.inlineVimrcs.map(async (vimrc) =>
+        await denops.call("dpp#util#_expand", vimrc) as string
+      )
+    ) {
+      const vimrcLines = (await Deno.readTextFile(vimrc)).split("\n");
+      if (extname(vimrc) == "lua") {
+        stateLines = ["lua <<EOF"].concat(
+          vimrcLines.filter((line) => !line.match(/^\s*$|^\s*--/)),
+        ).concat(["EOF"]);
+      } else {
+        stateLines = stateLines.concat(
+          vimrcLines.filter((line) => !line.match(/^\s*$|^\s*"/)),
+        );
+      }
+    }
+
     const stateFile = `${basePath}/state_${progname}.vim`;
     console.log(stateFile);
     await Deno.writeTextFile(stateFile, stateLines.join("\n"));
 
     const cacheFile = `${basePath}/cache_${progname}.vim`;
     const cacheLines = [
-      JSON.stringify([plugins, {}]),
+      JSON.stringify([configReturn.plugins, {}]),
     ];
     console.log(cacheFile);
     await Deno.writeTextFile(cacheFile, cacheLines.join("\n"));
@@ -318,6 +351,7 @@ Deno.test("initPlugin", () => {
       script_type: "foo",
       lazy: false,
       merged: true,
+      sourced: false,
     },
   );
 
@@ -334,6 +368,7 @@ Deno.test("initPlugin", () => {
       lazy: true,
       merged: false,
       on_ft: "foo",
+      sourced: false,
     },
   );
 });

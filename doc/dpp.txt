@@ -17,6 +17,10 @@ Exts			|dpp-exts|
 Protocols		|dpp-protocols|
   Protocol option	  |dpp-protocol-options|
   Protocol params	  |dpp-protocol-params|
+Create Ext		|dpp-create-ext|
+  Ext attributes	  |dpp-ext-attributes|
+Create Protocol		|dpp-create-protocol|
+  Protocol attributes	  |dpp-protocol-attributes|
 FAQ			|dpp-faq|
 Compatibility		|dpp-compatibility|
 
@@ -53,6 +57,48 @@ INTERFACE                                                      *dpp-interface*
 ------------------------------------------------------------------------------
 OPTIONS                                                          *dpp-options*
 
+                                                       *dpp-option-extOptions*
+extOptions		(dictionary)
+		It is a dictionary that maps ext names to its options.
+		The options with the name "_" is used as the options for all
+		names.
+		See also |dpp-ext-options|.
+
+		Default: {}
+
+                                                        *dpp-option-extParams*
+extParams		(dictionary)
+		It is a dictionary that maps ext names to its parameters.
+		See also |dpp-ext-params|.
+
+		Default: {}
+
+                                                     *dpp-option-inlineVimrcs*
+inlineVimrcs		(string[])
+		The vimrcs are sourced in |dpp#min#load_state()| before hooks.
+		NOTE: It must be set before |dpp#make_state()|.
+		NOTE: The files must not be included "<<" pattern(here
+		document).  It breaks the parser.
+		NOTE: It also supports ".lua" file for neovim.
+
+		Defaults: []
+
+                                                  *dpp-option-protocolOptions*
+protocolOptions		(dictionary)
+		It is a dictionary that maps protocol names to its options.
+		The options with the name "_" is used as the options for all
+		names.
+		See also |dpp-protocol-options|.
+
+		Default: {}
+
+                                                   *dpp-option-protocolParams*
+protocolParams		(dictionary)
+		It is a dictionary that maps protocol names to its parameters.
+		See also |dpp-protocol-params|.
+
+		Default: {}
+
 ------------------------------------------------------------------------------
 FUNCTIONS                                                      *dpp-functions*
 
@@ -86,7 +132,7 @@ dpp#min#load_state({base-path})
 dpp#source([{name}])
 		|:source|  the plugins specified by {plugins}.
 		{plugins} is the plugins name list.
-		If you omit it, dein will source all plugins.
+		If you omit it, dpp will source all plugins.
 		It returns sourced plugins list.
 
 ==============================================================================
@@ -164,6 +210,62 @@ PROTOCOL PARAMS                                          *dpp-protocol-params*
 
 These are the parameters that each Protocol can have.  Please read the
 Protocol documentation.
+
+
+==============================================================================
+CREATE EXT                                                    *dpp-create-ext*
+
+To create ext, you should read other exts implementation.
+
+The ext must put under "denops/@dpp-exts/*.ts".
+
+The ext class must extend the "BaseExt" class.
+
+NOTE: It must be written in TypeScript language.
+
+NOTE: If you call Vim functions, it is not asynchronous.
+
+
+------------------------------------------------------------------------------
+EXT ATTRIBUTES                                            *dpp-ext-attributes*
+
+                                                   *dpp-ext-attribute-actions*
+actions			(Record<string, function>)	(Required)
+		Defines ext specific actions.
+
+                                                    *dpp-ext-attribute-onInit*
+onInit			(function)			(Optional)
+		Called before call ext functions.
+
+                                                    *dpp-ext-attribute-params*
+params			(function)			(Required)
+		Called to get ext params.
+
+
+==============================================================================
+CREATE PROTOCOL                                          *dpp-create-protocol*
+
+To create protocol, you should read other protocols implementation.
+
+The protocol must put under "denops/@dpp-protocols/*.ts".
+
+The protocol class must extend the "BaseProtocol" class.
+
+NOTE: It must be written in TypeScript language.
+
+NOTE: If you call Vim functions, it is not asynchronous.
+
+
+------------------------------------------------------------------------------
+PROTOCOL ATTRIBUTES                                  *dpp-protocol-attributes*
+
+                                               *dpp-protocol-attribute-onInit*
+onInit			(function)			(Optional)
+		Called before call protocol functions.
+
+                                               *dpp-protocol-attribute-params*
+params			(function)			(Required)
+		Called to get protocol params.
 
 
 ==============================================================================

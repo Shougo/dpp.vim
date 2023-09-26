@@ -28,7 +28,7 @@ function dpp#autoload#_source(plugins) abort
   const filetype_before = 'autocmd FileType'->execute()
   let &runtimepath = dpp#util#_join_rtp(rtps, &runtimepath, '')
 
-  call dpp#call_hook('source', sourced)
+  call dpp#util#_call_hook('source', sourced)
 
   " Reload script files.
   for plugin in sourced
@@ -100,7 +100,7 @@ function dpp#autoload#_source(plugins) abort
   endif
 
   if !has('vim_starting')
-    call dpp#call_hook('post_source', sourced)
+    call dpp#util#_call_hook('post_source', sourced)
   endif
 
   return sourced

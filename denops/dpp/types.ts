@@ -26,6 +26,7 @@ export type Context = {
 export type DppOptions = {
   extOptions: Record<ExtName, Partial<ExtOptions>>;
   extParams: Record<ExtName, Partial<BaseExtParams>>;
+  inlineVimrcs: string[];
   protocolOptions: Record<ProtocolName, Partial<ExtOptions>>;
   protocolParams: Record<ProtocolName, Partial<BaseProtocolParams>>;
 };
