@@ -1,4 +1,4 @@
-function! dpp#ext#lazy#_source(plugins) abort
+function dpp#ext#lazy#_source(plugins) abort
   let plugins = dpp#util#_convert2list(a:plugins)
   if plugins->empty()
     return []
@@ -106,7 +106,7 @@ function! dpp#ext#lazy#_source(plugins) abort
   return sourced
 endfunction
 
-function! dpp#ext#lazy#_on_default_event(event) abort
+function dpp#ext#lazy#_on_default_event(event) abort
   let lazy_plugins = dpp#util#_get_lazy_plugins()
   let plugins = []
 
@@ -133,7 +133,7 @@ function! dpp#ext#lazy#_on_default_event(event) abort
 
   call s:source_events(a:event, plugins)
 endfunction
-function! dpp#ext#lazy#_on_event(event, plugins) abort
+function dpp#ext#lazy#_on_event(event, plugins) abort
   let lazy_plugins = dpp#util#_get_plugins(a:plugins)
         \ ->filter({ _, val -> !val.sourced })
   if lazy_plugins->empty()
@@ -146,7 +146,7 @@ function! dpp#ext#lazy#_on_event(event, plugins) abort
         \          !(val->has_key('on_if')) || val.on_if->eval() })
   call s:source_events(a:event, plugins)
 endfunction
-function! s:source_events(event, plugins) abort
+function s:source_events(event, plugins) abort
   if empty(a:plugins)
     return
   endif
@@ -174,7 +174,7 @@ function! s:source_events(event, plugins) abort
   endif
 endfunction
 
-function! dpp#ext#lazy#_on_func(name) abort
+function dpp#ext#lazy#_on_func(name) abort
   const function_prefix = a:name->substitute('[^#]*$', '', '')
   if function_prefix =~# '^dpp#'
         \ || (function_prefix =~# '^vital#' &&
@@ -188,7 +188,7 @@ function! dpp#ext#lazy#_on_func(name) abort
         \          || val->get('on_func', [])->index(a:name) >= 0 }))
 endfunction
 
-function! dpp#ext#lazy#_on_lua(name) abort
+function dpp#ext#lazy#_on_lua(name) abort
   if g:dpp#_called_lua->has_key(a:name)
     return
   endif
@@ -204,7 +204,7 @@ function! dpp#ext#lazy#_on_lua(name) abort
         \          val->get('on_lua', [])->index(mod_root) >= 0 }))
 endfunction
 
-function! dpp#ext#lazy#_on_pre_cmd(name) abort
+function dpp#ext#lazy#_on_pre_cmd(name) abort
   call dpp#ext#lazy#_source(
         \ dpp#util#_get_lazy_plugins()
         \  ->filter({ _, val -> copy(val->get('on_cmd', []))
@@ -215,7 +215,7 @@ function! dpp#ext#lazy#_on_pre_cmd(name) abort
         \     ->substitute('[_-]', '', 'g')) == 0 }))
 endfunction
 
-function! dpp#ext#lazy#_on_cmd(command, name, args, bang, line1, line2) abort
+function dpp#ext#lazy#_on_cmd(command, name, args, bang, line1, line2) abort
   call dpp#source(a:name)
 
   if (':' .. a:command)->exists() != 2
@@ -235,7 +235,7 @@ function! dpp#ext#lazy#_on_cmd(command, name, args, bang, line1, line2) abort
   endtry
 endfunction
 
-function! dpp#ext#lazy#_on_map(mapping, name, mode) abort
+function dpp#ext#lazy#_on_map(mapping, name, mode) abort
   const cnt = v:count > 0 ? v:count : ''
 
   const input = s:get_input()
@@ -283,7 +283,7 @@ function! dpp#ext#lazy#_on_map(mapping, name, mode) abort
   return ''
 endfunction
 
-function! dpp#ext#lazy#_dummy_complete(arglead, cmdline, cursorpos) abort
+function dpp#ext#lazy#_dummy_complete(arglead, cmdline, cursorpos) abort
   const command = a:cmdline->matchstr('\h\w*')
   if (':' .. command)->exists() == 2
     " Remove the dummy command.
@@ -296,7 +296,7 @@ function! dpp#ext#lazy#_dummy_complete(arglead, cmdline, cursorpos) abort
   return a:arglead
 endfunction
 
-function! s:source_plugin(rtps, index, plugin, sourced) abort
+function s:source_plugin(rtps, index, plugin, sourced) abort
   if a:plugin.sourced || a:sourced->index(a:plugin) >= 0
     \ || (a:plugin->has_key('if') && !(a:plugin.if->eval()))
     return
@@ -370,7 +370,7 @@ function! s:source_plugin(rtps, index, plugin, sourced) abort
     let g:dpp#_loaded_rplugins = v:true
   endif
 endfunction
-function! s:reset_ftplugin() abort
+function s:reset_ftplugin() abort
   const filetype_state = 'filetype'->execute()
 
   if 'b:did_indent'->exists() || 'b:did_ftplugin'->exists()
@@ -385,7 +385,7 @@ function! s:reset_ftplugin() abort
     silent! filetype indent on
   endif
 endfunction
-function! s:get_input() abort
+function s:get_input() abort
   let input = ''
   const termstr = '<M-_>'
 
@@ -408,7 +408,7 @@ function! s:get_input() abort
   return input
 endfunction
 
-function! s:is_reset_ftplugin(plugins) abort
+function s:is_reset_ftplugin(plugins) abort
   if &l:filetype ==# ''
     return 0
   endif
@@ -434,10 +434,69 @@ function! s:is_reset_ftplugin(plugins) abort
   endfor
   return 0
 endfunction
-function! s:mapargrec(map, mode) abort
+function s:mapargrec(map, mode) abort
   let arg = a:map->maparg(a:mode)
   while arg->maparg(a:mode) !=# ''
     let arg = arg->maparg(a:mode)
   endwhile
   return arg
+endfunction
+
+function dpp#ext#lazy#_generate_dummy_commands(plugin) abort
+  let dummy_commands = []
+  for name in a:plugin.on_cmd
+    " Define dummy commands.
+    let raw_cmd = 'command '
+          \ .. '-complete=custom,dein#autoload#_dummy_complete'
+          \ .. ' -bang -bar -range -nargs=* '. name
+          \ .. printf(" call dein#autoload#_on_cmd(%s, %s, <q-args>,
+          \  '<bang>'->expand(), '<line1>'->expand(), '<line2>'->expand())",
+          \   name->string(), a:plugin.name->string())
+
+    call add(dummy_commands, raw_cmd)
+  endfor
+  return dummy_commands
+endfunction
+function dpp#ext#lazy#_generate_dummy_mappings(plugin) abort
+  let dummy_mappings = []
+  const normalized_name = a:plugin.normalized_name
+  let items = a:plugin.on_map->type() == v:t_dict ?
+        \ a:plugin.on_map->items()
+        \ ->map({ _, val -> [val[0]->split('\zs'),
+        \       dein#util#_convert2list(val[1])]}) :
+        \ a:plugin.on_map->copy()
+        \ ->map({ _, val -> type(val) == v:t_list ?
+        \       [val[0]->split('\zs'), val[1:]] :
+        \       [['n', 'x', 'o'], [val]]
+        \  })
+  for [modes, mappings] in items
+    if mappings ==# ['<Plug>']
+      " Use plugin name.
+      let mappings = ['<Plug>(' .. normalized_name]
+      if normalized_name->stridx('-') >= 0
+        " The plugin mappings may use "_" instead of "-".
+        call add(mappings, '<Plug>('
+              \ .. normalized_name->substitute('-', '_', 'g'))
+      endif
+    endif
+
+    for mapping in mappings
+      " Define dummy mappings.
+      let prefix = printf('dein#autoload#_on_map(%s, %s,',
+            \ mapping->substitute('<', '<lt>', 'g')->string(),
+            \ a:plugin.name->string())
+      for mode in modes
+        let escape = has('nvim') ? "\<C-\>\<C-n>" : "\<C-l>N"
+        let raw_map = mode.'noremap <unique><silent> '.mapping
+              \ .. (mode ==# 'c' ? " \<C-r>=" :
+              \     mode ==# 'i' ? " \<C-o>:call " :
+              \     mode ==# 't' ? " " .. escape .. ":call " :
+              \     " :\<C-u>call ")
+              \ .. prefix .. mode->string() .. ')<CR>'
+        call add(dummy_mappings, raw_map)
+      endfor
+    endfor
+  endfor
+
+  return dummy_mappings
 endfunction

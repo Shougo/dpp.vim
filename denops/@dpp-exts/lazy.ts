@@ -1,4 +1,5 @@
 import { Actions, BaseExt, Plugin } from "../dpp/types.ts";
+import { Denops } from "../dpp/deps.ts";
 
 type Params = Record<string, never>;
 
@@ -45,15 +46,27 @@ export class Ext extends BaseExt<Params> {
   override actions: Actions<Params> = {
     makeState: {
       description: "Make stateLines",
-      callback: (args: {
+      callback: async (args: {
+        denops: Denops;
         actionParams: unknown;
       }) => {
         const params = args.actionParams as MakeStateArgs;
 
-        const stateLines = StateLines;
+        let stateLines = StateLines;
 
-        // TODO: Support dummy mappings/commands
         for (const plugin of params.plugins.filter((plugin) => plugin.lazy)) {
+          stateLines = stateLines.concat(
+            await args.denops.call(
+              "dpp#ext#lazy#_generate_dummy_commands",
+              plugin,
+            ) as string[],
+          );
+          stateLines = stateLines.concat(
+            await args.denops.call(
+              "dpp#ext#lazy#_generate_dummy_mappings",
+              plugin,
+            ) as string[],
+          );
         }
 
         return stateLines;
