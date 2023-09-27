@@ -80,6 +80,7 @@ export type Plugin = {
   merge_ftdetect?: string;
   merged?: boolean;
   name: string;
+  normalized_name?: string;
   on_cmd?: string | string[];
   on_event?: string | string[];
   on_ft?: string | string[];

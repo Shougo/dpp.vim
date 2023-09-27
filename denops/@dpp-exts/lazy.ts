@@ -48,11 +48,15 @@ export class Ext extends BaseExt<Params> {
       callback: (args: {
         actionParams: unknown;
       }) => {
-        const _params = args.actionParams as MakeStateArgs;
+        const params = args.actionParams as MakeStateArgs;
+
+        const stateLines = StateLines;
 
         // TODO: Support dummy mappings/commands
+        for (const plugin of params.plugins.filter((plugin) => plugin.lazy)) {
+        }
 
-        return StateLines;
+        return stateLines;
       },
     },
   };

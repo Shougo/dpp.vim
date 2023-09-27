@@ -1,4 +1,4 @@
-import { assertEquals, Denops, extname, is, op, vars } from "./deps.ts";
+import { assertEquals, Denops, extname, is, op, parse, vars } from "./deps.ts";
 import {
   ActionName,
   BaseExt,
@@ -282,6 +282,13 @@ function extArgs<
 
 function initPlugin(plugin: Plugin, basePath: string): Plugin {
   plugin.sourced = false;
+
+  if (!plugin.normalized_name) {
+    plugin.normalized_name = parse(plugin.name).name.replace(
+      /(n?vim|dps|denops)[_-]|[_-]n?vim$/,
+      "",
+    );
+  }
 
   if (!plugin.path) {
     // Set default path from basePath
