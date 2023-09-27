@@ -9,7 +9,6 @@ Introduction		|dpp-ext-toml-introduction|
 Install			|dpp-ext-toml-install|
 Examples		|dpp-ext-toml-examples|
 Actions			|dpp-ext-toml-actions|
-Preview params		|dpp-ext-toml-preview-params|
 Params			|dpp-ext-toml-params|
 Compatibility		|dpp-ext-toml-compatibility|
 

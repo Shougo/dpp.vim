@@ -9,7 +9,6 @@ Introduction		|dpp-ext-local-introduction|
 Install			|dpp-ext-local-install|
 Examples		|dpp-ext-local-examples|
 Actions			|dpp-ext-local-actions|
-Preview params		|dpp-ext-local-preview-params|
 Params			|dpp-ext-local-params|
 Compatibility		|dpp-ext-local-compatibility|
 

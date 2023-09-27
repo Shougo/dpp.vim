@@ -9,7 +9,6 @@ Introduction		|dpp-ext-lazy-introduction|
 Install			|dpp-ext-lazy-install|
 Examples		|dpp-ext-lazy-examples|
 Actions			|dpp-ext-lazy-actions|
-Preview params		|dpp-ext-lazy-preview-params|
 Params			|dpp-ext-lazy-params|
 Compatibility		|dpp-ext-lazy-compatibility|
 
