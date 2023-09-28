@@ -9,6 +9,17 @@ export function main(denops: Denops) {
   const contextBuilder = new ContextBuilder();
 
   denops.dispatcher = {
+    async extAction(
+      arg1: unknown,
+      arg2: unknown,
+      arg3: unknown,
+    ): Promise<unknown | undefined> {
+      const extName = ensure(arg1, is.String);
+      const actionName = ensure(arg2, is.String);
+      const actionParams = ensure(arg3, is.Record);
+
+      return await dpp.extAction(denops, extName, actionName, actionParams);
+    },
     async makeState(arg1: unknown, arg2: unknown): Promise<void> {
       const basePath = ensure(arg1, is.String);
       const configPath = ensure(arg2, is.String);

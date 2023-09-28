@@ -8,6 +8,7 @@ CONTENTS                                               *dpp-ext-toml-contents*
 Introduction		|dpp-ext-toml-introduction|
 Install			|dpp-ext-toml-install|
 Examples		|dpp-ext-toml-examples|
+Functions		|dpp-ext-toml-functions|
 Actions			|dpp-ext-toml-actions|
 Params			|dpp-ext-toml-params|
 Compatibility		|dpp-ext-toml-compatibility|
@@ -38,6 +39,16 @@ EXAMPLES                                               *dpp-ext-toml-examples*
         },
       });
 <
+
+==============================================================================
+FUNCTIONS                                             *dpp-ext-toml-functions*
+
+                                                       *dpp#ext#toml#syntax()*
+dpp#ext#toml#syntax()
+		Enable dein specific toml syntax.
+		It highlights multiline string as "vim" or "lua" syntax.
+		If you use neovim, you should use treesitter highlight
+		instead.
 
 ==============================================================================
 ACTIONS                                                 *dpp-ext-toml-actions*

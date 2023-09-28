@@ -104,6 +104,12 @@ protocolParams		(dictionary)
 ------------------------------------------------------------------------------
 FUNCTIONS                                                      *dpp-functions*
 
+                                                            *dpp#ext_action()*
+dpp#ext_action({ext-name}, {action-name}, {action-params})
+		Fire {action-name} action with {action-params} by {ext-name}
+		ext.
+		{action-params} behavior depends on {action-name}.
+
                                                                    *dpp#get()*
 dpp#get([{name}])
 		Get the plugin options dictionary for {plugin-name}.

@@ -7,6 +7,20 @@ function dpp#source(plugins = g:dpp#_plugins->values()) abort
   return dpp#source#_source(a:plugins)
 endfunction
 
+function dpp#ext_action(ext_name, action_name, action_params={}) abort
+  if !has('patch-9.0.1276') && !has('nvim-0.10')
+    call dpp#util#_error('dpp.vim requires Vim 9.0.1276+ or NeoVim 0.10+.')
+    return
+  endif
+
+  if !('#dpp'->exists())
+    call dpp#min#_init()
+  endif
+
+  return dpp#denops#_request('extAction', [
+        \ a:ext_name, a:action_name, a:action_params])
+endfunction
+
 function dpp#make_state(base_path, config_path) abort
   if !has('patch-9.0.1276') && !has('nvim-0.10')
     call dpp#util#_error('dpp.vim requires Vim 9.0.1276+ or NeoVim 0.10+.')

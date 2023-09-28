@@ -36,7 +36,7 @@ export class Dpp {
     extName: ExtName,
     actionName: ActionName,
     actionParams: unknown = {},
-  ) {
+  ): Promise<unknown | undefined> {
     const [ext, extOptions, extParams] = await this.getExt(denops, extName);
     if (!ext) {
       return;
