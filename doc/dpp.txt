@@ -604,6 +604,30 @@ NOTE: If you call Vim functions, it is not asynchronous.
 ------------------------------------------------------------------------------
 PROTOCOL ATTRIBUTES                                  *dpp-protocol-attributes*
 
+                                               *dpp-protocol-attribute-detect*
+detect			(function)			(Optional)
+		Called to detect plugin's protocol.
+
+                                       *dpp-protocol-attribute-getDiffCommand*
+getDiffCommand		(function)			(Optional)
+		Called to get updated diff command.
+
+                                       *dpp-protocol-attribute-getLogCommand*
+getLogCommand		(function)			(Optional)
+		Called to get repository synchronous command.
+
+                                          *dpp-protocol-attribute-getRevision*
+getRevisionLockCommand	(function)			(Optional)
+		Called to get current revision.
+
+                               *dpp-protocol-attribute-getRevisionLockCommand*
+getRevisionLockCommand	(function)			(Optional)
+		Called to get revision lock command.
+
+                                       *dpp-protocol-attribute-getSyncCommand*
+getSyncCommand		(function)			(Optional)
+		Called to get repository synchronous command.
+
                                                *dpp-protocol-attribute-onInit*
 onInit			(function)			(Optional)
 		Called before call protocol functions.

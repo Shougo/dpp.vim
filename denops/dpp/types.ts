@@ -106,4 +106,5 @@ export type Plugin = {
   script_type?: string;
   sourced?: boolean;
   timeout?: number;
+  url?: string;
 };
