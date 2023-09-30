@@ -31,23 +31,25 @@ https://github.com/vim-denops/denops.vim
 ==============================================================================
 EXAMPLES                                              *dpp-ext-local-examples*
 >
-    const plugins = await args.dpp.extAction(args.denops, "local", "local", {
-      directory: "~/work",
-      options: {
-        frozen: true,
-        merged: false,
-      },
-      includes: [
-        "vim*",
-        "nvim-*",
-        "*.vim",
-        "*.nvim",
-        "ddc-*",
-        "dpp-*",
-        "skkeleton",
-        "neco-vim",
-      ],
-    });
+    const plugins = await args.dpp.extAction(
+      args.denops, args.options, "local", "local", {
+        directory: "~/work",
+        options: {
+          frozen: true,
+          merged: false,
+        },
+        includes: [
+          "vim*",
+          "nvim-*",
+          "*.vim",
+          "*.nvim",
+          "ddc-*",
+          "dpp-*",
+          "skkeleton",
+          "neco-vim",
+        ],
+      }
+    );
 <
 
 ==============================================================================

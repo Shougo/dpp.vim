@@ -3,11 +3,16 @@ import {
   ActionName,
   BaseExt,
   BaseExtParams,
+  BaseProtocol,
+  BaseProtocolParams,
   Context,
   DppOptions,
   ExtName,
   ExtOptions,
   Plugin,
+  Protocol,
+  ProtocolName,
+  ProtocolOptions,
 } from "./types.ts";
 import {
   defaultContext,
@@ -16,9 +21,12 @@ import {
   foldMerge,
   mergeExtOptions,
   mergeExtParams,
+  mergeProtocolOptions,
+  mergeProtocolParams,
 } from "./context.ts";
 import { Loader } from "./loader.ts";
 import { defaultExtOptions } from "./base/ext.ts";
+import { defaultProtocolOptions } from "./base/protocol.ts";
 import { ConfigReturn } from "./base/config.ts";
 import { errorException, isDirectory } from "./utils.ts";
 
@@ -31,8 +39,29 @@ export class Dpp {
     this.loader = loader;
   }
 
+  async getProtocols(denops: Denops, protocolNames: ProtocolName[]) {
+    const protocols: Record<ProtocolName, Protocol> = {};
+
+    for (const procotolName of protocolNames) {
+      const [protocol, protocolOptions, protocolParams] = await this
+        .getProtocol(denops, procotolName);
+      if (!protocol) {
+        continue;
+      }
+
+      protocols[procotolName] = {
+        protocol,
+        options: protocolOptions,
+        params: protocolParams,
+      };
+    }
+
+    return protocols;
+  }
+
   async extAction(
     denops: Denops,
+    options: DppOptions,
     extName: ExtName,
     actionName: ActionName,
     actionParams: unknown = {},
@@ -55,6 +84,7 @@ export class Dpp {
       denops,
       context: this.context,
       options: this.options,
+      protocols: await this.getProtocols(denops, options.protocols),
       extOptions,
       extParams,
       actionParams,
@@ -197,7 +227,7 @@ export class Dpp {
 
   private async getExt(
     denops: Denops,
-    extName: ExtName,
+    name: ExtName,
   ): Promise<
     [
       BaseExt<BaseExtParams> | undefined,
@@ -205,16 +235,16 @@ export class Dpp {
       BaseExtParams,
     ]
   > {
-    if (!this.loader.getExt(extName)) {
-      await this.loader.autoload(denops, "ext", extName);
+    if (!this.loader.getExt(name)) {
+      await this.loader.autoload(denops, "ext", name);
     }
 
-    const ext = this.loader.getExt(extName);
+    const ext = this.loader.getExt(name);
     if (!ext) {
-      if (extName.length !== 0) {
+      if (name.length !== 0) {
         await denops.call(
           "dpp#util#_error",
-          `Not found ext: "${extName}"`,
+          `Not found ext: "${name}"`,
         );
       }
       return [
@@ -224,10 +254,45 @@ export class Dpp {
       ];
     }
 
-    const [extOptions, extParams] = extArgs(this.options, ext);
-    await checkExtOnInit(ext, denops, extOptions, extParams);
+    const [options, params] = extArgs(this.options, ext);
+    await checkExtOnInit(ext, denops, options, params);
 
-    return [ext, extOptions, extParams];
+    return [ext, options, params];
+  }
+
+  private async getProtocol(
+    denops: Denops,
+    name: ProtocolName,
+  ): Promise<
+    [
+      BaseProtocol<BaseProtocolParams> | undefined,
+      ProtocolOptions,
+      BaseProtocolParams,
+    ]
+  > {
+    if (!this.loader.getProtocol(name)) {
+      await this.loader.autoload(denops, "protocol", name);
+    }
+
+    const protocol = this.loader.getProtocol(name);
+    if (!protocol) {
+      if (name.length !== 0) {
+        await denops.call(
+          "dpp#util#_error",
+          `Not found protocol: "${name}"`,
+        );
+      }
+      return [
+        undefined,
+        defaultProtocolOptions(),
+        defaultDummy(),
+      ];
+    }
+
+    const [options, params] = protocolArgs(this.options, protocol);
+    await checkProtocolOnInit(protocol, denops, options, params);
+
+    return [protocol, options, params];
   }
 }
 
@@ -276,6 +341,55 @@ function extArgs<
     ext.params(),
     options.extParams["_"],
     options.extParams[ext.name],
+  ]);
+  return [o, p];
+}
+
+async function checkProtocolOnInit(
+  protocol: BaseProtocol<BaseProtocolParams>,
+  denops: Denops,
+  protocolOptions: ProtocolOptions,
+  protocolParams: BaseProtocolParams,
+) {
+  if (protocol.isInitialized) {
+    return;
+  }
+
+  try {
+    await protocol.onInit({
+      denops,
+      protocolOptions,
+      protocolParams,
+    });
+
+    protocol.isInitialized = true;
+  } catch (e: unknown) {
+    await errorException(
+      denops,
+      e,
+      `protocol: ${protocol.name} "onInit()" failed`,
+    );
+  }
+}
+
+function protocolArgs<
+  Params extends BaseProtocolParams,
+>(
+  options: DppOptions,
+  protocol: BaseProtocol<Params>,
+): [ExtOptions, BaseExtParams] {
+  const o = foldMerge(
+    mergeProtocolOptions,
+    defaultProtocolOptions,
+    [
+      options.protocolOptions["_"],
+      options.protocolOptions[protocol.name],
+    ],
+  );
+  const p = foldMerge(mergeProtocolParams, defaultDummy, [
+    protocol.params(),
+    options.extParams["_"],
+    options.extParams[protocol.name],
   ]);
   return [o, p];
 }

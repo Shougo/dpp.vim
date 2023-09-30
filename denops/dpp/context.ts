@@ -49,6 +49,7 @@ export function defaultDppOptions(): DppOptions {
     inlineVimrcs: [],
     protocolOptions: {},
     protocolParams: {},
+    protocols: [],
   };
 }
 

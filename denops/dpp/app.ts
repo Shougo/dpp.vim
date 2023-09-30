@@ -18,7 +18,15 @@ export function main(denops: Denops) {
       const actionName = ensure(arg2, is.String);
       const actionParams = ensure(arg3, is.Record);
 
-      return await dpp.extAction(denops, extName, actionName, actionParams);
+      const [_, options] = await contextBuilder.get(denops);
+
+      return await dpp.extAction(
+        denops,
+        options,
+        extName,
+        actionName,
+        actionParams,
+      );
     },
     async makeState(arg1: unknown, arg2: unknown): Promise<void> {
       const basePath = ensure(arg1, is.String);

@@ -1,5 +1,5 @@
 import { BaseExtParams } from "./base/ext.ts";
-import { BaseProtocolParams } from "./base/protocol.ts";
+import { BaseProtocol, BaseProtocolParams } from "./base/protocol.ts";
 import { Denops } from "./deps.ts";
 
 export { BaseConfig } from "./base/config.ts";
@@ -29,6 +29,7 @@ export type DppOptions = {
   inlineVimrcs: string[];
   protocolOptions: Record<ProtocolName, Partial<ExtOptions>>;
   protocolParams: Record<ProtocolName, Partial<BaseProtocolParams>>;
+  protocols: ProtocolName[];
 };
 
 export type UserOptions = Record<string, unknown>;
@@ -43,11 +44,18 @@ export type ProtocolOptions = {
   placeholder?: unknown;
 };
 
+export type Protocol = {
+  protocol: BaseProtocol<BaseProtocolParams>;
+  options: ProtocolOptions;
+  params: BaseProtocolParams;
+};
+
 export type BaseActionParams = Record<string, unknown>;
 
 export type ActionArguments<Params extends BaseActionParams> = {
   denops: Denops;
   context: Context;
+  protocols: Record<ProtocolName, Protocol>;
   options: DppOptions;
   extOptions: ExtOptions;
   extParams: Params;

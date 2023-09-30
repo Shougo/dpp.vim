@@ -100,6 +100,11 @@ protocolParams		(dictionary)
 		See also |dpp-protocol-params|.
 
 		Default: {}
+                                                     *dpp-option-protocols*
+protocols		(string[])
+		It is a list of protocol names.
+		
+		Default: []
 
 ------------------------------------------------------------------------------
 FUNCTIONS                                                      *dpp-functions*

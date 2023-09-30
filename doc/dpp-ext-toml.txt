@@ -32,12 +32,14 @@ https://github.com/vim-denops/denops.vim
 ==============================================================================
 EXAMPLES                                               *dpp-ext-toml-examples*
 >
-      const plugins = await args.dpp.extAction(args.denops, "toml", "load", {
+    const plugins = await args.dpp.extAction(
+      args.denops, args.options, "toml", "load", {
         path: "$BASE_DIR/dpp.toml",
         options: {
           lazy: true,
         },
-      });
+      }
+    );
 <
 
 ==============================================================================
