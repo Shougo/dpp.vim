@@ -1,6 +1,7 @@
-import { Denops, ensure, is, toFileUrl } from "./deps.ts";
+import { Denops, ensure, is, toFileUrl, vars } from "./deps.ts";
 import { ContextBuilder } from "./context.ts";
 import { Dpp } from "./dpp.ts";
+import { DppOptions } from "./types.ts";
 import { Loader } from "./loader.ts";
 
 export function main(denops: Denops) {
@@ -18,7 +19,16 @@ export function main(denops: Denops) {
       const actionName = ensure(arg2, is.String);
       const actionParams = ensure(arg3, is.Record);
 
+      // Set current options from dpp#_options
+      const currentOptions = await vars.g.get(
+        denops,
+        "dpp#_options",
+      ) as DppOptions;
+      contextBuilder.setGlobal(currentOptions);
+
       const [_, options] = await contextBuilder.get(denops);
+
+      console.log(options);
 
       return await dpp.extAction(
         denops,
