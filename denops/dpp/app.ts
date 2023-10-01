@@ -28,8 +28,6 @@ export function main(denops: Denops) {
 
       const [_, options] = await contextBuilder.get(denops);
 
-      console.log(options);
-
       return await dpp.extAction(
         denops,
         options,

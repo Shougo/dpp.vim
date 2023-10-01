@@ -36,6 +36,12 @@ EXAMPLES                                          *dpp-ext-installer-examples*
 ==============================================================================
 ACTIONS                                            *dpp-ext-installer-actions*
 
+                                            *dpp-ext-installer-action-install*
+install
+		Install plugins.
+
+		params:
+
 ==============================================================================
 PARAMS                                              *dpp-ext-installer-params*
 
