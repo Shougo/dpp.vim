@@ -40,7 +40,7 @@ function dpp#min#_load_cache_raw(vimrcs=[]) abort
   if !(g:dpp#_vimrcs->copy()
         \ ->map({ _, val -> getftime(expand(val)) })
         \ ->filter({ _, val -> time < val })->empty())
-    return [{}, {}]
+    return [{}, {}, {}]
   endif
   return has('nvim') ? cache->readfile()->json_decode()
         \ : cache->readfile()[0]->js_decode()

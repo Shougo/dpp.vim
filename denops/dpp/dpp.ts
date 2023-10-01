@@ -179,10 +179,11 @@ export class Dpp {
       `if g:dpp#_cache_version !=# ${cacheVersion} ` +
       `|| g:dpp#_init_runtimepath !=# '${initRuntimepath}' | ` +
       "throw 'Cache loading error' | endif",
-      "let [s:plugins, s:ftplugin] = dpp#min#_load_cache_raw()",
+      "let [s:plugins, s:ftplugin, s:options] = dpp#min#_load_cache_raw()",
       "if s:plugins->empty() | throw 'Cache loading error' | endif",
       "let g:dpp#_plugins = s:plugins",
       "let g:dpp#ftplugin = s:ftplugin",
+      "let g:dpp#_options = s:options",
       `let g:dpp#_base_path = '${basePath}'`,
       `let &runtimepath = '${newRuntimepath}'`,
     ];
@@ -220,7 +221,7 @@ export class Dpp {
 
     const cacheFile = `${basePath}/cache_${progname}.vim`;
     const cacheLines = [
-      JSON.stringify([configReturn.plugins, {}]),
+      JSON.stringify([configReturn.plugins, {}, options]),
     ];
     console.log(cacheFile);
     await Deno.writeTextFile(cacheFile, cacheLines.join("\n"));
