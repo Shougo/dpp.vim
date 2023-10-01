@@ -117,7 +117,12 @@ export class Dpp {
     if (!await isDirectory(dppRuntimepath)) {
       await Deno.mkdir(dppRuntimepath, { recursive: true });
     }
-    const currentRuntimepath = await op.runtimepath.getGlobal(denops);
+    // NOTE: Use init_runtimepath.
+    // Because "makeState" may be called after VimEnter.
+    const currentRuntimepath = await vars.g.get(
+      denops,
+      "dpp#_init_runtimepath",
+    );
 
     const rtps = await denops.call(
       "dpp#util#_split_rtp",
