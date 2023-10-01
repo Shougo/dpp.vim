@@ -403,13 +403,6 @@ function protocolArgs<
 function initPlugin(plugin: Plugin, basePath: string): Plugin {
   plugin.sourced = false;
 
-  if (!plugin.normalized_name) {
-    plugin.normalized_name = parse(plugin.name).name.replace(
-      /(n?vim|dps|denops)[_-]|[_-]n?vim$/,
-      "",
-    );
-  }
-
   if (!plugin.path) {
     // Set default path from basePath
     plugin.path = `${basePath}/repos/${plugin.repo ?? plugin.name}`;

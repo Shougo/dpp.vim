@@ -53,7 +53,8 @@ function dpp#autoload#_source(plugins) abort
     endfor
 
     if !has('vim_starting')
-      let augroup = plugin->get('augroup', plugin.normalized_name)
+      const augroup = plugin->get('augroup',
+            \ dpp#util#_get_normalized_name(plugin))
       let events = ['VimEnter', 'BufRead', 'BufEnter',
             \ 'BufWinEnter', 'WinEnter']
       if has('gui_running') && &term ==# 'builtin_gui'

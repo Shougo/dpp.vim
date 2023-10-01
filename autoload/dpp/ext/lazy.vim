@@ -53,7 +53,8 @@ function dpp#ext#lazy#_source(plugins) abort
     endfor
 
     if !has('vim_starting')
-      let augroup = plugin->get('augroup', plugin.normalized_name)
+      const augroup = plugin->get('augroup',
+            \ dpp#util#_get_normalized_name(plugin))
       let events = ['VimEnter', 'BufRead', 'BufEnter',
             \ 'BufWinEnter', 'WinEnter']
       if has('gui_running') && &term ==# 'builtin_gui'
@@ -184,7 +185,8 @@ function dpp#ext#lazy#_on_func(name) abort
 
   call dpp#ext#lazy#_source(dpp#util#_get_lazy_plugins()
         \ ->filter({ _, val ->
-        \          function_prefix->stridx(val.normalized_name.'#') == 0
+        \          function_prefix->stridx(
+        \             dpp#util#_get_normalized_name(val).'#') == 0
         \          || val->get('on_func', [])->index(a:name) >= 0 }))
 endfunction
 
@@ -211,7 +213,7 @@ function dpp#ext#lazy#_on_pre_cmd(name) abort
         \  ->map({ _, val2 -> tolower(val2) })
         \  ->index(a:name) >= 0
         \  || a:name->tolower()
-        \     ->stridx(val.normalized_name->tolower()
+        \     ->stridx(dpp#util#_get_normalized_name(val)->tolower()
         \     ->substitute('[_-]', '', 'g')) == 0 }))
 endfunction
 
@@ -444,7 +446,7 @@ endfunction
 
 function dpp#ext#lazy#_generate_dummy_commands(plugin) abort
   let dummy_commands = []
-  for name in a:plugin.on_cmd
+  for name in a:plugin->get('on_cmd', [])
     " Define dummy commands.
     let raw_cmd = 'command '
           \ .. '-complete=custom,dein#autoload#_dummy_complete'
@@ -459,13 +461,13 @@ function dpp#ext#lazy#_generate_dummy_commands(plugin) abort
 endfunction
 function dpp#ext#lazy#_generate_dummy_mappings(plugin) abort
   let dummy_mappings = []
-  const normalized_name = a:plugin.normalized_name
-  let items = a:plugin.on_map->type() == v:t_dict ?
-        \ a:plugin.on_map->items()
-        \ ->map({ _, val -> [val[0]->split('\zs'),
+  echomsg a:plugin
+  const normalized_name = dpp#util#_get_normalized_name(a:plugin)
+  const on_map = a:plugin->get('on_map', [])
+  let items = on_map->type() == v:t_dict ?
+        \ on_map->items()->map({ _, val -> [val[0]->split('\zs'),
         \       dein#util#_convert2list(val[1])]}) :
-        \ a:plugin.on_map->copy()
-        \ ->map({ _, val -> type(val) == v:t_list ?
+        \ on_map->copy()->map({ _, val -> type(val) == v:t_list ?
         \       [val[0]->split('\zs'), val[1:]] :
         \       [['n', 'x', 'o'], [val]]
         \  })

@@ -151,3 +151,9 @@ function dpp#util#_clear_state() abort
     call delete(cache)
   endfor
 endfunction
+
+function dpp#util#_get_normalized_name(plugin) abort
+  return a:plugin->get('normalized_name',
+        \ a:plugin.name->fnamemodify(':r')->substitute(
+        \ '\c^\%(n\?vim\|dps\|denops\)[_-]\|[_-]n\?vim$', '', 'g'))
+endfunction
