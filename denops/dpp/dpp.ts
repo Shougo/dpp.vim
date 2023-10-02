@@ -1,4 +1,4 @@
-import { assertEquals, Denops, extname, is, op, parse, vars } from "./deps.ts";
+import { assertEquals, Denops, extname, is, vars } from "./deps.ts";
 import {
   ActionName,
   BaseExt,
@@ -15,8 +15,6 @@ import {
   ProtocolOptions,
 } from "./types.ts";
 import {
-  defaultContext,
-  defaultDppOptions,
   defaultDummy,
   foldMerge,
   mergeExtOptions,
@@ -32,19 +30,17 @@ import { errorException, isDirectory } from "./utils.ts";
 
 export class Dpp {
   private loader: Loader;
-  private context: Context = defaultContext();
-  private options: DppOptions = defaultDppOptions();
 
   constructor(loader: Loader) {
     this.loader = loader;
   }
 
-  async getProtocols(denops: Denops, protocolNames: ProtocolName[]) {
+  async getProtocols(denops: Denops, options: DppOptions) {
     const protocols: Record<ProtocolName, Protocol> = {};
 
-    for (const procotolName of protocolNames) {
+    for (const procotolName of options.protocols) {
       const [protocol, protocolOptions, protocolParams] = await this
-        .getProtocol(denops, procotolName);
+        .getProtocol(denops, options, procotolName);
       if (!protocol) {
         continue;
       }
@@ -61,12 +57,17 @@ export class Dpp {
 
   async extAction(
     denops: Denops,
+    context: Context,
     options: DppOptions,
     extName: ExtName,
     actionName: ActionName,
     actionParams: unknown = {},
   ): Promise<unknown | undefined> {
-    const [ext, extOptions, extParams] = await this.getExt(denops, extName);
+    const [ext, extOptions, extParams] = await this.getExt(
+      denops,
+      options,
+      extName,
+    );
     if (!ext) {
       return;
     }
@@ -82,9 +83,9 @@ export class Dpp {
 
     const ret = await action.callback({
       denops,
-      context: this.context,
-      options: this.options,
-      protocols: await this.getProtocols(denops, options.protocols),
+      context,
+      options,
+      protocols: await this.getProtocols(denops, options),
       extOptions,
       extParams,
       actionParams,
@@ -233,6 +234,7 @@ export class Dpp {
 
   private async getExt(
     denops: Denops,
+    options: DppOptions,
     name: ExtName,
   ): Promise<
     [
@@ -260,14 +262,15 @@ export class Dpp {
       ];
     }
 
-    const [options, params] = extArgs(this.options, ext);
-    await checkExtOnInit(ext, denops, options, params);
+    const [extOptions, extParams] = extArgs(options, ext);
+    await checkExtOnInit(ext, denops, extOptions, extParams);
 
-    return [ext, options, params];
+    return [ext, extOptions, extParams];
   }
 
   private async getProtocol(
     denops: Denops,
+    options: DppOptions,
     name: ProtocolName,
   ): Promise<
     [
@@ -295,10 +298,15 @@ export class Dpp {
       ];
     }
 
-    const [options, params] = protocolArgs(this.options, protocol);
-    await checkProtocolOnInit(protocol, denops, options, params);
+    const [protocolOptions, protocolParams] = protocolArgs(options, protocol);
+    await checkProtocolOnInit(
+      protocol,
+      denops,
+      protocolOptions,
+      protocolParams,
+    );
 
-    return [protocol, options, params];
+    return [protocol, protocolOptions, protocolParams];
   }
 }
 

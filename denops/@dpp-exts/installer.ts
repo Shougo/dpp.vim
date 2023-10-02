@@ -7,14 +7,14 @@ export class Ext extends BaseExt<Params> {
   override actions: Actions<Params> = {
     install: {
       description: "Install plugins",
-      callback: async (args: {
+      callback: (args: {
         denops: Denops;
         options: DppOptions;
         actionParams: unknown;
       }) => {
         console.log(args.options);
-      }
-    }
+      },
+    },
   };
 
   override params(): Params {

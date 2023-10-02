@@ -26,10 +26,11 @@ export function main(denops: Denops) {
       ) as DppOptions;
       contextBuilder.setGlobal(currentOptions);
 
-      const [_, options] = await contextBuilder.get(denops);
+      const [context, options] = await contextBuilder.get(denops);
 
       return await dpp.extAction(
         denops,
+        context,
         options,
         extName,
         actionName,
