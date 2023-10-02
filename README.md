@@ -48,17 +48,27 @@ let $CACHE = expand('~/.cache')
 if !($CACHE->isdirectory())
   call mkdir($CACHE, 'p')
 endif
-if &runtimepath !~# '/dpp.vim'
-  let s:dir = 'dpp.vim'->fnamemodify(':p')
+
+for s:plugin in [
+      \ 'Shougo/dpp.vim',
+      \ 'denops/denops.vim',
+      \ ]->filter({ _, val ->
+      \           &runtimepath !~# '/' .. val->fnamemodify(':t') })
+  " Search from current directory
+  let s:dir = s:plugin->fnamemodify(':t')->fnamemodify(':p')
   if !(s:dir->isdirectory())
-    let s:dir = $CACHE .. '/dpp/repos/github.com/Shougo/dpp.vim'
+    " Search from $CACHE directory
+    let s:dir = $CACHE .. '/dpp/repos/github.com/' .. s:plugin
     if !(s:dir->isdirectory())
-      execute '!git clone https://github.com/Shougo/dpp.vim' s:dir
+      execute '!git clone https://github.com/' .. s:plugin s:dir
     endif
   endif
-  execute 'set runtimepath^='
-        \ .. s:dir->fnamemodify(':p')->substitute('[/\\]$', '', '')
-endif
+
+  if s:plugin->fnamemodify(':t') ==# 'dpp.vim'
+    execute 'set runtimepath^='
+          \ .. s:dir->fnamemodify(':p')->substitute('[/\\]$', '', '')
+  endif
+endfor
 ```
 
 ### Config example
