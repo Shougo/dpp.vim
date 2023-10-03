@@ -109,10 +109,10 @@ protocols		(string[])
 ------------------------------------------------------------------------------
 FUNCTIONS                                                      *dpp-functions*
 
-                                                            *dpp#ext_action()*
-dpp#ext_action({ext-name}, {action-name}[, {action-params}])
+                                                      *dpp#async_ext_action()*
+dpp#async_ext_action({ext-name}, {action-name}[, {action-params}])
 		Fire {action-name} action with {action-params} by {ext-name}
-		ext.
+		ext asynchronously.
 		{action-params} behavior depends on {action-name}.
 		NOTE: It must be executed after |dpp#min#load_state()|.
 
@@ -153,6 +153,13 @@ dpp#source([{name}])
 		{plugins} is the plugins name list.
 		If you omit it, dpp will source all plugins.
 		It returns sourced plugins list.
+
+                                                       *dpp#sync_ext_action()*
+dpp#sync_ext_action({ext-name}, {action-name}[, {action-params}])
+		Fire {action-name} action with {action-params} by {ext-name}
+		ext synchronously.
+		{action-params} behavior depends on {action-name}.
+		NOTE: It must be executed after |dpp#min#load_state()|.
 
 ------------------------------------------------------------------------------
 PLUGIN OPTIONS                                            *dpp-plugin-options*

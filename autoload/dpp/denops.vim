@@ -8,6 +8,15 @@ function s:init() abort
     return 1
   endif
 
+  if !('#dpp'->exists())
+    call dpp#min#_init()
+  endif
+
+  " Check sudo
+  if g:dpp#_is_sudo
+    return 1
+  endif
+
   augroup dpp
     autocmd!
     autocmd User DenopsPluginPost:dpp let s:initialized = v:true
