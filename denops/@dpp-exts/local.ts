@@ -29,15 +29,20 @@ export class Ext extends BaseExt<Params> {
 
         let plugins: Plugin[] = [];
         for (const include of params.includes ?? ["*"]) {
-          const dirs = await fn.glob(
+          const files = await fn.glob(
             args.denops,
             base + "/" + include,
             1,
             1,
           ) as string[];
 
+          const bits = await Promise.all(
+            files.map(async (file) => await isDirectory(file)),
+          );
+          const dirs = files.filter((_) => bits.shift());
+
           plugins = plugins.concat(
-            dirs.filter(async (dir) => await isDirectory(dir)).map((dir) => {
+            dirs.map((dir) => {
               return {
                 ...defaultOptions,
                 repo: dir,

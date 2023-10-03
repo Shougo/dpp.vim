@@ -1,3 +1,45 @@
+function dpp#denops#_request(method, args) abort
+  if s:init()
+    return {}
+  endif
+
+  if !dpp#denops#_denops_running()
+    " Lazy call request
+    execute printf('autocmd User DenopsPluginPost:dpp call '
+          \ .. 's:notify("%s", %s)', a:method, a:args->string())
+    return {}
+  endif
+
+  if denops#plugin#wait('dpp')
+    return {}
+  endif
+  return denops#request('dpp', a:method, a:args)
+endfunction
+function dpp#denops#_notify(method, args) abort
+  if s:init()
+    return {}
+  endif
+
+  if !dpp#denops#_denops_running()
+    " Lazy call notify
+    execute printf('autocmd User DenopsPluginPost:dpp call '
+          \ .. 's:notify("%s", %s)', a:method, a:args->string())
+    return {}
+  endif
+
+  return s:notify(a:method, a:args)
+endfunction
+
+function dpp#denops#_denops_running() abort
+  return 'g:loaded_denops'->exists()
+        \ && denops#server#status() ==# 'running'
+        \ && denops#plugin#is_loaded('dpp')
+endfunction
+
+function s:stopped() abort
+  unlet! s:initialized
+endfunction
+
 function s:init() abort
   if 's:initialized'->exists()
     return
@@ -31,48 +73,6 @@ function s:init() abort
   if 'g:loaded_denops'->exists() && denops#server#status() ==# 'running'
     silent! call dpp#denops#_register()
   endif
-endfunction
-
-function dpp#denops#_denops_running() abort
-  return 'g:loaded_denops'->exists()
-        \ && denops#server#status() ==# 'running'
-        \ && denops#plugin#is_loaded('dpp')
-endfunction
-
-function s:stopped() abort
-  unlet! s:initialized
-endfunction
-
-function dpp#denops#_request(method, args) abort
-  if s:init()
-    return {}
-  endif
-
-  if !dpp#denops#_denops_running()
-    " Lazy call request
-    execute printf('autocmd User DenopsPluginPost:dpp call '
-          \ .. 's:notify("%s", %s)', a:method, a:args->string())
-    return {}
-  endif
-
-  if denops#plugin#wait('dpp')
-    return {}
-  endif
-  return denops#request('dpp', a:method, a:args)
-endfunction
-function dpp#denops#_notify(method, args) abort
-  if s:init()
-    return {}
-  endif
-
-  if !dpp#denops#_denops_running()
-    " Lazy call notify
-    execute printf('autocmd User DenopsPluginPost:dpp call '
-          \ .. 's:notify("%s", %s)', a:method, a:args->string())
-    return {}
-  endif
-
-  return s:notify(a:method, a:args)
 endfunction
 
 function s:notify(method, args) abort

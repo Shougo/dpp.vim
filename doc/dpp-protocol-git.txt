@@ -35,6 +35,47 @@ EXAMPLES                                           *dpp-protocol-git-examples*
 ==============================================================================
 PARAMS                                               *dpp-protocol-git-params*
 
+                                           *dpp-protocol-git-param-cloneDepth*
+cloneDepth
+		The default history depth for "git clone".
+		If it is 1, dpp will use shallow clone feature.
+		NOTE: If it is set, |dpp-plugin-option-rev| does not work.
+		Because the history is not downloaded.
+
+		Default: 0
+
+                                          *dpp-protocol-git-param-commandPath*
+commandPath
+		The "git" command path used for git type.
+
+		Default: "git"
+
+                                       *dpp-protocol-git-param-defaultHubSite*
+defaultHubSite
+		The default hub site used for git type.
+
+		Default: "github.com"
+
+                                      *dpp-protocol-git-param-defaultProtocol*
+defaultProtocol
+		The default protocol used for git (github).
+		NOTE: It only accepts "https" or "ssh".
+
+		Default: "https"
+
+                                   *dpp-protocol-git-param-enablePartialClone*
+enablePartialClone
+		Enable partial clone when plugin install. It is faster.
+		NOTE: git 2.19+ is required.
+
+		Default: false
+
+                                          *dpp-protocol-git-param-pullCommand*
+pullCommand
+		The git command used to pull updates.
+
+		Default: "pull --ff --ff-only"
+
 ==============================================================================
 COMPATIBILITY                                 *dpp-protocol-git-compatibility*
 
