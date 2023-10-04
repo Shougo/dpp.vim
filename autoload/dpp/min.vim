@@ -4,13 +4,11 @@ function dpp#min#load_state(path, name=v:progname->fnamemodify(':r')) abort
   endif
   if g:dpp#_is_sudo | return 1 | endif
   let g:dpp#_base_path = a:path->expand()
-
   const state = printf('%s/state_%s.vim', g:dpp#_base_path, a:name)
-  if !(state->filereadable()) | return 1 | endif
   const cache = printf('%s/cache_%s.vim', g:dpp#_base_path, a:name)
-  if !(cache->filereadable()) | return 1 | endif
+  if !(cache->filereadable() || state->filereadable()) | return 1 | endif
   try
-    const g:dpp#_cache = has('nvim') ? cache->readfile()->json_decode()
+    let g:dpp#_cache = has('nvim') ? cache->readfile()->json_decode()
           \ : cache->readfile()[0]->js_decode()
     execute 'source' state->fnameescape()
     unlet g:dpp#_cache
@@ -30,7 +28,6 @@ function dpp#min#_init() abort
   let g:dpp#_is_sudo = $SUDO_USER !=# '' && $USER !=# $SUDO_USER
         \ && $HOME !=# ('~'.$USER)->expand()
         \ && $HOME ==# ('~'.$SUDO_USER)->expand()
-
   const g:dpp#_init_runtimepath = &runtimepath
 
   augroup dpp

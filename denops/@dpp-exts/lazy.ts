@@ -17,12 +17,11 @@ const StateLines = [
   " autocmd BufNew,BufNewFile *? call dpp#ext#lazy#_on_default_event('BufNew')",
   " autocmd VimEnter *? call dpp#ext#lazy#_on_default_event('VimEnter')",
   " autocmd FileType *? call dpp#ext#lazy#_on_default_event('FileType')",
-  " autocmd BufWritePost *.lua,*.vim,*.toml,vimrc,.vimrc",
-  "       \\ call dpp#util#_check_vimrcs()",
   " autocmd CmdUndefined * call dpp#ext#lazy#_on_pre_cmd('<afile>'->expand())",
   "augroup END",
   "augroup dpp-events | augroup END",
-  "if !has('nvim') | return | endif",
+  "if has('nvim')",
+  "let g:dpp#_on_lua_plugins = {}",
   "lua <<END",
   "table.insert(package.loaders, 1, (function()",
   "  return function(mod_name)",
@@ -40,6 +39,7 @@ const StateLines = [
   "  end",
   "end)())",
   "END",
+  "endif",
 ];
 
 export class Ext extends BaseExt<Params> {
@@ -67,8 +67,18 @@ export class Ext extends BaseExt<Params> {
               plugin,
             ) as string[],
           );
+
+          if ("on_lua" in plugin) {
+            stateLines = stateLines.concat(
+              await args.denops.call(
+                "dpp#ext#lazy#_generate_on_lua",
+                plugin,
+              ) as string[],
+            );
+          }
         }
 
+        console.log(stateLines);
         return stateLines;
       },
     },

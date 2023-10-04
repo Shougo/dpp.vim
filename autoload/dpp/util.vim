@@ -13,6 +13,10 @@ function dpp#util#_get_plugins(plugins) abort
         \ ->map({ _, val -> val->type() == v:t_dict ? val : dpp#get(val) })
         \ ->filter({ _, val -> !(val->empty()) })
 endfunction
+function dpp#util#_get_lazy_plugins() abort
+  return g:dpp#_plugins->values()
+        \ ->filter({ _, val -> !val.sourced && val.rtp !=# '' })
+endfunction
 
 function dpp#util#_get_runtime_path() abort
   return dpp#util#_substitute_path($VIMRUNTIME)

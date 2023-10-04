@@ -37,7 +37,11 @@ export function main(denops: Denops) {
         actionParams,
       );
     },
-    async makeState(arg1: unknown, arg2: unknown, arg3: unknown): Promise<void> {
+    async makeState(
+      arg1: unknown,
+      arg2: unknown,
+      arg3: unknown,
+    ): Promise<void> {
       const basePath = ensure(arg1, is.String);
       const configPath = ensure(arg2, is.String);
       const name = ensure(arg3, is.String);

@@ -446,7 +446,7 @@ endfunction
 
 function dpp#ext#lazy#_generate_dummy_commands(plugin) abort
   let dummy_commands = []
-  for name in a:plugin->get('on_cmd', [])
+  for name in dpp#util#_convert2list(a:plugin->get('on_cmd', []))
     " Define dummy commands.
     let raw_cmd = 'command '
           \ .. '-complete=custom,dpp#autoload#_dummy_complete'
@@ -461,7 +461,6 @@ function dpp#ext#lazy#_generate_dummy_commands(plugin) abort
 endfunction
 function dpp#ext#lazy#_generate_dummy_mappings(plugin) abort
   let dummy_mappings = []
-  echomsg a:plugin
   const normalized_name = dpp#util#_get_normalized_name(a:plugin)
   const on_map = a:plugin->get('on_map', [])
   let items = on_map->type() == v:t_dict ?
@@ -501,4 +500,10 @@ function dpp#ext#lazy#_generate_dummy_mappings(plugin) abort
   endfor
 
   return dummy_mappings
+endfunction
+function dpp#ext#lazy#_generate_on_lua(plugin) abort
+  return dpp#util#_convert2list(a:plugin.on_lua)
+        \ ->map({ _, val -> val->matchstr('^[^./]\+') })
+        \ ->map({ _, mod -> printf("let g:dpp#_on_lua_plugins[%s] = v:true",
+        \                          string(mod) )})
 endfunction

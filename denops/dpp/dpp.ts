@@ -196,9 +196,9 @@ export class Dpp {
       stateLines = stateLines.concat(configReturn.stateLines);
     }
 
-    const inlineVimrcs = options.inlineVimrcs.map(
-      async (vimrc) => await denops.call("dpp#util#_expand", vimrc) as string
-    );
+    const inlineVimrcs = await Promise.all(options.inlineVimrcs.map(
+      async (vimrc) => await denops.call("dpp#util#_expand", vimrc) as string,
+    ));
     for await (const vimrc of inlineVimrcs) {
       const vimrcLines = (await Deno.readTextFile(vimrc)).split("\n");
       if (extname(vimrc) == "lua") {
@@ -221,7 +221,7 @@ export class Dpp {
     const cacheFile = `${basePath}/cache_${name}.vim`;
     const cacheLines = [
       JSON.stringify([
-        configReturn.plugins,
+        recordPlugins,
         {},
         options,
         configReturn.checkFiles ?? [],
@@ -230,7 +230,7 @@ export class Dpp {
     console.log(cacheFile);
     await Deno.writeTextFile(cacheFile, cacheLines.join("\n"));
 
-    console.log(stateLines);
+    //console.log(stateLines);
     //console.log(cacheLines);
     //console.log(rtps);
   }
