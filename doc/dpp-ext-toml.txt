@@ -47,7 +47,7 @@ FUNCTIONS                                             *dpp-ext-toml-functions*
 
                                                        *dpp#ext#toml#syntax()*
 dpp#ext#toml#syntax()
-		Enable dein specific toml syntax.
+		Enable dpp specific toml syntax.
 		It highlights multiline string as "vim" or "lua" syntax.
 		If you use neovim, you should use treesitter highlight
 		instead.

@@ -3,15 +3,17 @@ import { Denops } from "../deps.ts";
 import { Dpp, Plugin } from "../types.ts";
 
 export type ConfigArguments = {
-  denops: Denops;
   basePath: string;
   contextBuilder: ContextBuilder;
+  denops: Denops;
   dpp: Dpp;
+  name: string;
 };
 
 export type ConfigReturn = {
+  checkFiles?: string[];
   plugins: Plugin[];
-  stateLines: string[];
+  stateLines?: string[];
 };
 
 export abstract class BaseConfig {

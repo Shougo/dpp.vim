@@ -449,9 +449,9 @@ function dpp#ext#lazy#_generate_dummy_commands(plugin) abort
   for name in a:plugin->get('on_cmd', [])
     " Define dummy commands.
     let raw_cmd = 'command '
-          \ .. '-complete=custom,dein#autoload#_dummy_complete'
+          \ .. '-complete=custom,dpp#autoload#_dummy_complete'
           \ .. ' -bang -bar -range -nargs=* '. name
-          \ .. printf(" call dein#autoload#_on_cmd(%s, %s, <q-args>,
+          \ .. printf(" call dpp#autoload#_on_cmd(%s, %s, <q-args>,
           \  '<bang>'->expand(), '<line1>'->expand(), '<line2>'->expand())",
           \   name->string(), a:plugin.name->string())
 
@@ -466,7 +466,7 @@ function dpp#ext#lazy#_generate_dummy_mappings(plugin) abort
   const on_map = a:plugin->get('on_map', [])
   let items = on_map->type() == v:t_dict ?
         \ on_map->items()->map({ _, val -> [val[0]->split('\zs'),
-        \       dein#util#_convert2list(val[1])]}) :
+        \       dpp#util#_convert2list(val[1])]}) :
         \ on_map->copy()->map({ _, val -> type(val) == v:t_list ?
         \       [val[0]->split('\zs'), val[1:]] :
         \       [['n', 'x', 'o'], [val]]
@@ -484,7 +484,7 @@ function dpp#ext#lazy#_generate_dummy_mappings(plugin) abort
 
     for mapping in mappings
       " Define dummy mappings.
-      let prefix = printf('dein#autoload#_on_map(%s, %s,',
+      let prefix = printf('dpp#autoload#_on_map(%s, %s,',
             \ mapping->substitute('<', '<lt>', 'g')->string(),
             \ a:plugin.name->string())
       for mode in modes

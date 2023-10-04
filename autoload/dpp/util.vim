@@ -17,17 +17,18 @@ endfunction
 function dpp#util#_get_runtime_path() abort
   return dpp#util#_substitute_path($VIMRUNTIME)
 endfunction
-function dpp#util#_get_vimrcs(vimrcs) abort
-  return !(a:vimrcs->empty()) ?
-        \ dpp#util#_convert2list(a:vimrcs)
-        \ ->map({ _, val -> dpp#util#_substitute_path(val->expand()) }) :
-        \ [dpp#util#_get_myvimrc()]
-endfunction
-function dpp#util#_get_myvimrc() abort
-  const vimrc = $MYVIMRC !=# '' ? $MYVIMRC :
-        \ 'scriptnames'->execute()->split('\n')[0]
-        \  ->matchstr('^\s*\d\+:\s\zs.*')
-  return dpp#util#_substitute_path(vimrc)
+function! dpp#util#_check_files() abort
+  const time = dpp#util#_get_runtime_path()->getftime()
+  const ret = !(g:dpp#_check_files->copy()
+        \ ->map({ _, val -> val->expand()->getftime() })
+        \ ->filter({ _, val -> time < val })->empty())
+  if !ret
+    return 0
+  endif
+
+  call dpp#util#_clear_state()
+
+  return ret
 endfunction
 
 function dpp#util#_convert2list(expr) abort

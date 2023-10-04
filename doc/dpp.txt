@@ -124,18 +124,35 @@ dpp#get([{name}])
 		plugin dictionary.
 
                                                             *dpp#make_state()*
-dpp#make_state({base-path}, {config-path})
+dpp#make_state({base-path}, {config-path}[, {name}])
 		Save dpp's state in the cache script.
 		It must be after |DenopsReady|.
 		{base-path} is where your downloaded plugins will be placed.
 		{config-path} is TypeScript configuration file to make state.
+		{name} is plugins profile name.  The default is "vim" or
+		"nvim".
 		NOTE: It saves your 'runtimepath' completely, you must not
 		call it after change 'runtimepath' dynamically.
 
+		The TypeScript configuration script must returns following
+		object.
+
+		checkFiles	(string[])	(Optional)
+			Check files when update timestamp.
+			Default: []
+
+		plugins		(Plugin[])	(Required)
+			Plugins list.
+
+		stateLines	(string[])	(Optional)
+			The additional state lines depends on exts.
+
                                                         *dpp#min#load_state()*
-dpp#min#load_state({base-path})
+dpp#min#load_state({base-path}[, {name}])
 		Load dpp's state from the cache script, {base-path} is where
 		your downloaded plugins will be placed.
+		{name} is plugins profile name.  The default is "vim" or
+		"nvim".
 		NOTE: It overwrites your 'runtimepath' completely, you must
 		not call it after change 'runtimepath' dynamically.
 		NOTE: The block is skipped if dpp's state is loaded.

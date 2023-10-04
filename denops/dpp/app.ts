@@ -37,9 +37,10 @@ export function main(denops: Denops) {
         actionParams,
       );
     },
-    async makeState(arg1: unknown, arg2: unknown): Promise<void> {
+    async makeState(arg1: unknown, arg2: unknown, arg3: unknown): Promise<void> {
       const basePath = ensure(arg1, is.String);
       const configPath = ensure(arg2, is.String);
+      const name = ensure(arg3, is.String);
 
       // NOTE: Import module with fragment so that reload works properly.
       // https://github.com/vim-denops/denops.vim/issues/227
@@ -48,15 +49,16 @@ export function main(denops: Denops) {
       );
       const obj = new mod.Config();
       const configReturn = await obj.config({
+        contextBuilder,
         denops,
         basePath,
-        contextBuilder,
         dpp,
+        name,
       });
 
       const [_, options] = await contextBuilder.get(denops);
 
-      await dpp.makeState(denops, options, basePath, configReturn);
+      await dpp.makeState(denops, options, basePath, name, configReturn);
     },
   };
 }

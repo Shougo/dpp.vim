@@ -17,7 +17,8 @@ function dpp#async_ext_action(ext_name, action_name, action_params={}) abort
         \ a:ext_name, a:action_name, a:action_params])
 endfunction
 
-function dpp#make_state(base_path, config_path) abort
+function dpp#make_state(
+      \ base_path, config_path, name=v:progname->fnamemodify(':r')) abort
   const config_path = dpp#util#_expand(a:config_path)
   const base_path = dpp#util#_expand(a:base_path)
 
@@ -26,7 +27,7 @@ function dpp#make_state(base_path, config_path) abort
     return 1
   endif
 
-  return dpp#denops#_notify('makeState', [base_path, config_path])
+  return dpp#denops#_notify('makeState', [base_path, config_path, a:name])
 endfunction
 
 function dpp#recache_runtimepath() abort

@@ -98,6 +98,7 @@ export class Dpp {
     denops: Denops,
     options: DppOptions,
     basePath: string,
+    name: string,
     configReturn: ConfigReturn,
   ) {
     // Initialize plugins
@@ -109,9 +110,6 @@ export class Dpp {
     if (!await isDirectory(basePath)) {
       await Deno.mkdir(basePath, { recursive: true });
     }
-
-    // Write state file
-    const progname = await vars.g.get(denops, "dpp#_progname");
 
     // Get runtimepath
     const dppRuntimepath = `${basePath}/.dpp`;
@@ -180,11 +178,7 @@ export class Dpp {
       `if g:dpp#_cache_version !=# ${cacheVersion} ` +
       `|| g:dpp#_init_runtimepath !=# '${initRuntimepath}' | ` +
       "throw 'Cache loading error' | endif",
-      "let [s:plugins, s:ftplugin, s:options] = dpp#min#_load_cache_raw()",
-      "if s:plugins->empty() | throw 'Cache loading error' | endif",
-      "let g:dpp#_plugins = s:plugins",
-      "let g:dpp#ftplugin = s:ftplugin",
-      "let g:dpp#_options = s:options",
+      "let [g:dpp#_plugins, g:dpp#ftplugin, g:dpp#_options, g:dpp#_check_files] = g:dpp#_cache",
       `let g:dpp#_base_path = '${basePath}'`,
       `let &runtimepath = '${newRuntimepath}'`,
     ];
@@ -198,12 +192,14 @@ export class Dpp {
     ) {
       stateLines.push("filetype plugin indent off");
     }
+    if (configReturn.stateLines) {
+      stateLines = stateLines.concat(configReturn.stateLines);
+    }
 
-    for await (
-      const vimrc of options.inlineVimrcs.map(async (vimrc) =>
-        await denops.call("dpp#util#_expand", vimrc) as string
-      )
-    ) {
+    const inlineVimrcs = options.inlineVimrcs.map(
+      async (vimrc) => await denops.call("dpp#util#_expand", vimrc) as string
+    );
+    for await (const vimrc of inlineVimrcs) {
       const vimrcLines = (await Deno.readTextFile(vimrc)).split("\n");
       if (extname(vimrc) == "lua") {
         stateLines = ["lua <<EOF"].concat(
@@ -215,14 +211,21 @@ export class Dpp {
         );
       }
     }
+    console.log(inlineVimrcs);
 
-    const stateFile = `${basePath}/state_${progname}.vim`;
+    // Write state file
+    const stateFile = `${basePath}/state_${name}.vim`;
     console.log(stateFile);
     await Deno.writeTextFile(stateFile, stateLines.join("\n"));
 
-    const cacheFile = `${basePath}/cache_${progname}.vim`;
+    const cacheFile = `${basePath}/cache_${name}.vim`;
     const cacheLines = [
-      JSON.stringify([configReturn.plugins, {}, options]),
+      JSON.stringify([
+        configReturn.plugins,
+        {},
+        options,
+        configReturn.checkFiles ?? [],
+      ]),
     ];
     console.log(cacheFile);
     await Deno.writeTextFile(cacheFile, cacheLines.join("\n"));
