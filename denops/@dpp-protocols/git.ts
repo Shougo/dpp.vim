@@ -1,5 +1,5 @@
-import { Denops } from "../dpp/deps.ts";
-import { BaseProtocol, Plugin } from "../dpp/types.ts";
+import { Denops, vars } from "../dpp/deps.ts";
+import { BaseProtocol, Plugin, ProtocolOptions } from "../dpp/types.ts";
 
 type Params = {
   cloneDepth: number;
@@ -11,13 +11,43 @@ type Params = {
 };
 
 export class Protocol extends BaseProtocol<Params> {
-  override detect(args: {
+  override async detect(args: {
     denops: Denops;
     plugin: Plugin;
+    protocolOptions: ProtocolOptions;
     protocolParams: Params;
-  }): Plugin | Promise<Plugin> | undefined {
-    console.log(args.protocolParams);
-    return;
+  }): Promise<Partial<Plugin> | undefined> {
+    if (!args.plugin.repo) {
+      return;
+    }
+
+    const url = await this.getUrl(args);
+    if (url.length === 0) {
+      return;
+    }
+
+    const directory = url.replace(/\.git$/, "").replace(/^https:\/+|^git@/, "")
+      .replace(/:/, "/");
+
+    return {
+      path: `${await vars.g.get(
+        args.denops,
+        "dpp#_base_path",
+      )}/repos/${directory}`,
+    };
+  }
+
+  override async getUrl(args: {
+    denops: Denops;
+    plugin: Plugin;
+    protocolOptions: ProtocolOptions;
+    protocolParams: Params;
+  }): Promise<string> {
+    if (!args.plugin.repo) {
+      return "";
+    }
+
+    return args.plugin.repo;
   }
 
   override params(): Params {
