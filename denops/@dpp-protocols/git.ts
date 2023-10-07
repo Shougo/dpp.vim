@@ -1,5 +1,6 @@
 import { Denops, vars } from "../dpp/deps.ts";
 import { BaseProtocol, Plugin, ProtocolOptions } from "../dpp/types.ts";
+import { isDirectory } from "../dpp/utils.ts";
 
 type Params = {
   cloneDepth: number;
@@ -19,6 +20,23 @@ export class Protocol extends BaseProtocol<Params> {
   }): Promise<Partial<Plugin> | undefined> {
     if (!args.plugin.repo) {
       return;
+    }
+
+    if (
+      args.plugin.repo.match(
+        /\/\/(raw|gist)\.githubusercontent\.com\/|\/archive\/[^\/]+.zip$/,
+      )
+    ) {
+      // Raw repository
+      return;
+    }
+
+    if (await isDirectory(args.plugin.repo)) {
+      // Local repository
+      return {
+        local: true,
+        path: args.plugin.repo,
+      };
     }
 
     const url = await this.getUrl(args);
@@ -43,11 +61,49 @@ export class Protocol extends BaseProtocol<Params> {
     protocolOptions: ProtocolOptions;
     protocolParams: Params;
   }): Promise<string> {
-    if (!args.plugin.repo) {
+    if (!args.plugin.repo || !args.plugin.repo.match(/\//)) {
       return "";
     }
 
-    return args.plugin.repo;
+    if (await isDirectory(args.plugin.repo)) {
+      // Local repository
+      return args.plugin.repo;
+    }
+
+    let protocol = args.protocolParams.defaultProtocol;
+    let host = args.protocolParams.defaultHubSite;
+    let name = args.plugin.repo;
+
+    const sshMatch = args.plugin.repo.match(/^git@(?<host>[^:]+):(?<name>.+)/);
+    const protocolMatch = args.plugin.repo.match(
+      /^(?<protocol>[^:]+):(?<host>[^\/]+)\/(?<name>.+)/,
+    );
+    if (sshMatch && sshMatch.groups) {
+      // Parse "git@host:name" pattern
+      protocol = "ssh";
+      host = sshMatch.groups.host;
+      name = sshMatch.groups.name;
+    } else if (protocolMatch && protocolMatch.groups) {
+      // Parse "protocol://host/name" pattern
+      protocol = protocolMatch.groups.protocol;
+      host = protocolMatch.groups.host;
+      name = protocolMatch.groups.name;
+    }
+
+    if (protocol !== "https" && protocol !== "ssh") {
+      await args.denops.call(
+        "dpp#util#_error",
+        `Invalid git protocol: "${protocol}"`,
+      );
+
+      return "";
+    }
+
+    const url = (protocol === "ssh")
+      ? `git@${host}:${name}`
+      : `${protocol}://${host}/${name}`;
+
+    return url;
   }
 
   override params(): Params {

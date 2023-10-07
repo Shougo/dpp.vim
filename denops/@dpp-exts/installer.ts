@@ -28,12 +28,8 @@ export class Ext extends BaseExt<Params> {
           ),
         ) as Plugin[];
 
-        const bits = await Promise.all(
-          plugins.map(async (plugin) => !await isDirectory(plugin.path ?? "")),
-        );
-
         // Detect protocol
-        for (const plugin of plugins.filter((_) => bits.shift())) {
+        for (const plugin of plugins) {
           if ("protocol" in plugin) {
             continue;
           }
@@ -58,6 +54,17 @@ export class Ext extends BaseExt<Params> {
               });
             }
           }
+        }
+
+        const bits = await Promise.all(
+          plugins.map(async (plugin) =>
+            plugin.path && !await isDirectory(plugin.path)
+          ),
+        );
+
+        // Install plugins
+        for (const plugin of plugins.filter((_) => bits.shift())) {
+          console.log(plugin);
         }
 
         //console.log(plugins);
