@@ -30,6 +30,6 @@ function dpp#make_state(
   return dpp#denops#_notify('makeState', [base_path, config_path, a:name])
 endfunction
 
-function dpp#recache_runtimepath() abort
+function dpp#clear_state() abort
   call dpp#util#_clear_state()
 endfunction

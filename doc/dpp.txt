@@ -116,6 +116,10 @@ dpp#async_ext_action({ext-name}, {action-name}[, {action-params}])
 		{action-params} behavior depends on {action-name}.
 		NOTE: It must be executed after |dpp#min#load_state()|.
 
+                                                           *dpp#clear_state()*
+dpp#clear_state()
+		Remove state file which is created by |dpp#make_state()|.
+
                                                                    *dpp#get()*
 dpp#get([{name}])
 		Get the plugin options dictionary for {plugin-name}.
@@ -159,11 +163,6 @@ dpp#min#load_state({base-path}[, {name}])
 
 		It returns 1, if the cache script is old or invalid or not
 		found.
-                                                   *dpp#recache_runtimepath()*
-dpp#recache_runtimepath()
-		Re-make the dpp runtimepath cache and execute |:helptags|.
-		It is called automatically after the installation.
-
                                                                 *dpp#source()*
 dpp#source([{name}])
 		|:source|  the plugins specified by {plugins}.

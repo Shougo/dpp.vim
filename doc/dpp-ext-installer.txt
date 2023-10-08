@@ -42,6 +42,13 @@ install
 
 		params:
 
+                                            *dpp-ext-installer-action-recache*
+recache
+		Re-make the dpp runtimepath cache and execute |:helptags|.
+		It is called automatically after
+		|dpp-ext-installer-action-install| or
+		|dpp-ext-installer-action-update|.
+
 ==============================================================================
 PARAMS                                              *dpp-ext-installer-params*
 
