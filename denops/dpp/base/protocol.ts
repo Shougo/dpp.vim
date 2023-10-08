@@ -23,21 +23,21 @@ export type GetUrlArguments<Params extends BaseProtocolParams> = {
   protocolParams: Params;
 };
 
-export type GetSyncCommandArguments<Params extends BaseProtocolParams> = {
+export type GetSyncCommandsArguments<Params extends BaseProtocolParams> = {
   denops: Denops;
   plugin: Plugin;
   protocolOptions: ProtocolOptions;
   protocolParams: Params;
 };
 
-export type GetLogCommandArguments<Params extends BaseProtocolParams> = {
+export type GetLogCommandsArguments<Params extends BaseProtocolParams> = {
   denops: Denops;
   plugin: Plugin;
   protocolOptions: ProtocolOptions;
   protocolParams: Params;
 };
 
-export type GetRevisionLockCommandArguments<Params extends BaseProtocolParams> =
+export type GetRevisionLockCommandsArguments<Params extends BaseProtocolParams> =
   {
     denops: Denops;
     plugin: Plugin;
@@ -45,14 +45,14 @@ export type GetRevisionLockCommandArguments<Params extends BaseProtocolParams> =
     protocolParams: Params;
   };
 
-export type GetRollbackCommandArguments<Params extends BaseProtocolParams> = {
+export type GetRollbackCommandsArguments<Params extends BaseProtocolParams> = {
   denops: Denops;
   plugin: Plugin;
   protocolOptions: ProtocolOptions;
   protocolParams: Params;
 };
 
-export type GetDiffCommandArguments<Params extends BaseProtocolParams> = {
+export type GetDiffCommandsArguments<Params extends BaseProtocolParams> = {
   denops: Denops;
   plugin: Plugin;
   protocolOptions: ProtocolOptions;
@@ -64,6 +64,11 @@ export type GetRevisionArguments<Params extends BaseProtocolParams> = {
   plugin: Plugin;
   protocolOptions: ProtocolOptions;
   protocolParams: Params;
+};
+
+export type Command = {
+  command: string;
+  args: string[];
 };
 
 export abstract class BaseProtocol<Params extends BaseProtocolParams> {
@@ -84,30 +89,31 @@ export abstract class BaseProtocol<Params extends BaseProtocolParams> {
   getUrl(_args: GetUrlArguments<Params>): Promise<string> | string {
     return "";
   }
-  getSyncCommand(
-    _args: GetSyncCommandArguments<Params>,
-  ): Promise<string> | string {
-    return "";
+
+  getSyncCommands(
+    _args: GetSyncCommandsArguments<Params>,
+  ): Promise<Command[]> | Command[] {
+    return [];
   }
-  getLogCommand(
-    _args: GetLogCommandArguments<Params>,
-  ): Promise<string> | string {
-    return "";
+  getLogCommands(
+    _args: GetLogCommandsArguments<Params>,
+  ): Promise<Command[]> | Command[] {
+    return [];
   }
-  getRevisionLockCommand(
-    _args: GetRevisionLockCommandArguments<Params>,
-  ): Promise<string> | string {
-    return "";
+  getRevisionLockCommands(
+    _args: GetRevisionLockCommandsArguments<Params>,
+  ): Promise<Command[]> | Command[] {
+    return [];
   }
-  getRollbackCommand(
-    _args: GetRollbackCommandArguments<Params>,
-  ): Promise<string> | string {
-    return "";
+  getRollbackCommands(
+    _args: GetRollbackCommandsArguments<Params>,
+  ): Promise<Command[]> | Command[] {
+    return [];
   }
-  getDiffCommand(
-    _args: GetDiffCommandArguments<Params>,
-  ): Promise<string> | string {
-    return "";
+  getDiffCommands(
+    _args: GetDiffCommandsArguments<Params>,
+  ): Promise<Command[]> | Command[] {
+    return [];
   }
 
   getRevision(_args: GetRevisionArguments<Params>): Promise<string> | string {
