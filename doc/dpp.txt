@@ -132,7 +132,8 @@ dpp#make_state({base-path}, {config-path}[, {name}])
 		Save dpp's state in the cache script.
 		It must be after |DenopsReady|.
 		{base-path} is where your downloaded plugins will be placed.
-		{config-path} is TypeScript configuration file to make state.
+		{config-path} is TypeScript configuration file path to make
+		state.  It must be full path.
 		{name} is plugins profile name.  The default is "vim" or
 		"nvim".
 		NOTE: It saves your 'runtimepath' completely, you must not
@@ -504,7 +505,7 @@ EXAMPLES                                                        *dpp-examples*
 	  " NOTE: dpp#make_state() requires denops.vim
 	  execute 'set runtimepath^=' .. s:denops_src
 	  autocmd User DenopsReady
-	  \ call dpp#make_state(s:dpp_base, '{your script path}')
+	  \ call dpp#make_state(s:dpp_base, '{your TypeScript file path}')
 	endif
 	
 	" Attempt to determine the type of a file based on its name and
