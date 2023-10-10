@@ -37,13 +37,14 @@ export type GetLogCommandsArguments<Params extends BaseProtocolParams> = {
   protocolParams: Params;
 };
 
-export type GetRevisionLockCommandsArguments<Params extends BaseProtocolParams> =
-  {
-    denops: Denops;
-    plugin: Plugin;
-    protocolOptions: ProtocolOptions;
-    protocolParams: Params;
-  };
+export type GetRevisionLockCommandsArguments<
+  Params extends BaseProtocolParams,
+> = {
+  denops: Denops;
+  plugin: Plugin;
+  protocolOptions: ProtocolOptions;
+  protocolParams: Params;
+};
 
 export type GetRollbackCommandsArguments<Params extends BaseProtocolParams> = {
   denops: Denops;
