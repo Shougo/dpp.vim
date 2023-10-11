@@ -102,7 +102,10 @@ async function updatePlugins(args: {
 }, plugins: Plugin[]) {
   // NOTE: Skip local plugins
   for (const plugin of plugins.filter((plugin) => !plugin.local)) {
-    console.log(plugin.name);
+    await args.denops.call(
+      "dpp#ext#installer#_print_progress_message",
+      plugin.name,
+    );
 
     const protocol = args.protocols[plugin.protocol ?? ""];
 
@@ -115,7 +118,6 @@ async function updatePlugins(args: {
 
     // Execute commands
     for (const command of commands) {
-      console.log(command);
       const proc = new Deno.Command(
         command.command,
         {
@@ -128,13 +130,30 @@ async function updatePlugins(args: {
 
       const { stdout, stderr } = await proc.output();
 
-      const outLines = new TextDecoder().decode(stdout).split(/\r?\n/);
-      console.log(outLines);
+      for (
+        const line of new TextDecoder().decode(stdout).split(/\r?\n/).filter((
+          line,
+        ) => line.length > 0)
+      ) {
+        await args.denops.call(
+          "dpp#ext#installer#_print_progress_message",
+          line,
+        );
+      }
 
-      const errLines = new TextDecoder().decode(stderr).split(/\r?\n/);
-      console.log(errLines);
+      for (
+        const line of new TextDecoder().decode(stderr).split(/\r?\n/).filter((
+          line,
+        ) => line.length > 0)
+      ) {
+        await args.denops.call(
+          "dpp#ext#installer#_print_progress_message",
+          line,
+        );
+      }
     }
+
   }
 
-  console.log("Done");
+  await args.denops.call("dpp#ext#installer#_close_progress_window");
 }

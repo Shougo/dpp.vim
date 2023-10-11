@@ -27,6 +27,10 @@ Please install both "dpp.vim" and "denops.vim".
 https://github.com/Shougo/dpp.vim
 https://github.com/vim-denops/denops.vim
 
+And you need to install protocol like "dpp-protocol-git".
+
+https://github.com/Shougo/dpp-protocol-git
+
 
 ==============================================================================
 EXAMPLES                                          *dpp-ext-installer-examples*
