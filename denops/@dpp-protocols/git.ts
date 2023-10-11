@@ -1,5 +1,10 @@
 import { Denops, vars } from "../dpp/deps.ts";
-import { BaseProtocol, Plugin, ProtocolOptions } from "../dpp/types.ts";
+import {
+  BaseProtocol,
+  Command,
+  Plugin,
+  ProtocolOptions,
+} from "../dpp/types.ts";
 import { isDirectory } from "../dpp/utils.ts";
 
 type Params = {
@@ -8,7 +13,7 @@ type Params = {
   defaultHubSite: string;
   defaultProtocol: string;
   partialClone: boolean;
-  pullCommand: string;
+  pullArgs: string[];
 };
 
 export class Protocol extends BaseProtocol<Params> {
@@ -106,6 +111,81 @@ export class Protocol extends BaseProtocol<Params> {
     return url;
   }
 
+  override async getSyncCommands(args: {
+    denops: Denops;
+    plugin: Plugin;
+    protocolOptions: ProtocolOptions;
+    protocolParams: Params;
+  }): Promise<Command[]> {
+    if (!args.plugin.repo || !args.plugin.path) {
+      return [];
+    }
+
+    if (await isDirectory(args.plugin.path)) {
+      const fetchArgs = [
+        "-c",
+        "credential.helper=",
+        "fetch",
+      ];
+
+      const remoteArgs = [
+        "remote",
+        "set-head",
+        "origin",
+        "-a",
+      ];
+
+      const submoduleArgs = [
+        "submodule",
+        "update",
+        "--init",
+        "--recursive",
+      ];
+
+      // TODO: depth support
+
+      return [
+        {
+          command: args.protocolParams.commandPath,
+          args: fetchArgs,
+        },
+        {
+          command: args.protocolParams.commandPath,
+          args: remoteArgs,
+        },
+        {
+          command: args.protocolParams.commandPath,
+          args: args.protocolParams.pullArgs,
+        },
+        {
+          command: args.protocolParams.commandPath,
+          args: submoduleArgs,
+        },
+      ];
+    } else {
+      const commandArgs = [
+        "-c",
+        "credential.helper=",
+        "clone",
+        "--recursive",
+      ];
+
+      if (args.protocolParams.partialClone) {
+        commandArgs.push("--filter=blob:none");
+      }
+
+      // TODO: depth support
+
+      commandArgs.push(await this.getUrl(args));
+      commandArgs.push(args.plugin.path);
+
+      return [{
+        command: args.protocolParams.commandPath,
+        args: commandArgs,
+      }];
+    }
+  }
+
   override params(): Params {
     return {
       cloneDepth: 0,
@@ -113,7 +193,7 @@ export class Protocol extends BaseProtocol<Params> {
       defaultHubSite: "github.com",
       defaultProtocol: "https",
       partialClone: false,
-      pullCommand: "pull --ff --ff-only",
+      pullArgs: ["pull", "--ff", "--ff-only"],
     };
   }
 }

@@ -70,11 +70,11 @@ enablePartialClone
 
 		Default: false
 
-                                          *dpp-protocol-git-param-pullCommand*
-pullCommand
-		The git command used to pull updates.
+                                          *dpp-protocol-git-param-pullArgs*
+pullArgs
+		The git command args used to pull updates.
 
-		Default: "pull --ff --ff-only"
+		Default: ["pull", "--ff", "--ff-only"]
 
 ==============================================================================
 COMPATIBILITY                                 *dpp-protocol-git-compatibility*

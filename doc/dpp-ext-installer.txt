@@ -31,6 +31,11 @@ https://github.com/vim-denops/denops.vim
 ==============================================================================
 EXAMPLES                                          *dpp-ext-installer-examples*
 >
+	" Install plugins
+	call dpp#async_ext_action('installer', 'install')
+
+	" Update plugins
+	call dpp#async_ext_action('installer', 'update')
 <
 
 ==============================================================================
@@ -48,6 +53,12 @@ recache
 		It is called automatically after
 		|dpp-ext-installer-action-install| or
 		|dpp-ext-installer-action-update|.
+
+                                            *dpp-ext-installer-action-update*
+update
+		Update plugins.
+
+		params:
 
 ==============================================================================
 PARAMS                                              *dpp-ext-installer-params*

@@ -6,7 +6,7 @@ export { BaseConfig } from "./base/config.ts";
 export { BaseExt } from "./base/ext.ts";
 export type { BaseExtParams } from "./base/ext.ts";
 export { BaseProtocol } from "./base/protocol.ts";
-export type { BaseProtocolParams } from "./base/protocol.ts";
+export type { BaseProtocolParams, Command } from "./base/protocol.ts";
 
 export { ContextBuilder } from "./context.ts";
 
