@@ -152,7 +152,6 @@ async function updatePlugins(args: {
         );
       }
     }
-
   }
 
   await args.denops.call("dpp#ext#installer#_close_progress_window");
