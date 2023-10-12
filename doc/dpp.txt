@@ -593,7 +593,7 @@ Dpp:makeStatePost
 		Called after |dpp#make_state()| is finished.
 >
 		" Auto exit after dpp#make_state()
-		autocmd User Dpp:makeStatePost * quit!
+		autocmd User Dpp:makeStatePost quit!
 <
 
 
