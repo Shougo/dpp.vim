@@ -233,6 +233,8 @@ export class Dpp {
     //console.log(stateLines);
     //console.log(cacheLines);
     //console.log(rtps);
+
+    await denops.cmd("doautocmd <nomodeline> User Dpp:postMakeState");
   }
 
   private async getExt(

@@ -19,6 +19,7 @@ Exts			|dpp-exts|
 Protocols		|dpp-protocols|
   Protocol option	  |dpp-protocol-options|
   Protocol params	  |dpp-protocol-params|
+Autocmds		|dpp-autocmds|
 Create Ext		|dpp-create-ext|
   Ext attributes	  |dpp-ext-attributes|
 Create Protocol		|dpp-create-protocol|
@@ -580,6 +581,16 @@ PROTOCOL PARAMS                                          *dpp-protocol-params*
 
 These are the parameters that each Protocol can have.  Please read the
 Protocol documentation.
+
+
+==============================================================================
+AUTOCMDS                                                        *dpp-autocmds*
+
+dpp.vim defines some |User| autocmds.
+
+                                               *dpp-autocmd-Dpp:postMakeState*
+Dpp:postMakeState
+		Called after |dpp#make_state()| is finished.
 
 
 ==============================================================================
