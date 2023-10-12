@@ -588,8 +588,8 @@ AUTOCMDS                                                        *dpp-autocmds*
 
 dpp.vim defines some |User| autocmds.
 
-                                               *dpp-autocmd-Dpp:postMakeState*
-Dpp:postMakeState
+                                               *dpp-autocmd-Dpp:makeStatePost*
+Dpp:makeStatePost
 		Called after |dpp#make_state()| is finished.
 
 
