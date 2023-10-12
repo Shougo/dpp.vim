@@ -98,7 +98,7 @@ if dpp#min#load_state(s:dpp_base)
   " NOTE: dpp#make_state() requires denops.vim
   execute 'set runtimepath^=' .. s:denops_src
   autocmd User DenopsReady
-  \ call dpp#make_state(s:dpp_base, '{your TypeScript file path}')
+  \ call dpp#make_state(s:dpp_base, '{TypeScript config file path}')
 endif
 
 " Attempt to determine the type of a file based on its name and
