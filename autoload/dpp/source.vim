@@ -1,4 +1,4 @@
-function dpp#autoload#_source(plugins) abort
+function dpp#source#_source(plugins) abort
   let plugins = dpp#util#_convert2list(a:plugins)
   if plugins->empty()
     return []
@@ -10,7 +10,7 @@ function dpp#autoload#_source(plugins) abort
   endif
 
   let rtps = dpp#util#_split_rtp(&runtimepath)
-  const index = rtps->index(g:dpp#_runtime_path)
+  const index = rtps->index(dpp#util#_get_runtime_path())
   if index < 0
     return []
   endif
@@ -199,4 +199,20 @@ function s:is_reset_ftplugin(plugins) abort
   endfor
 
   return 0
+endfunction
+
+function s:reset_ftplugin() abort
+  const filetype_state = 'filetype'->execute()
+
+  if 'b:did_indent'->exists() || 'b:did_ftplugin'->exists()
+    filetype plugin indent off
+  endif
+
+  if filetype_state =~# 'plugin:ON'
+    silent! filetype plugin on
+  endif
+
+  if filetype_state =~# 'indent:ON'
+    silent! filetype indent on
+  endif
 endfunction
