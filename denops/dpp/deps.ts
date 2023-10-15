@@ -15,21 +15,19 @@ export { ensure, is } from "https://deno.land/x/unknownutil@v3.9.0/mod.ts";
 export {
   assertEquals,
   equal,
-} from "https://deno.land/std@0.202.0/assert/mod.ts";
-export {
-  extname,
-  parse,
-  toFileUrl,
-} from "https://deno.land/std@0.202.0/path/mod.ts";
-export {
-  deadline,
-  DeadlineError,
-} from "https://deno.land/std@0.202.0/async/mod.ts";
-export { TimeoutError } from "https://deno.land/x/msgpack_rpc@v4.0.1/response_waiter.ts";
-export { Lock } from "https://deno.land/x/async@v2.0.2/mod.ts";
+} from "https://deno.land/std@0.204.0/assert/mod.ts";
 export {
   basename,
   dirname,
+  extname,
+  parse,
   SEP as pathsep,
-} from "https://deno.land/std@0.202.0/path/mod.ts";
-export { deferred } from "https://deno.land/std@0.202.0/async/deferred.ts";
+  toFileUrl,
+} from "https://deno.land/std@0.204.0/path/mod.ts";
+export {
+  deadline,
+  DeadlineError,
+} from "https://deno.land/std@0.204.0/async/mod.ts";
+export { TimeoutError } from "https://deno.land/x/msgpack_rpc@v4.0.1/response_waiter.ts";
+export { Lock } from "https://deno.land/x/async@v2.0.2/mod.ts";
+export { deferred } from "https://deno.land/std@0.204.0/async/deferred.ts";
