@@ -1,4 +1,4 @@
-import { assertEquals, Denops, extname, is, vars } from "./deps.ts";
+import { assertEquals, copy, Denops, extname, is, join, vars } from "./deps.ts";
 import {
   ActionName,
   BaseExt,
@@ -107,15 +107,12 @@ export class Dpp {
       recordPlugins[plugin.name] = initPlugin(plugin, basePath);
     }
 
-    if (!await isDirectory(basePath)) {
-      await Deno.mkdir(basePath, { recursive: true });
-    }
-
-    // Get runtimepath
-    const dppRuntimepath = `${basePath}/.dpp`;
+    const dppRuntimepath = `${basePath}/${name}/.dpp`;
     if (!await isDirectory(dppRuntimepath)) {
       await Deno.mkdir(dppRuntimepath, { recursive: true });
     }
+
+    // Get runtimepath
     // NOTE: Use init_runtimepath.
     // Because "makeState" may be called after VimEnter.
     const currentRuntimepath = await vars.g.get(
@@ -214,11 +211,11 @@ export class Dpp {
     console.log(inlineVimrcs);
 
     // Write state file
-    const stateFile = `${basePath}/state_${name}.vim`;
+    const stateFile = `${basePath}/${name}/state.vim`;
     console.log(stateFile);
     await Deno.writeTextFile(stateFile, stateLines.join("\n"));
 
-    const cacheFile = `${basePath}/cache_${name}.vim`;
+    const cacheFile = `${basePath}/${name}/cache.vim`;
     const cacheLines = [
       JSON.stringify([
         recordPlugins,
@@ -234,7 +231,44 @@ export class Dpp {
     //console.log(cacheLines);
     //console.log(rtps);
 
+    await this.mergePlugins(denops, dppRuntimepath, recordPlugins);
+
     await denops.cmd("doautocmd <nomodeline> User Dpp:makeStatePost");
+  }
+
+  private async mergePlugins(
+    denops: Denops,
+    dppRuntimepath: string,
+    recordPlugins: Record<string, Plugin>,
+  ) {
+    // Copy help files
+    const docDir = `${dppRuntimepath}/doc`;
+    if (!await isDirectory(docDir)) {
+      await Deno.mkdir(docDir, { recursive: true });
+    }
+
+    for (const plugin of Object.values(recordPlugins)) {
+      const srcDir = `${plugin.path}/doc`;
+      if (!plugin.path || !await isDirectory(srcDir)) {
+        continue;
+      }
+
+      for await (const entry of Deno.readDir(srcDir)) {
+        const path = join(srcDir, entry.name);
+        await copy(path, join(docDir, entry.name), { overwrite: true });
+      }
+    }
+
+    // Execute :helptags
+    try {
+      await denops.cmd(`silent helptags ${docDir}`);
+    } catch (e: unknown) {
+      await errorException(
+        denops,
+        e,
+        `:helptags failed`,
+      );
+    }
   }
 
   private async getExt(

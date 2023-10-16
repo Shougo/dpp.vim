@@ -149,12 +149,15 @@ function s:tsort_impl(target, mark, sorted) abort
   call add(a:sorted, a:target)
 endfunction
 
-function dpp#util#_clear_state() abort
-  const base = g:dpp#_base_path
-  for cache in (base .. '/state_*.vim')->glob(v:true, v:true)
-        \ + (base .. '/cache_*')->glob(v:true, v:true)
+function dpp#util#_clear_state(name) abort
+  const state = printf('%s/%s/state.vim', g:dpp#_base_path, a:name)
+  if state->filereadable()
+    call delete(state)
+  endif
+  const cache = printf('%s/%s/cache.vim', g:dpp#_base_path, a:name)
+  if cache->filereadable()
     call delete(cache)
-  endfor
+  endif
 endfunction
 
 function dpp#util#_get_normalized_name(plugin) abort

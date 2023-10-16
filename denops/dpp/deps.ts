@@ -20,6 +20,7 @@ export {
   basename,
   dirname,
   extname,
+  join,
   parse,
   SEP as pathsep,
   toFileUrl,
@@ -31,3 +32,4 @@ export {
 export { TimeoutError } from "https://deno.land/x/msgpack_rpc@v4.0.1/response_waiter.ts";
 export { Lock } from "https://deno.land/x/async@v2.0.2/mod.ts";
 export { deferred } from "https://deno.land/std@0.204.0/async/deferred.ts";
+export { copy } from "https://deno.land/std@0.204.0/fs/mod.ts";

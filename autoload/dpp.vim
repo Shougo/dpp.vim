@@ -30,6 +30,6 @@ function dpp#make_state(
   return dpp#denops#_notify('makeState', [base_path, config_path, a:name])
 endfunction
 
-function dpp#clear_state() abort
-  call dpp#util#_clear_state()
+function dpp#clear_state(name=v:progname->fnamemodify(':r')) abort
+  call dpp#util#_clear_state(a:name)
 endfunction

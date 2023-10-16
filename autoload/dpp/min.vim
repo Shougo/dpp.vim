@@ -4,8 +4,8 @@ function dpp#min#load_state(path, name=v:progname->fnamemodify(':r')) abort
   endif
   if g:dpp#_is_sudo | return 1 | endif
   let g:dpp#_base_path = a:path->expand()
-  const state = printf('%s/state_%s.vim', g:dpp#_base_path, a:name)
-  const cache = printf('%s/cache_%s.vim', g:dpp#_base_path, a:name)
+  const state = printf('%s/%s/state.vim', g:dpp#_base_path, a:name)
+  const cache = printf('%s/%s/cache.vim', g:dpp#_base_path, a:name)
   if !(cache->filereadable() || state->filereadable()) | return 1 | endif
   try
     let g:dpp#_cache = has('nvim') ? cache->readfile()->json_decode()

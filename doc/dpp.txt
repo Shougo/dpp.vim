@@ -118,11 +118,13 @@ dpp#async_ext_action({ext-name}, {action-name}[, {action-params}])
 		NOTE: It must be executed after |dpp#min#load_state()|.
 
                                                            *dpp#clear_state()*
-dpp#clear_state()
+dpp#clear_state([{name}])
 		Remove state file which is created by |dpp#make_state()|.
+		{name} is plugins profile name.  The default is "vim" or
+		"nvim".
 
                                                                    *dpp#get()*
-dpp#get([{name}])
+dpp#get([{plugin-name}])
 		Get the plugin options dictionary for {plugin-name}.
 		If you omit {plugin-name}, dpp will return the plugins
 		dictionary.  The key is the plugin name.  The value is the
@@ -167,8 +169,8 @@ dpp#min#load_state({base-path}[, {name}])
 		found.
                                                                 *dpp#source()*
 dpp#source([{name}])
-		|:source|  the plugins specified by {plugins}.
-		{plugins} is the plugins name list.
+		|:source|  the plugins specified by {name}.
+		{name} is the plugins name list.
 		If you omit it, dpp will source all plugins.
 		It returns sourced plugins list.
 
