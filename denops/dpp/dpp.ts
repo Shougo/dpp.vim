@@ -102,15 +102,26 @@ export class Dpp {
     configReturn: ConfigReturn,
   ) {
     // Initialize plugins
+    const protocols = await this.getProtocols(denops, options);
     const recordPlugins: Record<string, Plugin> = {};
     for (const plugin of configReturn.plugins) {
-      recordPlugins[plugin.name] = initPlugin(plugin, basePath);
+      recordPlugins[plugin.name] = initPlugin(
+        await detectPlugin(
+          denops,
+          options,
+          protocols,
+          plugin,
+        ),
+        basePath,
+      );
     }
 
     const dppRuntimepath = `${basePath}/${name}/.dpp`;
-    if (!await isDirectory(dppRuntimepath)) {
-      await Deno.mkdir(dppRuntimepath, { recursive: true });
+    if (await isDirectory(dppRuntimepath)) {
+      // Remove old runtime files
+      await Deno.remove(dppRuntimepath, { recursive: true });
     }
+    await Deno.mkdir(dppRuntimepath, { recursive: true });
 
     // Get runtimepath
     // NOTE: Use init_runtimepath.
@@ -208,11 +219,11 @@ export class Dpp {
         );
       }
     }
-    console.log(inlineVimrcs);
+    //console.log(inlineVimrcs);
 
     // Write state file
     const stateFile = `${basePath}/${name}/state.vim`;
-    console.log(stateFile);
+    //console.log(stateFile);
     await Deno.writeTextFile(stateFile, stateLines.join("\n"));
 
     const cacheFile = `${basePath}/${name}/cache.vim`;
@@ -224,7 +235,7 @@ export class Dpp {
         configReturn.checkFiles ?? [],
       ]),
     ];
-    console.log(cacheFile);
+    //console.log(cacheFile);
     await Deno.writeTextFile(cacheFile, cacheLines.join("\n"));
 
     //console.log(stateLines);
@@ -241,21 +252,26 @@ export class Dpp {
     dppRuntimepath: string,
     recordPlugins: Record<string, Plugin>,
   ) {
-    // Copy help files
+    const ftdetectDir = `${dppRuntimepath}/ftdetect`;
+    if (!await isDirectory(ftdetectDir)) {
+      await Deno.mkdir(ftdetectDir, { recursive: true });
+    }
     const docDir = `${dppRuntimepath}/doc`;
     if (!await isDirectory(docDir)) {
       await Deno.mkdir(docDir, { recursive: true });
     }
 
+    // Copy both ftdetect and help files
     for (const plugin of Object.values(recordPlugins)) {
-      const srcDir = `${plugin.path}/doc`;
-      if (!plugin.path || !await isDirectory(srcDir)) {
-        continue;
-      }
+      for (const srcDir of [`${plugin.path}/doc`, `${plugin.path}/ftdetect`]) {
+        if (!plugin.path || !await isDirectory(srcDir)) {
+          continue;
+        }
 
-      for await (const entry of Deno.readDir(srcDir)) {
-        const path = join(srcDir, entry.name);
-        await copy(path, join(docDir, entry.name), { overwrite: true });
+        for await (const entry of Deno.readDir(srcDir)) {
+          const path = join(srcDir, entry.name);
+          await copy(path, join(docDir, entry.name), { overwrite: true });
+        }
       }
     }
 
@@ -268,6 +284,27 @@ export class Dpp {
         e,
         `:helptags failed`,
       );
+    }
+
+    // Merge plugin files
+    for (
+      const plugin of Object.values(recordPlugins).filter((plugin) =>
+        plugin.merged
+      )
+    ) {
+      if (!plugin.path || !await isDirectory(plugin.path)) {
+        continue;
+      }
+
+      for await (const entry of Deno.readDir(plugin.path)) {
+        if (entry.name === "doc" || entry.name === "ftdetect") {
+          // Already copied
+          continue;
+        }
+
+        const path = join(plugin.path, entry.name);
+        await copy(path, join(dppRuntimepath, entry.name), { overwrite: true });
+      }
     }
   }
 
@@ -497,6 +534,41 @@ function initPlugin(plugin: Plugin, basePath: string): Plugin {
           "if",
           "hook_post_update",
         ].filter((key) => key in plugin).length <= 0;
+  }
+
+  return plugin;
+}
+
+async function detectPlugin(
+  denops: Denops,
+  options: DppOptions,
+  protocols: Record<ProtocolName, Protocol>,
+  plugin: Plugin,
+) {
+  // Detect protocol
+  if ("protocol" in plugin) {
+    return plugin;
+  }
+
+  for (
+    const protocol of options.protocols.filter((protocolName) =>
+      protocols[protocolName]
+    ).map((protocolName) => protocols[protocolName])
+  ) {
+    const detect = await protocol.protocol.detect({
+      denops: denops,
+      plugin,
+      protocolOptions: protocol.options,
+      protocolParams: protocol.params,
+    });
+
+    if (detect) {
+      // Overwrite by detect()
+      Object.assign(plugin, {
+        ...detect,
+        protocol: protocol.protocol.name,
+      });
+    }
   }
 
   return plugin;
