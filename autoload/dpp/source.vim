@@ -120,7 +120,8 @@ function s:source_plugin(rtps, index, plugin, sourced) abort
   " NOTE: on_source must sourced after depends
   for on_source in dpp#util#_get_lazy_plugins()
         \ ->filter({ _, val ->
-        \          val->get('on_source', []) ->index(a:plugin.name) >= 0
+        \   dpp#util#_convert2list(val->get('on_source', []))
+        \   ->index(a:plugin.name) >= 0
         \ })
     if s:source_plugin(a:rtps, index, on_source, a:sourced)
       let index += 1
