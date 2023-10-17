@@ -140,30 +140,58 @@ export class Dpp {
       await denops.call("dpp#util#_get_runtime_path") as string,
     );
 
+    const addRtp = async (plugin: Plugin) => {
+      if (!plugin.rtp) {
+        return;
+      }
+
+      plugin.sourced = true;
+      rtps.splice(runtimeIndex, 0, plugin.rtp);
+
+      const afterDir = `${plugin.rtp}/after`;
+      if (await isDirectory(afterDir)) {
+        rtps.splice(
+          rtps.indexOf(
+            await denops.call("dpp#util#_get_runtime_path") as string,
+          ) + 1,
+          0,
+          afterDir,
+        );
+      }
+    };
+
     // Add plugins runtimepath
+    const depends = new Set<string>();
     for (
       const plugin of Object.values(recordPlugins).filter((plugin) =>
         !plugin.lazy
       )
     ) {
-      if (plugin.rtp && await isDirectory(plugin.rtp)) {
-        plugin.sourced = true;
-        rtps.splice(runtimeIndex, 0, plugin.rtp);
-
-        // TODO: Load dependencies
-
-        const afterDir = `${plugin.rtp}/after`;
-        if (await isDirectory(afterDir)) {
-          rtps.splice(
-            rtps.indexOf(
-              await denops.call("dpp#util#_get_runtime_path") as string,
-            ) + 1,
-            0,
-            afterDir,
-          );
-        }
+      if (!plugin.rtp || !await isDirectory(plugin.rtp)) {
+        continue;
       }
+
+      for (
+        const depend of is.String(plugin.depends)
+          ? [plugin.depends]
+          : plugin.depends ?? []
+      ) {
+        depends.add(depend);
+      }
+
+      await addRtp(plugin);
     }
+
+    // Load dependencies
+    for (const depend of depends) {
+      const plugin = recordPlugins[depend];
+      if (!plugin?.rtp || !await isDirectory(plugin.rtp) || plugin.sourced) {
+        continue;
+      }
+
+      await addRtp(plugin);
+    }
+
     rtps.splice(
       rtps.indexOf(
         await denops.call("dpp#util#_get_runtime_path") as string,
@@ -190,6 +218,14 @@ export class Dpp {
       `let g:dpp#_base_path = '${basePath}'`,
       `let &runtimepath = '${newRuntimepath}'`,
     ];
+
+    for (const plugin of Object.values(recordPlugins)) {
+      if (!plugin.path || !await isDirectory(plugin.path) || !plugin.hook_add) {
+        continue;
+      }
+
+      stateLines.push(plugin.hook_add);
+    }
 
     if (await vars.g.get(denops, "did_load_filetypes", false)) {
       stateLines.push("filetype off");
@@ -542,6 +578,23 @@ function initPlugin(plugin: Plugin, basePath: string): Plugin {
         ].filter((key) => key in plugin).length <= 0;
   }
 
+  // hooks
+  // Convert lua_xxx keys
+  const hooks: Record<string, string> = {};
+  for (
+    const key of Object.keys(plugin).filter((key) => key.startsWith("lua_"))
+  ) {
+    const hook = key.replace(/^lua_/, "hook_");
+    hooks[hook] = `lua <<EOF\n${plugin[key as keyof typeof plugin]}\nEOF\n`;
+  }
+  // Convert head backslashes
+  for (
+    const key of Object.keys(plugin).filter((key) => key.startsWith("hook_"))
+  ) {
+    hooks[key] = hooks[key].replaceAll(/\n\s*\\/g, "");
+  }
+  plugin = Object.assign(plugin, hooks);
+
   return plugin;
 }
 
@@ -614,6 +667,24 @@ Deno.test("initPlugin", () => {
       merged: false,
       on_ft: "foo",
       sourced: false,
+    },
+  );
+
+  // hooks
+  assertEquals(
+    initPlugin({
+      name: "foo",
+      lua_add: "foo",
+    }, "base"),
+    {
+      name: "foo",
+      path: "base/repos/foo",
+      rtp: "base/repos/foo",
+      lazy: false,
+      merged: true,
+      sourced: false,
+      hook_add: "lua <<EOF\nfoo\nEOF\n",
+      lua_add: "foo",
     },
   );
 });

@@ -423,22 +423,22 @@ hooks_file	(String) or (List)
 		" }}}
 <
                                                   *dpp-plugin-option-hook_add*
-hook_add	(String) or (Function)
+hook_add	(String)
 		It is executed after the line is parsed.
 		NOTE: You cannot call plugin function in "hook_add".
 		Because the plugin is not sourced when "hook_add".
 
                                        *dpp-plugin-option-hook_depends_update*
-hook_depends_update (String) or (Function)
+hook_depends_update (String)
 		It is executed after |dpp-plugin-option-depends| plugins are
 		updated.
 
                                           *dpp-plugin-option-hook_done_update*
-hook_done_update (String) or (Function)
+hook_done_update (String)
 		It is executed after plugins are updated.
 
                                           *dpp-plugin-option-hook_post_source*
-hook_post_source (String) or (Function)
+hook_post_source (String)
 		It is executed after plugins are sourced.
 
 		NOTE: In Vim initializing, you must call the
@@ -447,7 +447,7 @@ hook_post_source (String) or (Function)
 		autocmd VimEnter * call dpp#call_hook('post_source')
 <
                                           *dpp-plugin-option-hook_post_update*
-hook_post_update (String) or (Function)
+hook_post_update (String)
 		It is executed after are updated and before
 		|dpp-plugin-option-build|.
 		NOTE: The plugin may not be sourced.
@@ -466,27 +466,27 @@ lua_add		(String)
                                         *dpp-plugin-option-lua_depends_update*
 lua_depends_update (String)
 		Lua language string hook instead of Vim script.
-		It is converted to |dpp-plugin-option-lua_depends_update| key.
+		It is converted to |dpp-plugin-option-hook_depends_update| key.
 
                                            *dpp-plugin-option-lua_done_update*
 lua_done_update	(String)
 		Lua language string hook instead of Vim script.
-		It is converted to |dpp-plugin-option-lua_done_update| key.
+		It is converted to |dpp-plugin-option-hook_done_update| key.
 
                                            *dpp-plugin-option-lua_post_source*
 lua_post_sources (String)
 		Lua language string hook instead of Vim script.
-		It is converted to |dpp-plugin-option-lua_post_source| key.
+		It is converted to |dpp-plugin-option-hook_post_source| key.
 
                                            *dpp-plugin-option-lua_post_update*
 lua_post_update	(String)
 		Lua language string hook instead of Vim script.
-		It is converted to |dpp-plugin-option-lua_post_update| key.
+		It is converted to |dpp-plugin-option-hook_post_update| key.
 
                                                 *dpp-plugin-option-lua_source*
-lua_sources	(String)
+lua_source	(String)
 		Lua language string hook instead of Vim script.
-		It is converted to |dpp-plugin-option-lua_source| key.
+		It is converted to |dpp-plugin-option-hook_source| key.
 
 
 ==============================================================================
