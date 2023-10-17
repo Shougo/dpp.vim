@@ -297,8 +297,11 @@ export class Dpp {
       }
 
       for await (const entry of Deno.readDir(plugin.path)) {
-        if (entry.name === "doc" || entry.name === "ftdetect") {
-          // Already copied
+        if (
+          entry.name === "doc" || entry.name === "ftdetect" ||
+          entry.name === ".git"
+        ) {
+          // Skip
           continue;
         }
 
