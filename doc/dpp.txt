@@ -11,6 +11,7 @@ Interface		|dpp-interface|
   Options		  |dpp-options|
   Functions		  |dpp-functions|
   Plugin options	  |dpp-plugin-options|
+Dpp Sources		|dpp-ddu-sources|
 Examples		|dpp-examples|
 Plugins merged feature	|dpp-merge|
 Exts			|dpp-exts|
@@ -225,8 +226,8 @@ ftplugin	(Dictionary)
 		"{filetype}" key is executed {filetype} ftplugin.
 		"lua_{filetype}" key is executed {filetype} ftplugin as
 		|:lua|.
-		NOTE: You need to call |dpp#recache_runtimepath()| after vimrc
-		is changed.
+		NOTE: You need to call |dpp#clear_state()| after vimrc is
+		changed.
 
                                                         *dpp-plugin-option-if*
 if		(Bool) or (String)
@@ -486,6 +487,15 @@ lua_post_update	(String)
 lua_sources	(String)
 		Lua language string hook instead of Vim script.
 		It is converted to |dpp-plugin-option-lua_source| key.
+
+
+==============================================================================
+DDU SOURCES                                                  *dpp-ddu-sources*
+
+                                                          *dpp-ddu-source-dpp*
+dpp
+		Nominates dpp plugins as items.
+
 
 ==============================================================================
 EXAMPLES                                                        *dpp-examples*
