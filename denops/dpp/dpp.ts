@@ -591,7 +591,10 @@ function initPlugin(plugin: Plugin, basePath: string): Plugin {
   for (
     const key of Object.keys(plugin).filter((key) => key.startsWith("hook_"))
   ) {
-    hooks[key] = hooks[key].replaceAll(/\n\s*\\/g, "");
+    hooks[key] = (plugin[key as keyof typeof plugin] as string).replaceAll(
+      /\n\s*\\/g,
+      "",
+    );
   }
   plugin = Object.assign(plugin, hooks);
 
