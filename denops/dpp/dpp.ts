@@ -275,15 +275,18 @@ export class Dpp {
       }
     }
 
-    // Execute :helptags
-    try {
-      await denops.cmd(`silent helptags ${docDir}`);
-    } catch (e: unknown) {
-      await errorException(
-        denops,
-        e,
-        `:helptags failed`,
-      );
+    // Execute :helptags when docDir is not empty
+    for await (const _ of Deno.readDir(docDir)) {
+      try {
+        await denops.cmd(`silent helptags ${docDir}`);
+        break;
+      } catch (e: unknown) {
+        await errorException(
+          denops,
+          e,
+          `:helptags failed`,
+        );
+      }
     }
 
     // Merge plugin files
