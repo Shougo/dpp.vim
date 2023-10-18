@@ -53,7 +53,7 @@ function dpp#source#_source(plugins) abort
     endfor
 
     if !has('vim_starting')
-      const augroup = plugin->get('augroup',
+      let augroup = plugin->get('augroup',
             \ dpp#util#_get_normalized_name(plugin))
       let events = ['VimEnter', 'BufRead', 'BufEnter',
             \ 'BufWinEnter', 'WinEnter']
