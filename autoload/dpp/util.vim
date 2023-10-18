@@ -165,3 +165,86 @@ function dpp#util#_get_normalized_name(plugin) abort
         \ a:plugin.name->fnamemodify(':r')->substitute(
         \ '\c^\%(n\?vim\|dps\|denops\)[_-]\|[_-]n\?vim$', '', 'g'))
 endfunction
+
+function dpp#util#_generate_ftplugin(runtimepath, ftplugin) abort
+  let generated = {}
+
+  " Merge g:dein#ftplugin
+  let ftplugin = {}
+  for [key, string] in a:ftplugin->items()
+    for ft in (key ==# '_' ? ['_'] : key->split('_'))
+      if !(ftplugin->has_key(ft))
+        if ft ==# '_'
+          let ftplugin[ft] = []
+        else
+          let ftplugin[ft] =<< trim END
+            if 'b:undo_ftplugin'->exists()
+              let b:undo_ftplugin ..= '|'
+            else
+              let b:undo_ftplugin = ''
+            endif
+          END
+        endif
+      endif
+      let ftplugin[ft] += string->split('\n')
+    endfor
+  endfor
+
+  " Generate ftplugin.vim
+  let ftplugin_generated = s:get_default_ftplugin()
+  let ftplugin_generated += ['function! s:after_ftplugin()']
+  let ftplugin_generated += ftplugin->get('_', [])
+  let ftplugin_generated += ['endfunction']
+  let generated[a:runtimepath .. '/after/ftplugin.vim'] = ftplugin_generated
+
+  " Generate after/ftplugin
+  const after = a:runtimepath .. '/after/ftplugin'
+  for [filetype, list] in ftplugin->items()
+        \ ->filter({ _, val -> val[0] !=# '_' })
+    let generated[printf('%s/%s.vim', after, filetype)] = list
+  endfor
+
+  return generated
+endfunction
+function s:get_default_ftplugin() abort
+  let default_ftplugin =<< trim END
+    if exists('g:did_load_after_ftplugin')
+      finish
+    endif
+    let g:did_load_after_ftplugin = 1
+
+    augroup filetypeplugin
+      autocmd!
+      autocmd FileType * call s:ftplugin()
+    augroup END
+
+    function! s:ftplugin()
+      if 'b:undo_ftplugin'->exists()
+        silent! execute b:undo_ftplugin
+        unlet! b:undo_ftplugin b:did_ftplugin
+      endif
+
+      let filetype = '<amatch>'->expand()
+      if filetype !=# ''
+        if &cpoptions =~# 'S' && 'b:did_ftplugin'->exists()
+          unlet b:did_ftplugin
+        endif
+        for ft in filetype->split('\.')
+          execute 'runtime!'
+          \ 'ftplugin/' .. ft .. '.vim'
+          \ 'ftplugin/' .. ft .. '_*.vim'
+          \ 'ftplugin/' .. ft .. '/*.vim'
+          if has('nvim')
+            execute 'runtime!'
+            \ 'ftplugin/' .. ft .. '.lua'
+            \ 'ftplugin/' .. ft .. '_*.lua'
+            \ 'ftplugin/' .. ft .. '/*.lua'
+          endif
+        endfor
+      endif
+      call s:after_ftplugin()
+    endfunction
+
+  END
+  return default_ftplugin
+endfunction

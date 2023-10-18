@@ -1,4 +1,13 @@
-import { assertEquals, copy, Denops, extname, is, join, vars } from "./deps.ts";
+import {
+  assertEquals,
+  copy,
+  Denops,
+  dirname,
+  extname,
+  is,
+  join,
+  vars,
+} from "./deps.ts";
 import {
   ActionName,
   BaseExt,
@@ -279,6 +288,25 @@ export class Dpp {
     //console.log(rtps);
 
     await this.mergePlugins(denops, dppRuntimepath, recordPlugins);
+
+    // Generate ftplugin files
+    console.log(configReturn.ftplugins);
+    if (configReturn.ftplugins) {
+      const generatedFtplugins = await denops.call(
+        "dpp#util#_generate_ftplugin",
+        dppRuntimepath,
+        configReturn.ftplugins,
+      ) as Record<string, string>;
+
+      for (const path of Object.keys(generatedFtplugins)) {
+        const parent = dirname(path);
+        if (!await isDirectory(parent)) {
+          await Deno.mkdir(parent, { recursive: true });
+        }
+
+        await Deno.writeTextFile(path, generatedFtplugins[path]);
+      }
+    }
 
     await denops.cmd("doautocmd <nomodeline> User Dpp:makeStatePost");
   }

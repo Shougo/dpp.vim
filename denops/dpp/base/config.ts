@@ -12,6 +12,7 @@ export type ConfigArguments = {
 
 export type ConfigReturn = {
   checkFiles?: string[];
+  ftplugins?: Record<string, string>;
   plugins: Plugin[];
   stateLines?: string[];
 };
