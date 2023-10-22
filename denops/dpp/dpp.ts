@@ -254,10 +254,12 @@ export class Dpp {
     ));
     for await (const vimrc of inlineVimrcs) {
       const vimrcLines = (await Deno.readTextFile(vimrc)).split("\n");
-      if (extname(vimrc) == "lua") {
-        stateLines = ["lua <<EOF"].concat(
+      if (extname(vimrc) == ".lua") {
+        stateLines = stateLines.concat(
+          ["lua <<EOF"],
           vimrcLines.filter((line) => !line.match(/^\s*$|^\s*--/)),
-        ).concat(["EOF"]);
+          ["EOF"],
+        );
       } else {
         stateLines = stateLines.concat(
           vimrcLines.filter((line) => !line.match(/^\s*$|^\s*"/)),
