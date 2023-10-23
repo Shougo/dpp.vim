@@ -35,7 +35,7 @@ import { Loader } from "./loader.ts";
 import { defaultExtOptions } from "./base/ext.ts";
 import { defaultProtocolOptions } from "./base/protocol.ts";
 import { ConfigReturn } from "./base/config.ts";
-import { errorException, isDirectory } from "./utils.ts";
+import { errorException, isDirectory, parseHooksFile } from "./utils.ts";
 
 export class Dpp {
   private loader: Loader;
@@ -113,14 +113,32 @@ export class Dpp {
     // Initialize plugins
     const protocols = await this.getProtocols(denops, options);
     const recordPlugins: Record<string, Plugin> = {};
-    for (const plugin of configReturn.plugins) {
-      recordPlugins[plugin.name] = initPlugin(
-        await detectPlugin(
-          denops,
-          options,
-          protocols,
+    for (let plugin of configReturn.plugins) {
+      plugin = await detectPlugin(
+        denops,
+        options,
+        protocols,
+        plugin,
+      );
+
+      if (plugin.hooks_file) {
+        const hooksFile = await denops.call(
+          "dpp#util#_expand",
+          plugin.hooks_file,
+        ) as string;
+        const hooksFileLines = (await Deno.readTextFile(hooksFile)).split("\n");
+
+        plugin = Object.assign(
           plugin,
-        ),
+          parseHooksFile(
+            options.hooksFileMarker,
+            hooksFileLines,
+          ),
+        );
+      }
+
+      recordPlugins[plugin.name] = initPlugin(
+        plugin,
         basePath,
       );
     }
@@ -228,12 +246,45 @@ export class Dpp {
       `let &runtimepath = '${newRuntimepath}'`,
     ];
 
-    for (const plugin of Object.values(recordPlugins)) {
-      if (!plugin.path || !await isDirectory(plugin.path) || !plugin.hook_add) {
-        continue;
-      }
+    // hooksFiles
+    if (configReturn.hooksFiles) {
+      for (
+        const hooksFile of await Promise.all(configReturn.hooksFiles.map(
+          async (hooksFile) =>
+            await denops.call("dpp#util#_expand", hooksFile) as string,
+        ))
+      ) {
+        const hooksFileLines = (await Deno.readTextFile(hooksFile)).split("\n");
 
-      stateLines.push(plugin.hook_add);
+        const parsedHooksFile = parseHooksFile(
+          options.hooksFileMarker,
+          hooksFileLines,
+        );
+
+        // Use ftplugin only
+        if (parsedHooksFile.ftplugin && is.Record(parsedHooksFile.ftplugin)) {
+          if (!configReturn.ftplugins) {
+            configReturn.ftplugins = {};
+          }
+
+          // Merge ftplugins
+          for (const filetype of Object.keys(parsedHooksFile.ftplugin)) {
+            if (configReturn.ftplugins[filetype]) {
+              configReturn.ftplugins[filetype] += `\n${
+                parsedHooksFile.ftplugin[filetype]
+              }`;
+            } else {
+              configReturn.ftplugins[filetype] =
+                parsedHooksFile.ftplugin[filetype];
+            }
+          }
+        }
+      }
+    }
+
+    let checkFiles = configReturn.checkFiles ?? [];
+    if (configReturn.hooksFiles) {
+      checkFiles = checkFiles.concat(configReturn.hooksFiles);
     }
 
     if (await vars.g.get(denops, "did_load_filetypes", false)) {
@@ -247,6 +298,20 @@ export class Dpp {
     }
     if (configReturn.stateLines) {
       stateLines = stateLines.concat(configReturn.stateLines);
+    }
+
+    for (const plugin of Object.values(recordPlugins)) {
+      if (!plugin.path || !await isDirectory(plugin.path)) {
+        continue;
+      }
+
+      if (plugin.hooks_file) {
+        checkFiles.push(plugin.hooks_file);
+      }
+
+      if (plugin.hook_add) {
+        stateLines.push(plugin.hook_add);
+      }
     }
 
     const inlineVimrcs = await Promise.all(options.inlineVimrcs.map(
@@ -279,7 +344,7 @@ export class Dpp {
         recordPlugins,
         {},
         options,
-        configReturn.checkFiles ?? [],
+        checkFiles,
       ]),
     ];
     //console.log(cacheFile);
@@ -292,7 +357,7 @@ export class Dpp {
     await this.mergePlugins(denops, dppRuntimepath, recordPlugins);
 
     // Generate ftplugin files
-    console.log(configReturn.ftplugins);
+    //console.log(configReturn.ftplugins);
     if (configReturn.ftplugins) {
       const generatedFtplugins = await denops.call(
         "dpp#util#_generate_ftplugin",
@@ -664,22 +729,6 @@ async function detectPlugin(
   }
 
   return plugin;
-}
-
-async function parseHooksFile(
-  denops: Denops,
-  marker: string,
-  hooksFile: string[],
-): Promise<Partial<Plugin>> {
-  const startMarker = marker.split(',')[0]
-  const endMarker = marker.split(',')[1]
-  const options: Partial<Plugin> = {};
-  let hookName = "";
-
-  for (const line of hooksFile) {
-  }
-
-  return options;
 }
 
 Deno.test("initPlugin", () => {

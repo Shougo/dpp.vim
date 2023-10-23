@@ -24,7 +24,7 @@ endfunction
 function! dpp#util#_check_files() abort
   const time = dpp#util#_get_runtime_path()->getftime()
   const ret = !(g:dpp#_check_files->copy()
-        \ ->map({ _, val -> val->expand()->getftime() })
+        \ ->map({ _, val -> dpp#util#_expand(val)->getftime() })
         \ ->filter({ _, val -> time < val })->empty())
   if !ret
     return 0
