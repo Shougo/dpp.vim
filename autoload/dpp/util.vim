@@ -21,7 +21,7 @@ endfunction
 function dpp#util#_get_runtime_path() abort
   return dpp#util#_substitute_path($VIMRUNTIME)
 endfunction
-function! dpp#util#_check_files() abort
+function! dpp#util#_check_files(name) abort
   const time = dpp#util#_get_runtime_path()->getftime()
   const ret = !(g:dpp#_check_files->copy()
         \ ->map({ _, val -> dpp#util#_expand(val)->getftime() })
@@ -30,7 +30,7 @@ function! dpp#util#_check_files() abort
     return 0
   endif
 
-  call dpp#util#_clear_state()
+  call dpp#util#_clear_state(a:name)
 
   return ret
 endfunction

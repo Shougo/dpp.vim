@@ -124,6 +124,15 @@ dpp#async_ext_action({ext-name}, {action-name}[, {action-params}])
 		{action-params} behavior depends on {action-name}.
 		NOTE: It must be executed after |dpp#min#load_state()|.
 
+                                                           *dpp#check_files()*
+dpp#check_files([{name}])
+		Check dpp.vim cache file is outdated.
+		{name} is plugins profile name.  The default is "vim" or
+		"nvim".
+		If it is outdated, |dpp#clear_state()| is called
+		automatically.
+		It should be called when |BufWritePost| autocmd.
+
                                                            *dpp#clear_state()*
 dpp#clear_state([{name}])
 		Remove state file which is created by |dpp#make_state()|.

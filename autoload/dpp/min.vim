@@ -16,7 +16,7 @@ function dpp#min#load_state(path, name=v:progname->fnamemodify(':r')) abort
     if v:exception !=# 'Cache loading error'
       call dpp#util#_error('Loading state error: ' .. v:exception)
     endif
-    call dpp#util#_clear_state()
+    call dpp#util#_clear_state(a:name)
     return 1
   endtry
 endfunction
@@ -32,8 +32,6 @@ function dpp#min#_init() abort
 
   augroup dpp
     autocmd!
-    autocmd BufWritePost *.lua,*.vim,*.toml,vimrc,.vimrc
-          \ call dpp#util#_check_files()
     autocmd User Dpp:makeStatePost :
   augroup END
 endfunction
