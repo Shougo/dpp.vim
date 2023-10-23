@@ -46,6 +46,7 @@ export function defaultDppOptions(): DppOptions {
   return {
     extOptions: {},
     extParams: {},
+    hooksFileMarker: "{{{,}}}",
     inlineVimrcs: [],
     protocolOptions: {},
     protocolParams: {},

@@ -77,6 +77,12 @@ extParams		(dictionary)
 
 		Default: {}
 
+                                                  *dpp-option-hooksFileMarker*
+hooksFileMarker		(string)
+		The marker is used in |dpp-plugin-option-hooks_file|.
+
+		Defaults: "{{{,}}}"
+
                                                      *dpp-option-inlineVimrcs*
 inlineVimrcs		(string[])
 		The vimrcs are sourced in |dpp#min#load_state()| before hooks.
@@ -229,6 +235,36 @@ ftplugin	(Dictionary)
 		NOTE: You need to call |dpp#clear_state()| after vimrc is
 		changed.
 
+                                                *dpp-plugin-option-hooks_file*
+hooks_file	(String) or (List)
+		Hooks file path.  It must be valid path.
+		It is useful to define long hooks.
+
+		The file format is:
+
+		{hook_name} {start_marker}
+		...
+		{end_marker}
+
+		{start_marker} and {end_marker} are from
+		|dpp-option-hooksFileMarker|.
+		{hook_name} is "hook_xxx" or "lua_xxx" or
+		|dpp-plugin-options-ftplugin| filetype.
+
+		Example:
+>
+		" hook_source {{{
+		let g:foo = 'bar'
+		" }}}
+		" cpp {{{
+		let g:bar = 'baz'
+		" }}}
+		" Use vim9script
+		" hook_update {{{
+		vim9script
+		g:bar = 'baz'
+		" }}}
+<
                                                         *dpp-plugin-option-if*
 if		(Bool) or (String)
 		If set to |v:false|, dpp doesn't load the plugin.

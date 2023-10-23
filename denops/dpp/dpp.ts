@@ -666,6 +666,22 @@ async function detectPlugin(
   return plugin;
 }
 
+async function parseHooksFile(
+  denops: Denops,
+  marker: string,
+  hooksFile: string[],
+): Promise<Partial<Plugin>> {
+  const startMarker = marker.split(',')[0]
+  const endMarker = marker.split(',')[1]
+  const options: Partial<Plugin> = {};
+  let hookName = "";
+
+  for (const line of hooksFile) {
+  }
+
+  return options;
+}
+
 Deno.test("initPlugin", () => {
   assertEquals(
     initPlugin({
