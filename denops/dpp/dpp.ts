@@ -35,7 +35,12 @@ import { Loader } from "./loader.ts";
 import { defaultExtOptions } from "./base/ext.ts";
 import { defaultProtocolOptions } from "./base/protocol.ts";
 import { ConfigReturn } from "./base/config.ts";
-import { errorException, isDirectory, parseHooksFile } from "./utils.ts";
+import {
+  convert2List,
+  errorException,
+  isDirectory,
+  parseHooksFile,
+} from "./utils.ts";
 
 export class Dpp {
   private loader: Loader;
@@ -122,19 +127,23 @@ export class Dpp {
       );
 
       if (plugin.hooks_file) {
-        const hooksFile = await denops.call(
-          "dpp#util#_expand",
-          plugin.hooks_file,
-        ) as string;
-        const hooksFileLines = (await Deno.readTextFile(hooksFile)).split("\n");
+        for (const hooksFile of convert2List(plugin.hooks_file)) {
+          const hooksFilePath = await denops.call(
+            "dpp#util#_expand",
+            hooksFile,
+          ) as string;
+          const hooksFileLines = (await Deno.readTextFile(hooksFilePath)).split(
+            "\n",
+          );
 
-        plugin = Object.assign(
-          plugin,
-          parseHooksFile(
-            options.hooksFileMarker,
-            hooksFileLines,
-          ),
-        );
+          plugin = Object.assign(
+            plugin,
+            parseHooksFile(
+              options.hooksFileMarker,
+              hooksFileLines,
+            ),
+          );
+        }
       }
 
       recordPlugins[plugin.name] = initPlugin(
@@ -306,7 +315,9 @@ export class Dpp {
       }
 
       if (plugin.hooks_file) {
-        checkFiles.push(plugin.hooks_file);
+        for (const hooksFile of convert2List(plugin.hooks_file)) {
+          checkFiles.push(hooksFile);
+        }
       }
 
       if (plugin.hook_add) {

@@ -91,7 +91,7 @@ export type Plugin = {
   hook_post_source?: string;
   hook_post_update?: string;
   hook_source?: string;
-  hooks_file?: string;
+  hooks_file?: string | string[];
   if?: boolean | string;
   lazy?: boolean;
   local?: boolean;

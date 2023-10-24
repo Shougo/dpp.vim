@@ -1,4 +1,4 @@
-import { assertEquals, Denops } from "./deps.ts";
+import { assertEquals, Denops, is } from "./deps.ts";
 
 export async function errorException(
   denops: Denops,
@@ -27,6 +27,10 @@ export async function errorException(
     );
     console.error(e);
   }
+}
+
+export function convert2List<T>(expr: T | T[]): T[] {
+  return is.Array(expr) ? expr : [expr];
 }
 
 export async function isDirectory(path: string) {
