@@ -1,4 +1,5 @@
 import { assertEquals, Denops, is } from "./deps.ts";
+import { Plugin } from "./types.ts";
 
 export async function errorException(
   denops: Denops,
