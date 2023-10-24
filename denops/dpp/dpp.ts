@@ -207,11 +207,7 @@ export class Dpp {
         continue;
       }
 
-      for (
-        const depend of is.String(plugin.depends)
-          ? [plugin.depends]
-          : plugin.depends ?? []
-      ) {
+      for (const depend of convert2List(plugin.depends)) {
         depends.add(depend);
       }
 

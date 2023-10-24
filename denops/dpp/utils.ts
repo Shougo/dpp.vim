@@ -29,8 +29,8 @@ export async function errorException(
   }
 }
 
-export function convert2List<T>(expr: T | T[]): T[] {
-  return is.Array(expr) ? expr : [expr];
+export function convert2List<T>(expr: T | T[] | undefined): T[] {
+  return !expr ? [] : is.Array(expr) ? expr : [expr];
 }
 
 export async function isDirectory(path: string) {
