@@ -19,7 +19,6 @@ The development is supported by
 - [Introduction](#introduction)
 - [Install](#install)
   - [Requirements](#requirements)
-  - [Basic installation](#basic-installation)
   - [Config example](#config-example)
 
 <!-- vim-markdown-toc -->
@@ -39,37 +38,6 @@ Dpp.vim requires both Deno and denops.vim.
 - <https://deno.land/>
 - <https://github.com/vim-denops/denops.vim>
 
-### Basic installation
-
-You can install dpp.vim by your vimrc/init.vim.
-
-```vim
-let $CACHE = expand('~/.cache')
-if !($CACHE->isdirectory())
-  call mkdir($CACHE, 'p')
-endif
-
-for s:plugin in [
-      \ 'Shougo/dpp.vim',
-      \ 'denops/denops.vim',
-      \ ]->filter({ _, val ->
-      \           &runtimepath !~# '/' .. val->fnamemodify(':t') })
-  " Search from current directory
-  let s:dir = s:plugin->fnamemodify(':t')->fnamemodify(':p')
-  if !(s:dir->isdirectory())
-    " Search from $CACHE directory
-    let s:dir = $CACHE .. '/dpp/repos/github.com/' .. s:plugin
-    if !(s:dir->isdirectory())
-      execute '!git clone https://github.com/' .. s:plugin s:dir
-    endif
-  endif
-
-  if s:plugin->fnamemodify(':t') ==# 'dpp.vim'
-    execute 'set runtimepath^='
-          \ .. s:dir->fnamemodify(':p')->substitute('[/\\]$', '', '')
-  endif
-endfor
-```
 
 ### Config example
 

@@ -251,6 +251,10 @@ export class Dpp {
       `let &runtimepath = '${newRuntimepath}'`,
     ];
 
+    if (!configReturn.ftplugins) {
+      configReturn.ftplugins = {};
+    }
+
     // hooksFiles
     if (configReturn.hooksFiles) {
       for (
@@ -268,10 +272,6 @@ export class Dpp {
 
         // Use ftplugin only
         if (parsedHooksFile.ftplugin && is.Record(parsedHooksFile.ftplugin)) {
-          if (!configReturn.ftplugins) {
-            configReturn.ftplugins = {};
-          }
-
           // Merge ftplugins
           for (const filetype of Object.keys(parsedHooksFile.ftplugin)) {
             if (configReturn.ftplugins[filetype]) {
@@ -318,6 +318,19 @@ export class Dpp {
 
       if (plugin.hook_add) {
         stateLines.push(plugin.hook_add);
+      }
+
+      // Merge ftplugins
+      if (plugin.ftplugin) {
+        for (const filetype of Object.keys(plugin.ftplugin)) {
+          if (configReturn.ftplugins[filetype]) {
+            configReturn.ftplugins[filetype] += `\n${
+              plugin.ftplugin[filetype]
+            }`;
+          } else {
+            configReturn.ftplugins[filetype] = plugin.ftplugin[filetype];
+          }
+        }
       }
     }
 
@@ -370,7 +383,7 @@ export class Dpp {
         "dpp#util#_generate_ftplugin",
         dppRuntimepath,
         configReturn.ftplugins,
-      ) as Record<string, string>;
+      ) as Record<string, string[]>;
 
       for (const path of Object.keys(generatedFtplugins)) {
         const parent = dirname(path);
@@ -378,7 +391,7 @@ export class Dpp {
           await Deno.mkdir(parent, { recursive: true });
         }
 
-        await Deno.writeTextFile(path, generatedFtplugins[path]);
+        await Deno.writeTextFile(path, generatedFtplugins[path].join("\n"));
       }
     }
 
