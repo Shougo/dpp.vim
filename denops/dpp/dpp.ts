@@ -305,6 +305,25 @@ export class Dpp {
       stateLines = stateLines.concat(configReturn.stateLines);
     }
 
+    // NOTE: inlineVimrcs must be before plugins hook_add.
+    const inlineVimrcs = await Promise.all(options.inlineVimrcs.map(
+      async (vimrc) => await denops.call("dpp#util#_expand", vimrc) as string,
+    ));
+    for await (const vimrc of inlineVimrcs) {
+      const vimrcLines = (await Deno.readTextFile(vimrc)).split("\n");
+      if (extname(vimrc) == ".lua") {
+        stateLines = stateLines.concat(
+          ["lua <<EOF"],
+          vimrcLines.filter((line) => !line.match(/^\s*$|^\s*--/)),
+          ["EOF"],
+        );
+      } else {
+        stateLines = stateLines.concat(
+          vimrcLines.filter((line) => !line.match(/^\s*$|^\s*"/)),
+        );
+      }
+    }
+
     for (const plugin of Object.values(recordPlugins)) {
       if (!plugin.path || !await isDirectory(plugin.path)) {
         continue;
@@ -334,28 +353,8 @@ export class Dpp {
       }
     }
 
-    const inlineVimrcs = await Promise.all(options.inlineVimrcs.map(
-      async (vimrc) => await denops.call("dpp#util#_expand", vimrc) as string,
-    ));
-    for await (const vimrc of inlineVimrcs) {
-      const vimrcLines = (await Deno.readTextFile(vimrc)).split("\n");
-      if (extname(vimrc) == ".lua") {
-        stateLines = stateLines.concat(
-          ["lua <<EOF"],
-          vimrcLines.filter((line) => !line.match(/^\s*$|^\s*--/)),
-          ["EOF"],
-        );
-      } else {
-        stateLines = stateLines.concat(
-          vimrcLines.filter((line) => !line.match(/^\s*$|^\s*"/)),
-        );
-      }
-    }
-    //console.log(inlineVimrcs);
-
     // Write state file
     const stateFile = `${basePath}/${name}/state.vim`;
-    //console.log(stateFile);
     await Deno.writeTextFile(stateFile, stateLines.join("\n"));
 
     const cacheFile = `${basePath}/${name}/cache.vim`;
