@@ -688,7 +688,12 @@ function initPlugin(plugin: Plugin, basePath: string): Plugin {
     const key of Object.keys(plugin).filter((key) => key.startsWith("lua_"))
   ) {
     const hook = key.replace(/^lua_/, "hook_");
-    hooks[hook] = `lua <<EOF\n${plugin[key as keyof typeof plugin]}\nEOF\n`;
+    const lua = `lua <<EOF\n${plugin[key as keyof typeof plugin]}\nEOF\n`;
+    if (hooks[hook]) {
+      hooks[hook] += "\n" + lua;
+    } else {
+      hooks[hook] = lua;
+    }
   }
   // Convert head backslashes
   for (
