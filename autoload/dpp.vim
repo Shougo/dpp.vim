@@ -35,5 +35,5 @@ function dpp#clear_state(name=v:progname->fnamemodify(':r')) abort
 endfunction
 
 function dpp#check_files(name=v:progname->fnamemodify(':r')) abort
-  call dpp#util#_check_files(a:name)
+  return dpp#util#_check_files(a:name)
 endfunction

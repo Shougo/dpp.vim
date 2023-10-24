@@ -22,17 +22,14 @@ function dpp#util#_get_runtime_path() abort
   return dpp#util#_substitute_path($VIMRUNTIME)
 endfunction
 function! dpp#util#_check_files(name) abort
-  const time = dpp#util#_get_runtime_path()->getftime()
-  const ret = !(g:dpp#_check_files->copy()
-        \ ->map({ _, val -> dpp#util#_expand(val)->getftime() })
-        \ ->filter({ _, val -> time < val })->empty())
-  if !ret
-    return 0
+  const time = printf('%s/%s/state.vim', g:dpp#_base_path, a:name)->getftime()
+  const updated = g:dpp#_check_files->copy()
+        \ ->filter({ _, val -> time < dpp#util#_expand(val)->getftime() })
+  if !(updated->empty())
+    call dpp#util#_clear_state(a:name)
   endif
 
-  call dpp#util#_clear_state(a:name)
-
-  return ret
+  return updated
 endfunction
 
 function dpp#util#_convert2list(expr) abort

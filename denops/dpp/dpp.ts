@@ -367,17 +367,14 @@ export class Dpp {
         checkFiles,
       ]),
     ];
-    //console.log(cacheFile);
     await Deno.writeTextFile(cacheFile, cacheLines.join("\n"));
 
     //console.log(stateLines);
     //console.log(cacheLines);
-    //console.log(rtps);
 
     await this.mergePlugins(denops, dppRuntimepath, recordPlugins);
 
     // Generate ftplugin files
-    //console.log(configReturn.ftplugins);
     if (configReturn.ftplugins) {
       const generatedFtplugins = await denops.call(
         "dpp#util#_generate_ftplugin",
