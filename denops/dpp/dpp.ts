@@ -666,7 +666,8 @@ function initPlugin(plugin: Plugin, basePath: string): Plugin {
     plugin.depends = [plugin.depends];
   }
 
-  if (!plugin.lazy) {
+  if (!("lazy" in plugin)) {
+    // Default lazy set
     plugin.lazy = Object.keys(plugin).filter((key) =>
       key.startsWith("on_")
     ).length > 0;
