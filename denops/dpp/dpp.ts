@@ -667,17 +667,9 @@ function initPlugin(plugin: Plugin, basePath: string): Plugin {
   }
 
   if (!plugin.lazy) {
-    plugin.lazy = [
-      "on_ft",
-      "on_cmd",
-      "on_func",
-      "on_lua",
-      "on_map",
-      "on_path",
-      "on_if",
-      "on_event",
-      "on_source",
-    ].filter((key) => key in plugin).length > 0;
+    plugin.lazy = Object.keys(plugin).filter((key) =>
+      key.startsWith("on_")
+    ).length > 0;
   }
 
   if (!plugin.merged) {

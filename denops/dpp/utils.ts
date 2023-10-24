@@ -128,6 +128,13 @@ export function parseHooksFile(
   return options;
 }
 
+export function getLazyPlugins(plugins: Plugin[]): Plugin[] {
+  return plugins.filter((plugin) =>
+    plugin.lazy ||
+    Object.keys(plugin).filter((key) => key.startsWith("on_")).length > 0
+  );
+}
+
 Deno.test("parseHooksFile", () => {
   assertEquals(
     parseHooksFile("{{{,}}}", [
