@@ -196,6 +196,20 @@ export class Dpp {
       }
     };
 
+    // Check plugin-option-if is enabled
+    const checkIf = async (plugin: Plugin) => {
+      if (!("if" in plugin)) {
+        return true;
+      }
+
+      if (is.Boolean(plugin.if)) {
+        return plugin.if;
+      }
+
+      // Eval plugin-option-if string.
+      return await denops.call("eval", plugin.if) as boolean;
+    };
+
     // Add plugins runtimepath
     const depends = new Set<string>();
     for (
@@ -203,7 +217,9 @@ export class Dpp {
         !plugin.lazy
       )
     ) {
-      if (!plugin.rtp || !await isDirectory(plugin.rtp)) {
+      if (
+        !plugin.rtp || !await isDirectory(plugin.rtp) || !await checkIf(plugin)
+      ) {
         continue;
       }
 
@@ -217,7 +233,10 @@ export class Dpp {
     // Load dependencies
     for (const depend of depends) {
       const plugin = recordPlugins[depend];
-      if (!plugin?.rtp || !await isDirectory(plugin.rtp) || plugin.sourced) {
+      if (
+        !plugin?.rtp || !await isDirectory(plugin.rtp) || plugin.sourced ||
+        !await checkIf(plugin)
+      ) {
         continue;
       }
 
