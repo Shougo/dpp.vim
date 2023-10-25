@@ -166,7 +166,7 @@ endfunction
 function dpp#util#_generate_ftplugin(runtimepath, ftplugin) abort
   let generated = {}
 
-  " Merge g:dein#ftplugin
+  " Merge
   let ftplugin = {}
   for [key, string] in a:ftplugin->items()
     for ft in (key ==# '_' ? ['_'] : key->split('_'))

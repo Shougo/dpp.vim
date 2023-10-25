@@ -260,6 +260,9 @@ lazy		(Bool)
 		NOTE: You should not specify the plugins which have no
 		"plugin/" directory as lazy load plugins.  It is meaningless
 		and just increases the overhead.
+		NOTE: To load lazy plugins, you need to install
+		|dpp-ext-lazy|.
+		https://github.com/Shougo/dpp-ext-lazy
 
                                                     *dpp-plugin-option-merged*
 merged		(Bool)
