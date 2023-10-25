@@ -333,11 +333,10 @@ on_if		(String)
 		"VimEnter" and "FileType".
 		If |dpp-plugin-option-on_event| exists, it is evaluated when
 		|dpp-plugin-option-on_event|.
+		NOTE: To load lazy plugins, you need to install
+		|dpp-ext-lazy|.
+		https://github.com/Shougo/dpp-ext-lazy
 
-		For example: >
-		call dpp#add('blueyed/vim-diminactive',
-		\ #{ on_event: 'WinEnter', on_if: 'winnr("$") > 1' })
-<
                                                     *dpp-plugin-option-on_lua*
 on_lua		(List) or (String)
 		If it is matched to the required lua module root, dpp will
