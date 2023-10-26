@@ -35,6 +35,8 @@ export type GetLogCommandsArguments<Params extends BaseProtocolParams> = {
   plugin: Plugin;
   protocolOptions: ProtocolOptions;
   protocolParams: Params;
+  newRev: string;
+  oldRev: string;
 };
 
 export type GetRevisionLockCommandsArguments<
@@ -51,6 +53,7 @@ export type GetRollbackCommandsArguments<Params extends BaseProtocolParams> = {
   plugin: Plugin;
   protocolOptions: ProtocolOptions;
   protocolParams: Params;
+  rev: string;
 };
 
 export type GetDiffCommandsArguments<Params extends BaseProtocolParams> = {
@@ -58,8 +61,8 @@ export type GetDiffCommandsArguments<Params extends BaseProtocolParams> = {
   plugin: Plugin;
   protocolOptions: ProtocolOptions;
   protocolParams: Params;
-  oldRev: string;
   newRev: string;
+  oldRev: string;
 };
 
 export type GetRevisionArguments<Params extends BaseProtocolParams> = {
