@@ -58,6 +58,8 @@ export type GetDiffCommandsArguments<Params extends BaseProtocolParams> = {
   plugin: Plugin;
   protocolOptions: ProtocolOptions;
   protocolParams: Params;
+  oldRev: string;
+  newRev: string;
 };
 
 export type GetRevisionArguments<Params extends BaseProtocolParams> = {
