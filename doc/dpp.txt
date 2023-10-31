@@ -35,8 +35,9 @@ INTRODUCTION                                                *dpp-introduction*
 *dpp* is the abbreviation of "Dark Powered Plugin manager".  It provides
 extensible plugin manager features.
 
-If you don't want to configure plugins, you don't have to use the plugin.
-It does not work with zero configuration.  You can use other plugins.
+If you don't want to configure plugins, you don't have to use the plugin
+manager. It does not work with zero configuration.  You can use other plugin
+managers.
 
 
 ==============================================================================

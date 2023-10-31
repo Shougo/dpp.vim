@@ -2,8 +2,9 @@
 
 > Dark Powered Plugin manager for Vim/neovim
 
-If you don't want to configure plugins, you don't have to use the plugin. It
-does not work with zero configuration. You can use other plugins.
+If you don't want to configure plugins, you don't have to use the plugin
+manager. It does not work with zero configuration. You can use other plugin
+managers.
 
 [![Doc](https://img.shields.io/badge/doc-%3Ah%20dpp-orange.svg)](doc/dpp.txt)
 
