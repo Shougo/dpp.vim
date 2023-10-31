@@ -10,10 +10,11 @@ managers.
 
 Please read [help](doc/dpp.txt) for details.
 
-Dpp is the abbreviation of "Dark Powered Plugin manager".
-
 The development is supported by
 [github sponsors](https://github.com/sponsors/Shougo/). Thank you!
+
+Note: If you want to know why I use Deno or what means "dark powered", please
+see "FAQ" section in [help](doc/dpp.txt).
 
 <!-- vim-markdown-toc GFM -->
 
@@ -21,6 +22,8 @@ The development is supported by
 - [Install](#install)
   - [Requirements](#requirements)
   - [Config example](#config-example)
+- [Extensions](#extensions)
+- [Protocols](#protocols)
 
 <!-- vim-markdown-toc -->
 
@@ -82,3 +85,26 @@ endif
 ```
 
 </details>
+
+## Extensions
+
+Extensions implement fancy features like other plugin managers.
+
+- <https://github.com/Shougo/dpp-ext-installer/>
+
+- <https://github.com/Shougo/dpp-ext-local>
+
+- <https://github.com/Shougo/dpp-ext-lazy>
+
+- <https://github.com/Shougo/dpp-ext-toml>
+
+You can find other extensions by [the topic](https://github.com/topics/dpp-ext).
+
+## Protocols
+
+Protocols implement VCS related features.
+
+- <https://github.com/Shougo/dpp-protocol-git>
+
+You can find other protocols by
+[the topic](https://github.com/Shougo/dpp-protocol-git).

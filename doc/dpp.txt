@@ -245,6 +245,7 @@ ftplugin	(Dictionary)
 		NOTE: You need to call |dpp#clear_state()| after vimrc is
 		changed.
 
+                                                        *dpp-plugin-option-if*
 if		(Bool) or (String)
 		If set to |v:false|, dpp doesn't load the plugin.
 		If it is |String|, dpp will eval it.
@@ -262,7 +263,7 @@ lazy		(Bool)
 		"plugin/" directory as lazy load plugins.  It is meaningless
 		and just increases the overhead.
 		NOTE: To load lazy plugins, you need to install
-		|dpp-ext-lazy|.
+		"dpp-ext-lazy".
 		https://github.com/Shougo/dpp-ext-lazy
 
                                                     *dpp-plugin-option-merged*
@@ -335,7 +336,7 @@ on_if		(String)
 		If |dpp-plugin-option-on_event| exists, it is evaluated when
 		|dpp-plugin-option-on_event|.
 		NOTE: To load lazy plugins, you need to install
-		|dpp-ext-lazy|.
+		"dpp-ext-lazy".
 		https://github.com/Shougo/dpp-ext-lazy
 
                                                     *dpp-plugin-option-on_lua*
@@ -424,7 +425,7 @@ hooks_file	(String) or (List)
 		{start_marker} and {end_marker} are from
 		|dpp-option-hooksFileMarker|.
 		{hook_name} is "hook_xxx" or "lua_xxx" or
-		|dpp-plugin-options-ftplugin| filetype.
+		|dpp-plugin-option-ftplugin| filetype.
 
 		Example:
 >
@@ -484,7 +485,8 @@ lua_add		(String)
                                         *dpp-plugin-option-lua_depends_update*
 lua_depends_update (String)
 		Lua language string hook instead of Vim script.
-		It is converted to |dpp-plugin-option-hook_depends_update| key.
+		It is converted to |dpp-plugin-option-hook_depends_update|
+		key.
 
                                            *dpp-plugin-option-lua_done_update*
 lua_done_update	(String)
@@ -710,8 +712,39 @@ params			(function)			(Required)
 ==============================================================================
 FAQ                                                                  *dpp-faq*
 
+FAQ 1:							|dpp-faq-1|
+	How to donate money to you?
+
+FAQ 2:							|dpp-faq-2|
+	What means "dark powered"?
+
+FAQ 3:							|dpp-faq-3|
+	Why dpp.vim uses Deno?
+
 ------------------------------------------------------------------------------
                                                                    *dpp-faq-1*
+Q: How to donate money to you?
+
+A: I have started github sponsorship to spend more time for Vim/neovim
+plugins.  You can donate money to help me!
+
+   https://github.com/sponsors/Shougo
+
+                                                                   *dpp-faq-2*
+Q: What means "dark powered"?
+
+A: I think text editor is everything in the world. I want to do everything in
+Vim(neovim) like Emacs. It is not allowed by |design-not| in Vim. It is not
+the light way to use Vim. So I have defined it as the dark way. I am the dark
+Vimmer. My plugins are dark powered.
+
+                                                                   *dpp-faq-3*
+Q: Why dpp.vim uses Deno?
+
+A: Deno is asynchronous and faster than Vim script and it can be used in both
+Vim and neovim.  The features are what I desired.
+I have created some plugins by TypeScript.  The development is very fun and
+easy to maintain.
 
 ==============================================================================
 COMPATIBILITY                                              *dpp-compatibility*
