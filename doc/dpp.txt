@@ -298,13 +298,13 @@ normalized_name	(String)
 		NOTE: Must be unique across all plugins.
 		Normalized name example:
 		name            : normalized name
->
+
 		denite.nvim       denite
 		dpp.vim           dpp
 		vim-quickrun      quickrun
 		dps-dial          dial
 		denops-foo        foo
-<
+
                                                     *dpp-plugin-option-on_cmd*
 on_cmd		(List) or (String)
 		If it is matched to the executed command, dpp will call
