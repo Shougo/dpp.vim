@@ -98,7 +98,7 @@ Extensions implement fancy features like other plugin managers.
 
 - <https://github.com/Shougo/dpp-ext-toml>
 
-You can find other extensions by [the topic](https://github.com/topics/dpp-ext).
+You can find other extensions by [the topic](https://github.com/topics/dpp-exts).
 
 ## Protocols
 
@@ -107,4 +107,4 @@ Protocols implement VCS related features.
 - <https://github.com/Shougo/dpp-protocol-git>
 
 You can find other protocols by
-[the topic](https://github.com/Shougo/dpp-protocol-git).
+[the topic](https://github.com/Shougo/dpp-protocols).
