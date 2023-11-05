@@ -247,5 +247,9 @@ function s:get_default_ftplugin() abort
 endfunction
 
 function dpp#util#_dos2unix(path) abort
-  call writefile(readfile(a:path), a:path)
+  call writefile(
+        \   readfile(a:path)
+        \     ->map({ _, val -> val->substitute("\r$", '', 'g')}),
+        \   a:path
+        \ )
 endfunction
