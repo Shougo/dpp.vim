@@ -8,9 +8,7 @@ function dpp#min#load_state(path, name=v:progname->fnamemodify(':r')) abort
   const state = printf('%s/%s/state.vim', g:dpp#_base_path, a:name)
   const cache = printf('%s/%s/cache.vim', g:dpp#_base_path, a:name)
   if !(cache->filereadable() || state->filereadable()) | return 1 | endif
-  const fileformat = &fileformat
   try
-    set fileformat&
     let g:dpp#_cache = has('nvim') ? cache->readfile()->json_decode()
           \ : cache->readfile()[0]->js_decode()
     execute 'source' state->fnameescape()
@@ -21,8 +19,6 @@ function dpp#min#load_state(path, name=v:progname->fnamemodify(':r')) abort
     endif
     call dpp#util#_clear_state(a:name)
     return 1
-  finally
-    let &fileformat = &fileformat
   endtry
 endfunction
 function dpp#min#_init() abort
