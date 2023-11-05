@@ -375,6 +375,7 @@ export class Dpp {
     // Write state file
     const stateFile = `${basePath}/${name}/state.vim`;
     await Deno.writeTextFile(stateFile, stateLines.join("\n"));
+    await denops.call("dpp#util#_dos2unix", stateFile);
 
     const cacheFile = `${basePath}/${name}/cache.vim`;
     const cacheLines = [
@@ -386,6 +387,7 @@ export class Dpp {
       ]),
     ];
     await Deno.writeTextFile(cacheFile, cacheLines.join("\n"));
+    await denops.call("dpp#util#_dos2unix", cacheFile);
 
     //console.log(stateLines);
     //console.log(cacheLines);
@@ -407,6 +409,7 @@ export class Dpp {
         }
 
         await Deno.writeTextFile(path, generatedFtplugins[path].join("\n"));
+        await denops.call("dpp#util#_dos2unix", path);
       }
     }
 

@@ -245,3 +245,7 @@ function s:get_default_ftplugin() abort
   END
   return default_ftplugin
 endfunction
+
+function dpp#util#_dos2unix(path) abort
+  call writefile(readfile(a:path), a:path)
+endfunction
