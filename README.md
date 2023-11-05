@@ -98,7 +98,8 @@ Extensions implement fancy features like other plugin managers.
 
 - <https://github.com/Shougo/dpp-ext-toml>
 
-You can find other extensions by [the topic](https://github.com/topics/dpp-exts).
+You can find other extensions by
+[the topic](https://github.com/topics/dpp-exts).
 
 ## Protocols
 
