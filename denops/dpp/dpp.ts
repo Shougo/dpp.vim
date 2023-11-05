@@ -4,7 +4,6 @@ import {
   Denops,
   dirname,
   extname,
-  fn,
   is,
   join,
   vars,
@@ -356,9 +355,7 @@ export class Dpp {
       }
 
       if (plugin.hook_add) {
-        stateLines = stateLines.concat(
-          plugin.hook_add.split("\n"),
-        );
+        stateLines.push(plugin.hook_add);
       }
 
       // Merge ftplugins
@@ -377,8 +374,7 @@ export class Dpp {
 
     // Write state file
     const stateFile = `${basePath}/${name}/state.vim`;
-    // NOTE: Deno.writeTextFile does not work in Windows.
-    await fn.writefile(denops, stateLines, stateFile, "b");
+    await Deno.writeTextFile(stateFile, stateLines.join("\n"));
 
     const cacheFile = `${basePath}/${name}/cache.vim`;
     const cacheLines = [
@@ -389,8 +385,7 @@ export class Dpp {
         checkFiles,
       ]),
     ];
-    // NOTE: Deno.writeTextFile does not work in Windows.
-    await fn.writefile(denops, cacheLines, cacheFile, "b");
+    await Deno.writeTextFile(cacheFile, cacheLines.join("\n"));
 
     //console.log(stateLines);
     //console.log(cacheLines);
@@ -411,8 +406,7 @@ export class Dpp {
           await Deno.mkdir(parent, { recursive: true });
         }
 
-        // NOTE: Deno.writeTextFile does not work in Windows.
-        await fn.writefile(denops, generatedFtplugins[path], path, "b");
+        await Deno.writeTextFile(path, generatedFtplugins[path].join("\n"));
       }
     }
 
