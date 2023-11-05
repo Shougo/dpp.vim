@@ -376,7 +376,7 @@ export class Dpp {
     // Write state file
     const stateFile = `${basePath}/${name}/state.vim`;
     // NOTE: Deno.writeTextFile does not work in Windows.
-    await fn.writefile(denops, stateLines.join("\n"), stateFile);
+    await fn.writefile(denops, stateLines, stateFile);
 
     const cacheFile = `${basePath}/${name}/cache.vim`;
     const cacheLines = [
@@ -388,7 +388,7 @@ export class Dpp {
       ]),
     ];
     // NOTE: Deno.writeTextFile does not work in Windows.
-    await fn.writefile(denops, cacheLines.join("\n"), cacheFile);
+    await fn.writefile(denops, cacheLines, cacheFile);
 
     //console.log(stateLines);
     //console.log(cacheLines);
@@ -410,7 +410,7 @@ export class Dpp {
         }
 
         // NOTE: Deno.writeTextFile does not work in Windows.
-        await fn.writefile(denops, generatedFtplugins[path].join("\n"), path);
+        await fn.writefile(denops, generatedFtplugins[path], path);
       }
     }
 
