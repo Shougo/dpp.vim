@@ -136,7 +136,7 @@ export class Dpp {
             hooksFile,
           ) as string;
           const hooksFileLines = (await Deno.readTextFile(hooksFilePath)).split(
-            "\n",
+            /\r?\n/,
           );
 
           plugin = Object.assign(
