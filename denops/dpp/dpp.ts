@@ -4,6 +4,7 @@ import {
   Denops,
   dirname,
   extname,
+  fn,
   is,
   join,
   vars,
@@ -115,6 +116,8 @@ export class Dpp {
     name: string,
     configReturn: ConfigReturn,
   ) {
+    const hasWindows = await fn.has(denops, "win32");
+
     // Initialize plugins
     const protocols = await this.getProtocols(denops, options);
     const recordPlugins: Record<string, Plugin> = {};
@@ -375,7 +378,9 @@ export class Dpp {
     // Write state file
     const stateFile = `${basePath}/${name}/state.vim`;
     await Deno.writeTextFile(stateFile, stateLines.join("\n"));
-    await denops.call("dpp#util#_dos2unix", stateFile);
+    if (hasWindows) {
+      await denops.call("dpp#util#_dos2unix", stateFile);
+    }
 
     const cacheFile = `${basePath}/${name}/cache.vim`;
     const cacheLines = [
@@ -387,7 +392,9 @@ export class Dpp {
       ]),
     ];
     await Deno.writeTextFile(cacheFile, cacheLines.join("\n"));
-    await denops.call("dpp#util#_dos2unix", cacheFile);
+    if (hasWindows) {
+      await denops.call("dpp#util#_dos2unix", cacheFile);
+    }
 
     //console.log(stateLines);
     //console.log(cacheLines);
@@ -409,7 +416,9 @@ export class Dpp {
         }
 
         await Deno.writeTextFile(path, generatedFtplugins[path].join("\n"));
-        await denops.call("dpp#util#_dos2unix", path);
+        if (hasWindows) {
+          await denops.call("dpp#util#_dos2unix", path);
+        }
       }
     }
 

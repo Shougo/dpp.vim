@@ -34,7 +34,11 @@ export function convert2List<T>(expr: T | T[] | undefined): T[] {
   return !expr ? [] : is.Array(expr) ? expr : [expr];
 }
 
-export async function isDirectory(path: string) {
+export async function isDirectory(path: string | undefined) {
+  if (!path) {
+    return false;
+  }
+
   // NOTE: Deno.stat() may be failed
   try {
     if ((await Deno.stat(path)).isDirectory) {

@@ -97,15 +97,12 @@ function dpp#util#_execute_hook(plugin, hook_name, hook) abort
   endif
 
   try
-    if a:hook->type() == v:t_string
-      let cmds = a:hook->split('\n')
-      if !(cmds->empty()) && cmds[0] =~# '^\s*vim9script' && exists(':vim9')
-        vim9 call execute(cmds[1 : ], '')
-      else
-        call execute(cmds, '')
-      endif
+    " NOTE: hook may contain \r in Windows
+    const cmds = a:hook->split('\r\?\n')
+    if !(cmds->empty()) && cmds[0] =~# '^\s*vim9script' && exists(':vim9')
+      vim9 call execute(cmds[1 : ], '')
     else
-      call call(a:hook, [])
+      call execute(cmds, '')
     endif
 
     let a:plugin.called[string(a:hook)] = v:true
@@ -249,7 +246,7 @@ endfunction
 function dpp#util#_dos2unix(path) abort
   call writefile(
         \   readfile(a:path)
-        \     ->map({ _, val -> val->substitute("\r", '', 'g')}),
+        \     ->map({ _, val -> val->substitute('\r', '', 'g')}),
         \   a:path
         \ )
 endfunction
