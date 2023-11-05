@@ -285,7 +285,9 @@ export class Dpp {
             await denops.call("dpp#util#_expand", hooksFile) as string,
         ))
       ) {
-        const hooksFileLines = (await Deno.readTextFile(hooksFile)).split("\n");
+        const hooksFileLines = (await Deno.readTextFile(hooksFile)).split(
+          /\r?\n/,
+        );
 
         const parsedHooksFile = parseHooksFile(
           options.hooksFileMarker,
@@ -332,7 +334,7 @@ export class Dpp {
       async (vimrc) => await denops.call("dpp#util#_expand", vimrc) as string,
     ));
     for await (const vimrc of inlineVimrcs) {
-      const vimrcLines = (await Deno.readTextFile(vimrc)).split("\n");
+      const vimrcLines = (await Deno.readTextFile(vimrc)).split(/\r?\n/);
       if (extname(vimrc) == ".lua") {
         stateLines = stateLines.concat(
           ["lua <<EOF"],
