@@ -99,6 +99,7 @@ function dpp#util#_execute_hook(plugin, hook_name, hook) abort
   try
     " NOTE: hook may contain \r in Windows
     const cmds = a:hook->split('\r\?\n')
+          \ ->map({ _, val -> val->substitute('\r', '', 'g')})
     if !(cmds->empty()) && cmds[0] =~# '^\s*vim9script' && exists(':vim9')
       vim9 call execute(cmds[1 : ], '')
     else
