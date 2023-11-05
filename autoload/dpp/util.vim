@@ -249,7 +249,7 @@ endfunction
 function dpp#util#_dos2unix(path) abort
   call writefile(
         \   readfile(a:path)
-        \     ->map({ _, val -> val->substitute("\r$", '', 'g')}),
+        \     ->map({ _, val -> val->substitute("\r", '', 'g')}),
         \   a:path
         \ )
 endfunction
