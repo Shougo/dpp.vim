@@ -1,6 +1,5 @@
 import {
   assertEquals,
-  copy,
   Denops,
   dirname,
   extname,
@@ -40,6 +39,7 @@ import {
   convert2List,
   errorException,
   isDirectory,
+  linkPath,
   parseHooksFile,
 } from "./utils.ts";
 
@@ -121,8 +121,9 @@ export class Dpp {
     // Initialize plugins
     const protocols = await this.getProtocols(denops, options);
     const recordPlugins: Record<string, Plugin> = {};
-    for (let plugin of configReturn.plugins) {
-      plugin = await detectPlugin(
+    for (const plugin of configReturn.plugins) {
+      // NOTE: detectPlugin changes "plugin" value
+      await detectPlugin(
         denops,
         options,
         protocols,
@@ -139,7 +140,7 @@ export class Dpp {
             /\r?\n/,
           );
 
-          plugin = Object.assign(
+          Object.assign(
             plugin,
             parseHooksFile(
               options.hooksFileMarker,
@@ -179,6 +180,7 @@ export class Dpp {
       await denops.call("dpp#util#_get_runtime_path") as string,
     );
 
+    const runtimePath = await denops.call("dpp#util#_get_runtime_path") as string;
     const addRtp = async (plugin: Plugin) => {
       if (!plugin.rtp) {
         return;
@@ -189,13 +191,7 @@ export class Dpp {
 
       const afterDir = `${plugin.rtp}/after`;
       if (await isDirectory(afterDir)) {
-        rtps.splice(
-          rtps.indexOf(
-            await denops.call("dpp#util#_get_runtime_path") as string,
-          ) + 1,
-          0,
-          afterDir,
-        );
+        rtps.splice(rtps.indexOf(runtimePath) + 1, 0, afterDir);
       }
     };
 
@@ -246,13 +242,7 @@ export class Dpp {
       await addRtp(plugin);
     }
 
-    rtps.splice(
-      rtps.indexOf(
-        await denops.call("dpp#util#_get_runtime_path") as string,
-      ),
-      0,
-      dppRuntimepath,
-    );
+    rtps.splice(rtps.indexOf(runtimePath), 0, dppRuntimepath);
     rtps.push(`${dppRuntimepath}/after`);
 
     const newRuntimepath = await denops.call(
@@ -432,6 +422,7 @@ export class Dpp {
     dppRuntimepath: string,
     recordPlugins: Record<string, Plugin>,
   ) {
+    const hasWindows = await fn.has(denops, "win32");
     const ftdetectDir = `${dppRuntimepath}/ftdetect`;
     if (!await isDirectory(ftdetectDir)) {
       await Deno.mkdir(ftdetectDir, { recursive: true });
@@ -441,7 +432,7 @@ export class Dpp {
       await Deno.mkdir(docDir, { recursive: true });
     }
 
-    // Copy both ftdetect and help files
+    // Merge both ftdetect and help files
     for (const plugin of Object.values(recordPlugins)) {
       for (const srcDir of [`${plugin.path}/doc`, `${plugin.path}/ftdetect`]) {
         if (!plugin.path || !await isDirectory(srcDir)) {
@@ -449,8 +440,11 @@ export class Dpp {
         }
 
         for await (const entry of Deno.readDir(srcDir)) {
-          const path = join(srcDir, entry.name);
-          await copy(path, join(docDir, entry.name), { overwrite: true });
+          await linkPath(
+            hasWindows,
+            join(srcDir, entry.name),
+            join(docDir, entry.name),
+          );
         }
       }
     }
@@ -488,8 +482,11 @@ export class Dpp {
           continue;
         }
 
-        const path = join(plugin.path, entry.name);
-        await copy(path, join(dppRuntimepath, entry.name), { overwrite: true });
+        await linkPath(
+          hasWindows,
+          join(plugin.path, entry.name),
+          join(dppRuntimepath, entry.name),
+        );
       }
     }
   }
@@ -738,7 +735,7 @@ function initPlugin(plugin: Plugin, basePath: string): Plugin {
       "",
     );
   }
-  plugin = Object.assign(plugin, hooks);
+  Object.assign(plugin, hooks);
 
   return plugin;
 }

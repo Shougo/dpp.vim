@@ -1,4 +1,4 @@
-import { assertEquals, Denops, is } from "./deps.ts";
+import { assertEquals, copy, Denops, is, join } from "./deps.ts";
 import { Plugin } from "./types.ts";
 
 export async function errorException(
@@ -69,6 +69,43 @@ export async function safeStat(path: string): Promise<Deno.FileInfo | null> {
     // Ignore stat exception
   }
   return null;
+}
+
+export async function linkPath(hasWindows: boolean, src: string, dest: string) {
+  if (!hasWindows) {
+    // NOTE: For non Windows, copy() is faster...
+    await copy(src, dest, { overwrite: true });
+    return;
+  }
+
+  if (await isDirectory(src)) {
+    if (!await safeStat(dest)) {
+      // Not exists directory
+      await Deno.mkdir(dest, { recursive: true });
+    }
+
+    if (!await isDirectory(dest)) {
+      // NOTE: dest must be directory
+      return;
+    }
+
+    // Recursive
+    for await (const entry of Deno.readDir(src)) {
+      await linkPath(hasWindows, join(src, entry.name), join(dest, entry.name));
+    }
+  } else {
+    if (await safeStat(dest)) {
+      // Exists file
+      return;
+    }
+
+    if (hasWindows) {
+      // NOTE: Use hard link for Windows.
+      await Deno.link(src, dest);
+    } else {
+      await Deno.symlink(src, dest);
+    }
+  }
 }
 
 export function parseHooksFile(

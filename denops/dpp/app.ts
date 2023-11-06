@@ -42,6 +42,7 @@ export function main(denops: Denops) {
       arg2: unknown,
       arg3: unknown,
     ): Promise<void> {
+      //const startTime = Date.now();
       const basePath = ensure(arg1, is.String);
       const configPath = ensure(arg2, is.String);
       const name = ensure(arg3, is.String);
@@ -52,6 +53,7 @@ export function main(denops: Denops) {
         `${toFileUrl(configPath).href}#${performance.now()}`
       );
       const obj = new mod.Config();
+      //await denops.call("dpp#util#_error", `${Date.now() - startTime} ms`);
       const configReturn = await obj.config({
         contextBuilder,
         denops,
@@ -59,10 +61,13 @@ export function main(denops: Denops) {
         dpp,
         name,
       });
+      //await denops.call("dpp#util#_error", `${Date.now() - startTime} ms`);
 
       const [_, options] = await contextBuilder.get(denops);
 
       await dpp.makeState(denops, options, basePath, name, configReturn);
+
+      //await denops.call("dpp#util#_error", `${Date.now() - startTime} ms`);
     },
   };
 }
