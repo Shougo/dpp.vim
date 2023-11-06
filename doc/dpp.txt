@@ -721,6 +721,9 @@ FAQ 2:							|dpp-faq-2|
 FAQ 3:							|dpp-faq-3|
 	Why dpp.vim uses Deno?
 
+FAQ 4:							|dpp-faq-4|
+	I want to update cache file automatically when the config is updated.
+
 ------------------------------------------------------------------------------
                                                                    *dpp-faq-1*
 Q: How to donate money to you?
@@ -745,6 +748,16 @@ A: Deno is asynchronous and faster than Vim script and it can be used in both
 Vim and neovim.  The features are what I desired.
 I have created some plugins by TypeScript.  The development is very fun and
 easy to maintain.
+
+                                                                   *dpp-faq-4*
+Q: I want to update cache file automatically when the config is updated.
+
+A: You need to set checkFiles when |dpp#make_state()| and you need to call
+|dpp#check_files()| like this.
+>
+  autocmd BufWritePost *.lua,*.vim,*.toml,*.ts,vimrc,.vimrc
+            \ call dpp#check_files()
+<
 
 ==============================================================================
 COMPATIBILITY                                              *dpp-compatibility*
