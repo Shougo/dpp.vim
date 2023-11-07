@@ -180,7 +180,9 @@ export class Dpp {
       await denops.call("dpp#util#_get_runtime_path") as string,
     );
 
-    const runtimePath = await denops.call("dpp#util#_get_runtime_path") as string;
+    const runtimePath = await denops.call(
+      "dpp#util#_get_runtime_path",
+    ) as string;
     const addRtp = async (plugin: Plugin) => {
       if (!plugin.rtp) {
         return;
