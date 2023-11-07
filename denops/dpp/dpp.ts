@@ -113,6 +113,7 @@ export class Dpp {
     denops: Denops,
     options: DppOptions,
     basePath: string,
+    configPath: string,
     name: string,
     configReturn: ConfigReturn,
   ) {
@@ -261,7 +262,7 @@ export class Dpp {
       `|| g:dpp#_init_runtimepath !=# '${initRuntimepath}' | ` +
       "throw 'Cache loading error' | endif",
       "let [g:dpp#_plugins, g:dpp#ftplugin, g:dpp#_options, g:dpp#_check_files] = g:dpp#_cache",
-      `let g:dpp#_base_path = '${basePath}'`,
+      `let g:dpp#_config_path = '${configPath}'`,
       `let &runtimepath = '${newRuntimepath}'`,
     ];
 
@@ -308,13 +309,10 @@ export class Dpp {
       checkFiles = checkFiles.concat(configReturn.hooksFiles);
     }
 
-    if (await vars.g.get(denops, "did_load_filetypes", false)) {
+    if (await vars.g.get(denops, "dpp#_did_load_filetypes", false)) {
       stateLines.push("filetype off");
     }
-    if (
-      await vars.b.get(denops, "did_indent", false) ||
-      await vars.b.get(denops, "did_ftplugin", false)
-    ) {
+    if (await vars.g.get(denops, "dpp#_did_load_ftplugin", false)) {
       stateLines.push("filetype plugin indent off");
     }
     if (configReturn.stateLines) {
@@ -476,10 +474,7 @@ export class Dpp {
       }
 
       for await (const entry of Deno.readDir(plugin.path)) {
-        if (
-          entry.name === "doc" || entry.name === "ftdetect" ||
-          entry.name === ".git"
-        ) {
+        if (["doc", "ftdetect", ".git"].indexOf(entry.name) >= 0) {
           // Skip
           continue;
         }

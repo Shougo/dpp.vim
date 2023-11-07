@@ -22,14 +22,19 @@ function dpp#min#load_state(path, name=v:progname->fnamemodify(':r')) abort
   endtry
 endfunction
 function dpp#min#_init() abort
-  let g:dpp#_cache_version = 1
-  let g:dpp#_plugins = {}
-  let g:dpp#_options = {}
-  let g:dpp#_check_files = []
-  let g:dpp#_is_sudo = $SUDO_USER !=# '' && $USER !=# $SUDO_USER
+  const g:dpp#_cache_version = 1
+  const g:dpp#_is_sudo = $SUDO_USER !=# '' && $USER !=# $SUDO_USER
         \ && $HOME !=# ('~'.$USER)->expand()
         \ && $HOME ==# ('~'.$SUDO_USER)->expand()
   const g:dpp#_init_runtimepath = &runtimepath
+  const g:dpp#_did_load_filetypes =
+        \ g:->get('did_load_filetypes', v:false)
+  const g:dpp#_did_load_ftplugin =
+        \ b:->get('did_ftplugin', v:false) || b:->get('did_indent', v:false)
+
+  let g:dpp#_plugins = {}
+  let g:dpp#_options = {}
+  let g:dpp#_check_files = []
 
   augroup dpp
     autocmd!

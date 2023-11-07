@@ -65,7 +65,14 @@ export function main(denops: Denops) {
 
       const [_, options] = await contextBuilder.get(denops);
 
-      await dpp.makeState(denops, options, basePath, name, configReturn);
+      await dpp.makeState(
+        denops,
+        options,
+        basePath,
+        configPath,
+        name,
+        configReturn,
+      );
 
       //await denops.call("dpp#util#_error", `${Date.now() - startTime} ms`);
     },

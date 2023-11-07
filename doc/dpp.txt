@@ -130,7 +130,7 @@ dpp#check_files([{name}])
 		Check dpp.vim cache file is outdated.
 		{name} is plugins profile name.  The default is "vim" or
 		"nvim".
-		If it is outdated, |dpp#clear_state()| is called
+		If it is outdated, |dpp#make_state()| is called
 		automatically.
 		It should be called when |BufWritePost| autocmd.
 

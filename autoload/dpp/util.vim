@@ -25,8 +25,8 @@ function! dpp#util#_check_files(name) abort
   const time = printf('%s/%s/state.vim', g:dpp#_base_path, a:name)->getftime()
   const updated = g:dpp#_check_files->copy()
         \ ->filter({ _, val -> time < dpp#util#_expand(val)->getftime() })
-  if !(updated->empty())
-    call dpp#util#_clear_state(a:name)
+  if !(updated->empty()) && exists('g:dpp#_config_path')
+    call dpp#make_state(g:dpp#_base_path, g:dpp#_config_path, a:name)
   endif
 
   return updated

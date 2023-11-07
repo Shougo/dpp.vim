@@ -18,9 +18,12 @@ function dpp#async_ext_action(ext_name, action_name, action_params={}) abort
 endfunction
 
 function dpp#make_state(
-      \ base_path, config_path, name=v:progname->fnamemodify(':r')) abort
-  const config_path = dpp#util#_expand(a:config_path)
+      \   base_path=g:->get('dpp#_base_path', ''),
+      \   config_path=g:->get('dpp#_config_path', ''),
+      \   name=g:->get('dpp#_name', v:progname->fnamemodify(':r')),
+      \ ) abort
   const base_path = dpp#util#_expand(a:base_path)
+  const config_path = dpp#util#_expand(a:config_path)
 
   if !(config_path->filereadable())
     call dpp#util#_error(printf('"%s" is not found.', a:config_path))
@@ -30,10 +33,14 @@ function dpp#make_state(
   return dpp#denops#_notify('makeState', [base_path, config_path, a:name])
 endfunction
 
-function dpp#clear_state(name=v:progname->fnamemodify(':r')) abort
+function dpp#clear_state(
+      \   name=g:->get('dpp#_name', v:progname->fnamemodify(':r'))
+      \ ) abort
   call dpp#util#_clear_state(a:name)
 endfunction
 
-function dpp#check_files(name=v:progname->fnamemodify(':r')) abort
+function dpp#check_files(
+      \   name=g:->get('dpp#_name', v:progname->fnamemodify(':r'))
+      \ ) abort
   return dpp#util#_check_files(a:name)
 endfunction
