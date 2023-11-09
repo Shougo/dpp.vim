@@ -235,8 +235,17 @@ export class Dpp {
     // Load dependencies
     for (const depend of depends) {
       const plugin = recordPlugins[depend];
+      if (!plugin) {
+        await denops.call(
+          "dpp#util#_error",
+          `Not found dependency: "${depend}"`,
+        );
+        continue;
+      }
+
       if (
-        !plugin?.rtp || !await isDirectory(plugin.rtp) || plugin.sourced ||
+        plugin.rtp || plugin.sourced ||
+        !await isDirectory(plugin.rtp) ||
         !await checkIf(plugin)
       ) {
         continue;
