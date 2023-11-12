@@ -156,6 +156,8 @@ dpp#make_state({base-path}, {config-path}[, {name}])
 		state.  It must be full path.
 		{name} is plugins profile name.  The default is "vim" or
 		"nvim".
+		When the state file is created,
+		|dpp-autocmd-Dpp:makeStatePost| event is fired.
 		NOTE: It saves your 'runtimepath' completely, you must not
 		call it after change 'runtimepath' dynamically.
 

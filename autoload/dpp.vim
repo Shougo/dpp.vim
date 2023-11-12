@@ -8,11 +8,21 @@ function dpp#source(plugins = g:dpp#_plugins->values()) abort
 endfunction
 
 function dpp#sync_ext_action(ext_name, action_name, action_params={}) abort
+  if !exists('g:dpp#_base_path') || !exists('g:dpp#_config_path')
+    call dpp#util#_error('You need to make state file by "dpp#make_state()".')
+    return
+  endif
+
   return dpp#denops#_request('extAction', [
         \ a:ext_name, a:action_name, a:action_params])
 endfunction
 
 function dpp#async_ext_action(ext_name, action_name, action_params={}) abort
+  if !exists('g:dpp#_base_path') || !exists('g:dpp#_config_path')
+    call dpp#util#_error('You need to make state file by "dpp#make_state()".')
+    return
+  endif
+
   return dpp#denops#_notify('extAction', [
         \ a:ext_name, a:action_name, a:action_params])
 endfunction
