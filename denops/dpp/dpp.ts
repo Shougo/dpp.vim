@@ -443,7 +443,8 @@ export class Dpp {
 
     // Merge both ftdetect and help files
     for (const plugin of Object.values(recordPlugins)) {
-      for (const srcDir of [`${plugin.path}/doc`, `${plugin.path}/ftdetect`]) {
+      for (const src of ["doc", "ftdetect"]) {
+        const srcDir = `${plugin.path}/${src}`
         if (!plugin.path || !await isDirectory(srcDir)) {
           continue;
         }
@@ -452,7 +453,7 @@ export class Dpp {
           await linkPath(
             hasWindows,
             join(srcDir, entry.name),
-            join(docDir, entry.name),
+            join(src == "doc" ? docDir : ftdetectDir, entry.name),
           );
         }
       }
