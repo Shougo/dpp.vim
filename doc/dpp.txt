@@ -124,6 +124,7 @@ dpp#async_ext_action({ext-name}, {action-name}[, {action-params}])
 		ext asynchronously.
 		{action-params} behavior depends on {action-name}.
 		NOTE: It must be executed after |dpp#min#load_state()|.
+		NOTE: It must be after |DenopsReady|.
 
                                                            *dpp#check_files()*
 dpp#check_files([{name}])
@@ -150,7 +151,6 @@ dpp#get([{plugin-name}])
                                                             *dpp#make_state()*
 dpp#make_state({base-path}, {config-path}[, {name}])
 		Save dpp's state in the cache script.
-		It must be after |DenopsReady|.
 		{base-path} is where your downloaded plugins will be placed.
 		{config-path} is TypeScript configuration file path to make
 		state.  It must be full path.
@@ -158,6 +158,7 @@ dpp#make_state({base-path}, {config-path}[, {name}])
 		"nvim".
 		When the state file is created,
 		|dpp-autocmd-Dpp:makeStatePost| event is fired.
+		NOTE: It must be after |DenopsReady|.
 		NOTE: It saves your 'runtimepath' completely, you must not
 		call it after change 'runtimepath' dynamically.
 
@@ -199,6 +200,7 @@ dpp#sync_ext_action({ext-name}, {action-name}[, {action-params}])
 		ext synchronously.
 		{action-params} behavior depends on {action-name}.
 		NOTE: It must be executed after |dpp#min#load_state()|.
+		NOTE: It must be after |DenopsReady|.
 
 ------------------------------------------------------------------------------
 PLUGIN OPTIONS                                            *dpp-plugin-options*

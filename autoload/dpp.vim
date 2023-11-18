@@ -13,6 +13,12 @@ function dpp#sync_ext_action(ext_name, action_name, action_params={}) abort
     return
   endif
 
+  if !dpp#denops#_denops_running()
+    call dpp#util#_error(
+          \ 'denops.vim must be loaded before "dpp#sync_ext_action()".')
+    return
+  endif
+
   return dpp#denops#_request('extAction', [
         \ a:ext_name, a:action_name, a:action_params])
 endfunction
@@ -20,6 +26,12 @@ endfunction
 function dpp#async_ext_action(ext_name, action_name, action_params={}) abort
   if !exists('g:dpp#_base_path') || !exists('g:dpp#_config_path')
     call dpp#util#_error('You need to make state file by "dpp#make_state()".')
+    return
+  endif
+
+  if !dpp#denops#_denops_running()
+    call dpp#util#_error(
+          \ 'denops.vim must be loaded before "dpp#async_ext_action()".')
     return
   endif
 
