@@ -1,4 +1,11 @@
-import { assertEquals, copy, Denops, is, join } from "./deps.ts";
+import {
+  assertEquals,
+  assertInstanceOf,
+  copy,
+  Denops,
+  is,
+  join,
+} from "./deps.ts";
 import { Plugin } from "./types.ts";
 
 export async function errorException(
@@ -74,8 +81,12 @@ export async function safeStat(path: string): Promise<Deno.FileInfo | null> {
 export async function linkPath(hasWindows: boolean, src: string, dest: string) {
   if (!hasWindows) {
     // NOTE: For non Windows, copy() is faster...
-    await copy(src, dest, { overwrite: true });
-    return;
+    try {
+      await copy(src, dest, { overwrite: false });
+      return;
+    } catch (e) {
+      assertInstanceOf(e, Deno.errors.AlreadyExists);
+    }
   }
 
   if (await isDirectory(src)) {

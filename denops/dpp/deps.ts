@@ -14,6 +14,7 @@ export * as autocmd from "https://deno.land/x/denops_std@v5.0.2/autocmd/mod.ts";
 export { ensure, is } from "https://deno.land/x/unknownutil@v3.10.0/mod.ts";
 export {
   assertEquals,
+  assertInstanceOf,
   equal,
 } from "https://deno.land/std@0.206.0/assert/mod.ts";
 export {
