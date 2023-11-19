@@ -444,7 +444,7 @@ export class Dpp {
     // Merge both ftdetect and help files
     for (const plugin of Object.values(recordPlugins)) {
       for (const src of ["doc", "ftdetect"]) {
-        const srcDir = `${plugin.path}/${src}`
+        const srcDir = `${plugin.path}/${src}`;
         if (!plugin.path || !await isDirectory(srcDir)) {
           continue;
         }
