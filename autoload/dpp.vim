@@ -13,7 +13,7 @@ function dpp#sync_ext_action(ext_name, action_name, action_params={}) abort
     return
   endif
 
-  if !dpp#denops#_denops_running()
+  if !'g:loaded_denops'->exists()
     call dpp#util#_error(
           \ 'denops.vim must be loaded before "dpp#sync_ext_action()".')
     return
@@ -29,7 +29,7 @@ function dpp#async_ext_action(ext_name, action_name, action_params={}) abort
     return
   endif
 
-  if !dpp#denops#_denops_running()
+  if !'g:loaded_denops'->exists()
     call dpp#util#_error(
           \ 'denops.vim must be loaded before "dpp#async_ext_action()".')
     return
