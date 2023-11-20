@@ -61,6 +61,10 @@ function dpp#util#_add_after(rtps, path) abort
 endfunction
 
 function dpp#util#_expand(path) abort
+  if a:path is v:null
+    return ''
+  endif
+
   let path = (a:path =~# '^\$\h\w*') ? a:path->substitute(
         \ '^\$\h\w*', '\=eval(submatch(0))', '') : a:path
   if path =~# '^\~'
