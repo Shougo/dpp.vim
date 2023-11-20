@@ -313,10 +313,14 @@ normalized_name	(String)
 on_cmd		(List) or (String)
 		If it is matched to the executed command, dpp will call
 		|dpp#source()|.
+		NOTE: To use the feature, you need to install "dpp-ext-lazy".
+		https://github.com/Shougo/dpp-ext-lazy
 
                                                   *dpp-plugin-option-on_event*
 on_event	(String) or (List)
 		dpp will call |dpp#source()| on the events.
+		NOTE: To use the feature, you need to install "dpp-ext-lazy".
+		https://github.com/Shougo/dpp-ext-lazy
 
                                                    *dpp-plugin-option-on_func*
 on_func		(List) or (String)
@@ -325,11 +329,15 @@ on_func		(List) or (String)
 		NOTE: It does not work when Vim initialized.
 		NOTE: It does not work for Vim9 script. It is |FuncUndefined|
 		limitation.
+		NOTE: To use the feature, you need to install "dpp-ext-lazy".
+		https://github.com/Shougo/dpp-ext-lazy
 
                                                      *dpp-plugin-option-on_ft*
 on_ft		(List) or (String)
 		If it is matched to 'filetype', dpp will call
 		|dpp#source()|.
+		NOTE: To use the feature, you need to install "dpp-ext-lazy".
+		https://github.com/Shougo/dpp-ext-lazy
 
                                                      *dpp-plugin-option-on_if*
 on_if		(String)
@@ -339,8 +347,7 @@ on_if		(String)
 		"VimEnter" and "FileType".
 		If |dpp-plugin-option-on_event| exists, it is evaluated when
 		|dpp-plugin-option-on_event|.
-		NOTE: To load lazy plugins, you need to install
-		"dpp-ext-lazy".
+		NOTE: To use the feature, you need to install "dpp-ext-lazy".
 		https://github.com/Shougo/dpp-ext-lazy
 
                                                     *dpp-plugin-option-on_lua*
@@ -353,6 +360,8 @@ on_lua		(List) or (String)
 		NOTE: You cannot require on_lua plugins in
 		|dpp-plugin-option-hook_add|.  Because the plugins are not
 		initialized.
+		NOTE: To use the feature, you need to install "dpp-ext-lazy".
+		https://github.com/Shougo/dpp-ext-lazy
 
                                                     *dpp-plugin-option-on_map*
 on_map		(Dictionary) or (List) or (String)
@@ -364,6 +373,8 @@ on_map		(Dictionary) or (List) or (String)
 		NOTE: You can use plugin prefix mappings.
 		For example, you can use "<Plug>(ref-" instead of
 		"<Plug>(ref-back)" and so on.
+		NOTE: To use the feature, you need to install "dpp-ext-lazy".
+		https://github.com/Shougo/dpp-ext-lazy
 
                                                    *dpp-plugin-option-on_path*
 on_path		(List) or (String)
@@ -371,11 +382,15 @@ on_path		(List) or (String)
 		files.  Otherwise, dpp will call |dpp#source()| if the
 		buffer name is matched to the string pattern.
 		NOTE: It is useful for explorer behavior plugins.
+		NOTE: To use the feature, you need to install "dpp-ext-lazy".
+		https://github.com/Shougo/dpp-ext-lazy
 
                                                  *dpp-plugin-option-on_source*
 on_source	(List) or (String)
 		Load the plugin before the listed plugins are loaded.
 		NOTE: The plugins must be lazy loaded plugins.
+		NOTE: To use the feature, you need to install "dpp-ext-lazy".
+		https://github.com/Shougo/dpp-ext-lazy
 
                                                       *dpp-plugin-option-path*
 path		(String)
