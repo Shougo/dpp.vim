@@ -14,9 +14,7 @@ function dpp#min#load_state(path, name=v:progname->fnamemodify(':r')) abort
     execute 'source' state->fnameescape()
     unlet g:dpp#_cache
   catch
-    if v:exception !=# 'Cache loading error'
-      call dpp#util#_error('Loading state error: ' .. v:exception)
-    endif
+    call dpp#util#_error('Loading state error: ' .. v:exception)
     call dpp#util#_clear_state(a:name)
     return 1
   endtry

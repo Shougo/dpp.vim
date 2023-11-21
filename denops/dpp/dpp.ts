@@ -265,11 +265,9 @@ export class Dpp {
     );
 
     const cacheVersion = await vars.g.get(denops, "dpp#_cache_version");
-    const initRuntimepath = await vars.g.get(denops, "dpp#_init_runtimepath");
     let stateLines = [
-      `if g:dpp#_cache_version !=# ${cacheVersion} ` +
-      `|| g:dpp#_init_runtimepath !=# '${initRuntimepath}' | ` +
-      "throw 'Cache loading error' | endif",
+      `if g:dpp#_cache_version !=# ${cacheVersion}` +
+      `| throw "Cache version error" | endif`,
       "let [g:dpp#_plugins, g:dpp#ftplugin, g:dpp#_options, g:dpp#_check_files] = g:dpp#_cache",
       `let g:dpp#_config_path = '${configPath}'`,
       `let &runtimepath = '${newRuntimepath}'`,

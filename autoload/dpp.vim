@@ -9,7 +9,8 @@ endfunction
 
 function dpp#sync_ext_action(ext_name, action_name, action_params={}) abort
   if !exists('g:dpp#_base_path') || !exists('g:dpp#_config_path')
-    call dpp#util#_error('You need to make state file by "dpp#make_state()".')
+    call dpp#util#_error('dpp.vim is not initialized yet.')
+    call dpp#util#_error('Please check dpp#min#load_state() is suceeded.')
     return
   endif
 
@@ -25,7 +26,8 @@ endfunction
 
 function dpp#async_ext_action(ext_name, action_name, action_params={}) abort
   if !exists('g:dpp#_base_path') || !exists('g:dpp#_config_path')
-    call dpp#util#_error('You need to make state file by "dpp#make_state()".')
+    call dpp#util#_error('dpp.vim is not initialized yet.')
+    call dpp#util#_error('Please check dpp#min#load_state() is suceeded.')
     return
   endif
 
