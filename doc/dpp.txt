@@ -11,6 +11,7 @@ Interface		|dpp-interface|
   Options		  |dpp-options|
   Functions		  |dpp-functions|
   Plugin options	  |dpp-plugin-options|
+  Lua functions.	  |dpp-lua-functions|
 Dpp Sources		|dpp-ddu-sources|
 Examples		|dpp-examples|
 Plugins merged feature	|dpp-merge|
@@ -527,6 +528,39 @@ lua_source	(String)
 		Lua language string hook instead of Vim script.
 		It is converted to |dpp-plugin-option-hook_source| key.
 
+------------------------------------------------------------------------------
+LUA FUNCTIONS                                              *dpp-lua-functions*
+
+                                                      *dpp.async_ext_action()*
+dpp.async_ext_action({ext-name}, {action-name}[, {action-params}])
+		Same as |dpp#async_ext_action()|.
+
+                                                           *dpp.check_files()*
+dpp.check_files([{name}])
+		Same as |dpp#check_files()|.
+
+                                                           *dpp.clear_state()*
+dpp.clear_state([{name}])
+		Same as |dpp#clear_state()|.
+
+                                                                   *dpp.get()*
+dpp.get([{plugin-name}])
+		Same as |dpp#get()|.
+                                                            *dpp.load_state()*
+dpp.load_state({base-path}, {name})
+		Same as |dpp#min#load_state()|.
+
+                                                            *dpp.make_state()*
+dpp.make_state({base-path}, {config-path}[, {name}])
+		Same as |dpp#make_state()|.
+
+                                                                *dpp.source()*
+dpp.source([{name}])
+		Same as |dpp#source()|.
+
+                                                       *dpp.sync_ext_action()*
+dpp.sync_ext_action({ext-name}, {action-name}[, {action-params}])
+		Same as |dpp#sync_ext_action()|.
 
 ==============================================================================
 DDU SOURCES                                                  *dpp-ddu-sources*
