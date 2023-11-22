@@ -777,6 +777,9 @@ FAQ 3:							|dpp-faq-3|
 FAQ 4:							|dpp-faq-4|
 	I want to update cache file automatically when the config is updated.
 
+FAQ 5:							|dpp-faq-5|
+	I want to use dpp functions in lua.
+
 ------------------------------------------------------------------------------
                                                                    *dpp-faq-1*
 Q: How to donate money to you?
@@ -810,6 +813,37 @@ A: You need to set checkFiles when |dpp#make_state()| and you need to call
 >
   autocmd BufWritePost *.lua,*.vim,*.toml,*.ts,vimrc,.vimrc
             \ call dpp#check_files()
+<
+
+                                                                   *dpp-faq-5*
+Q: I want to use dpp functions in lua.
+
+A: You can use |dpp-lua-functions| like this.
+
+>
+  lua <<END
+  vim.opt.runtimepath:prepend({dpp src path})
+
+  local dpp = require("dpp")
+
+  local dppBase = vim.fn.expand('~/.cache/dpp')
+  if dpp.load_state(dppBase) then
+    vim.api.nvim_create_autocmd("User", {
+      pattern = "DenopsReady",
+      callback = function()
+        vim.notify("dpp load_state() is failed")
+        dpp.make_state(dppBase, {TypeScript config file path})
+      end,
+    })
+  end
+
+  vim.api.nvim_create_autocmd("User", {
+    pattern = "Dpp:makeStatePost",
+    callback = function()
+      vim.notify("dpp make_state() is done")
+    end,
+  })
+END
 <
 
 ==============================================================================
