@@ -83,6 +83,7 @@ if has('syntax')
   syntax on
 endif
 ```
+</details>
 
 <details>
   <summary>
