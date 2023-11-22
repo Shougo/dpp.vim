@@ -46,8 +46,8 @@ Dpp.vim requires both Deno and denops.vim.
 
 <details>
   <summary>
-    Show a UNIX installation example using <strong>"~/.cache/dpp"</strong> as
-    the base path location.
+    Show Vim script configuration example using
+    <strong>"~/.cache/dpp"</strong> as the base path location.
   </summary>
 
 ```vim
@@ -82,6 +82,44 @@ filetype indent plugin on
 if has('syntax')
   syntax on
 endif
+```
+
+<details>
+  <summary>
+    Show Lua configuration using <strong>"~/.cache/dpp"</strong> as the base
+    path location.
+  </summary>
+
+```lua
+local dppSrc = "~/.cache/dpp/repos/github.com/Shougo/dpp.vim"
+local denopsSrc = "~/.cache/dpp/repos/github.com/denops/denops.vim"
+
+vim.opt.runtimepath:prepend(dppSrc)
+
+local dpp = require("dpp")
+
+local dppBase = "~/.cache/dpp"
+if dpp.load_state(dppBase) then
+  vim.opt.runtimepath:prepend(denopsSrc)
+
+  vim.api.nvim_create_autocmd("User", {
+    pattern = "DenopsReady",
+    callback = function()
+      vim.notify("dpp load_state() is failed")
+      dpp.make_state(dppBase, {TypeScript config file path})
+    end,
+  })
+end
+
+vim.api.nvim_create_autocmd("User", {
+  pattern = "Dpp:makeStatePost",
+  callback = function()
+    vim.notify("dpp make_state() is done")
+  end,
+})
+
+vim.cmd("filetype indent plugin on")
+vim.cmd("syntax on")
 ```
 
 </details>
