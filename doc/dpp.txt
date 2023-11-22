@@ -826,7 +826,7 @@ A: You can use |dpp-lua-functions| like this.
 
   local dpp = require("dpp")
 
-  local dppBase = vim.fn.expand('~/.cache/dpp')
+  local dppBase = "~/.cache/dpp"
   if dpp.load_state(dppBase) then
     vim.opt.runtimepath:prepend({denops src path})
 
