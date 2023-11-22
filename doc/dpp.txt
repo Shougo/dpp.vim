@@ -828,6 +828,8 @@ A: You can use |dpp-lua-functions| like this.
 
   local dppBase = vim.fn.expand('~/.cache/dpp')
   if dpp.load_state(dppBase) then
+    vim.opt.runtimepath:prepend({denops src path})
+
     vim.api.nvim_create_autocmd("User", {
       pattern = "DenopsReady",
       callback = function()
