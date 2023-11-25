@@ -53,7 +53,7 @@ export function main(denops: Denops) {
         `${toFileUrl(configPath).href}#${performance.now()}`
       );
       const obj = new mod.Config();
-      //await denops.call("dpp#util#_error", `${Date.now() - startTime} ms`);
+      //console.log(`${Date.now() - startTime} ms`);
       const configReturn = await obj.config({
         contextBuilder,
         denops,
@@ -61,7 +61,7 @@ export function main(denops: Denops) {
         dpp,
         name,
       });
-      //await denops.call("dpp#util#_error", `${Date.now() - startTime} ms`);
+      //console.log(`${Date.now() - startTime} ms`);
 
       const [_, options] = await contextBuilder.get(denops);
 
@@ -74,7 +74,7 @@ export function main(denops: Denops) {
         configReturn,
       );
 
-      //await denops.call("dpp#util#_error", `${Date.now() - startTime} ms`);
+      //console.log(`${Date.now() - startTime} ms`);
     },
   };
 }
