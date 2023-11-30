@@ -66,7 +66,8 @@ OPTIONS                                                          *dpp-options*
                                                *dpp-option-convertImportPaths*
 convertImportPaths (string[])
 		It is the list of dynamic import paths for denops plugins.
-		It is converted to "static.ts".
+		It is converted to "mods.ts" under {base-path}/{name}
+		directory.
 		It is useful for dynamic load denops plugins.
 
                                                        *dpp-option-extOptions*

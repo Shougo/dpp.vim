@@ -451,6 +451,13 @@ export class Dpp {
     staticLines.push("};");
     await Deno.writeTextFile(staticFile, staticLines.join("\n"));
 
+    const modsFile = `${basePath}/${name}/mods.ts`;
+    const modsLines = [
+      `export { mods } from "file://${staticFile}"`,
+      "",
+    ];
+    await Deno.writeTextFile(modsFile, modsLines.join("\n"));
+
     await denops.cmd("doautocmd <nomodeline> User Dpp:makeStatePost");
   }
 
