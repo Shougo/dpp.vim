@@ -421,6 +421,36 @@ export class Dpp {
       }
     }
 
+    // Generate static.ts
+    let mods: string[] = [];
+    for (const importPath of options.convertImportPaths) {
+      for (const plugin of Object.values(recordPlugins)) {
+        if (!await isDirectory(`${plugin.rtp}/denops`)) {
+          continue;
+        }
+
+        mods = mods.concat(
+          await fn.glob(
+            denops,
+            `${plugin.rtp}/${importPath}`,
+            true,
+            true,
+          ) as string[],
+        );
+      }
+    }
+    const staticFile = `${basePath}/${name}/static.ts`;
+    const staticLines = [];
+    for (const [index, path] of mods.entries()) {
+      staticLines.push(`import * as mod${index} from "file://${path}"`);
+    }
+    staticLines.push("export const mods = {");
+    for (const [index, path] of mods.entries()) {
+      staticLines.push(`  "${path}": mod${index},`);
+    }
+    staticLines.push("};");
+    await Deno.writeTextFile(staticFile, staticLines.join("\n"));
+
     await denops.cmd("doautocmd <nomodeline> User Dpp:makeStatePost");
   }
 

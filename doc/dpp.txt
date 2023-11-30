@@ -63,6 +63,12 @@ INTERFACE                                                      *dpp-interface*
 ------------------------------------------------------------------------------
 OPTIONS                                                          *dpp-options*
 
+                                               *dpp-option-convertImportPaths*
+convertImportPaths (string[])
+		It is the list of dynamic import paths for denops plugins.
+		It is converted to "static.ts".
+		It is useful for dynamic load denops plugins.
+
                                                        *dpp-option-extOptions*
 extOptions		(dictionary)
 		It is a dictionary that maps ext names to its options.

@@ -25,6 +25,7 @@ export type Context = {
 };
 
 export type DppOptions = {
+  convertImportPaths: string[];
   extOptions: Record<ExtName, Partial<ExtOptions>>;
   extParams: Record<ExtName, Partial<BaseExtParams>>;
   hooksFileMarker: string;
