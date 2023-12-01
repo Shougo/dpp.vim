@@ -24,7 +24,13 @@ export type Context = {
   placeholder?: unknown;
 };
 
+type ImportPath = {
+  globs: string[];
+  output: string;
+};
+
 export type DppOptions = {
+  convertImportPaths: ImportPath[];
   extOptions: Record<ExtName, Partial<ExtOptions>>;
   extParams: Record<ExtName, Partial<BaseExtParams>>;
   hooksFileMarker: string;

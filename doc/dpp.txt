@@ -63,6 +63,20 @@ INTERFACE                                                      *dpp-interface*
 ------------------------------------------------------------------------------
 OPTIONS                                                          *dpp-options*
 
+                                               *dpp-option-convertImportPaths*
+convertImportPaths (ImportPath[])
+		It is the list of dynamic import paths for denops plugins.
+		It is converted to "output" file under {base-path}/{name}
+		directory.
+
+>
+		type ImportPath = {
+		  globs: string[];
+		  output: string;
+		};
+<
+		It is useful for dynamic load denops plugins.
+
                                                        *dpp-option-extOptions*
 extOptions		(dictionary)
 		It is a dictionary that maps ext names to its options.
