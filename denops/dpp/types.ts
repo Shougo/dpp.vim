@@ -30,7 +30,6 @@ type ImportPath = {
 };
 
 export type DppOptions = {
-  convertImportPaths: ImportPath[];
   extOptions: Record<ExtName, Partial<ExtOptions>>;
   extParams: Record<ExtName, Partial<BaseExtParams>>;
   hooksFileMarker: string;

@@ -44,7 +44,6 @@ export function defaultContext(): Context {
 
 export function defaultDppOptions(): DppOptions {
   return {
-    convertImportPaths: [],
     extOptions: {},
     extParams: {},
     hooksFileMarker: "{{{,}}}",
