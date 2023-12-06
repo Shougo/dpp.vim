@@ -24,11 +24,6 @@ export type Context = {
   placeholder?: unknown;
 };
 
-type ImportPath = {
-  globs: string[];
-  output: string;
-};
-
 export type DppOptions = {
   extOptions: Record<ExtName, Partial<ExtOptions>>;
   extParams: Record<ExtName, Partial<BaseExtParams>>;
