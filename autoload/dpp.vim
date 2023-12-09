@@ -8,7 +8,7 @@ function dpp#source(plugins = g:dpp#_plugins->values()) abort
 endfunction
 
 function dpp#sync_ext_action(ext_name, action_name, action_params={}) abort
-  if !exists('g:dpp#_base_path') || !exists('g:dpp#_config_path')
+  if !'g:dpp#_base_path'->exists() || !'g:dpp#_config_path'->exists()
     call dpp#util#_error('dpp.vim is not initialized yet.')
     call dpp#util#_error('Please check dpp#min#load_state() is suceeded.')
     return
@@ -25,7 +25,7 @@ function dpp#sync_ext_action(ext_name, action_name, action_params={}) abort
 endfunction
 
 function dpp#async_ext_action(ext_name, action_name, action_params={}) abort
-  if !exists('g:dpp#_base_path') || !exists('g:dpp#_config_path')
+  if !'g:dpp#_base_path'->exists() || !'g:dpp#_config_path'->exists()
     call dpp#util#_error('dpp.vim is not initialized yet.')
     call dpp#util#_error('Please check dpp#min#load_state() is suceeded.')
     return
@@ -49,7 +49,7 @@ function dpp#make_state(
   const base_path = dpp#util#_expand(a:base_path)
   const config_path = dpp#util#_expand(a:config_path)
 
-  if !(config_path->filereadable())
+  if !config_path->filereadable()
     call dpp#util#_error(printf('"%s" is not found.', a:config_path))
     return 1
   endif

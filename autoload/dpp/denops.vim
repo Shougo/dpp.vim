@@ -50,7 +50,7 @@ function s:init() abort
     return 1
   endif
 
-  if !('#dpp'->exists())
+  if !'#dpp'->exists()
     call dpp#min#_init()
   endif
 
@@ -76,7 +76,7 @@ function s:init() abort
 endfunction
 
 function s:notify(method, args) abort
-  if denops#plugin#is_loaded('dpp')
+  if 'dpp'->denops#plugin#is_loaded()
     call denops#notify('dpp', a:method, a:args)
   else
     call denops#plugin#wait_async('dpp',

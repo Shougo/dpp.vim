@@ -1,15 +1,15 @@
 function dpp#source#_source(plugins) abort
-  let plugins = dpp#util#_convert2list(a:plugins)
+  let plugins = a:plugins->dpp#util#_convert2list()
   if plugins->empty()
     return []
   endif
 
   if plugins[0]->type() != v:t_dict
-    let plugins = dpp#util#_convert2list(a:plugins)
+    let plugins = a:plugins->dpp#util#_convert2list()
           \ ->map({ _, val -> g:dpp#_plugins->get(val, {}) })
   endif
 
-  let rtps = dpp#util#_split_rtp(&runtimepath)
+  let rtps = &runtimepath->dpp#util#_split_rtp()
   const index = rtps->index(dpp#util#_get_runtime_path())
   if index < 0
     return []
@@ -26,7 +26,7 @@ function dpp#source#_source(plugins) abort
   endfor
 
   const filetype_before = 'autocmd FileType'->execute()
-  let &runtimepath = dpp#util#_join_rtp(rtps, &runtimepath, '')
+  let &runtimepath = rtps->dpp#util#_join_rtp(&runtimepath, '')
 
   call dpp#util#_call_hook('source', sourced)
 
@@ -54,7 +54,7 @@ function dpp#source#_source(plugins) abort
 
     if !has('vim_starting')
       let augroup = plugin->get('augroup',
-            \ dpp#util#_get_normalized_name(plugin))
+            \ plugin->dpp#util#_get_normalized_name())
       let events = ['VimEnter', 'BufRead', 'BufEnter',
             \ 'BufWinEnter', 'WinEnter']
       if has('gui_running') && &term ==# 'builtin_gui'
@@ -71,7 +71,7 @@ function dpp#source#_source(plugins) abort
         for name in 'denops/*/main.ts'
               \ ->globpath(plugin.rtp, v:true, v:true)
               \ ->map({ _, val -> val->fnamemodify(':h:t')})
-              \ ->filter({ _, val -> !denops#plugin#is_loaded(val) })
+              \ ->filter({ _, val -> !val->denops#plugin#is_loaded() })
 
           if denops#server#status() ==# 'running'
             " NOTE: denops#plugin#register() may be failed
@@ -89,7 +89,7 @@ function dpp#source#_source(plugins) abort
 
   const filetype_after = 'autocmd FileType'->execute()
 
-  const is_reset = s:is_reset_ftplugin(sourced)
+  const is_reset = sourced->s:is_reset_ftplugin()
   if is_reset
     " NOTE: filetype plugins must be reset to load new ftplugins
     call s:reset_ftplugin()
@@ -109,7 +109,7 @@ endfunction
 
 function s:source_plugin(rtps, index, plugin, sourced) abort
   if a:plugin.sourced || a:sourced->index(a:plugin) >= 0
-    \ || (a:plugin->has_key('if') && !(a:plugin.if->eval()))
+    \ || (a:plugin->has_key('if') && !a:plugin.if->eval())
     return
   endif
 
@@ -130,7 +130,7 @@ function s:source_plugin(rtps, index, plugin, sourced) abort
 
   " Load dependencies
   for name in a:plugin->get('depends', [])
-    if !(g:dpp#_plugins->has_key(name))
+    if !g:dpp#_plugins->has_key(name)
       call dpp#util#_error(printf(
             \ 'Plugin "%s" depends "%s" but it is not found.',
             \ a:plugin.name, name))

@@ -1,7 +1,7 @@
 const s:is_windows = has('win32') || has('win64')
 
 function dpp#util#_error(msg) abort
-  for mes in s:msg2list(a:msg)
+  for mes in a:msg->s:msg2list()
     echohl WarningMsg | echomsg '[dpp] ' .. mes | echohl None
   endfor
 endfunction
@@ -9,9 +9,9 @@ endfunction
 function dpp#util#_get_plugins(plugins) abort
   return a:plugins->empty() ?
         \ g:dpp#_plugins->values() :
-        \ dpp#util#_convert2list(a:plugins)
-        \ ->map({ _, val -> val->type() == v:t_dict ? val : dpp#get(val) })
-        \ ->filter({ _, val -> !(val->empty()) })
+        \ a:plugins->dpp#util#_convert2list()
+        \ ->map({ _, val -> val->type() == v:t_dict ? val : val->dpp#get() })
+        \ ->filter({ _, val -> !val->empty() })
 endfunction
 function dpp#util#_get_lazy_plugins() abort
   return g:dpp#_plugins->values()
@@ -24,8 +24,8 @@ endfunction
 function! dpp#util#_check_files(name) abort
   const time = printf('%s/%s/state.vim', g:dpp#_base_path, a:name)->getftime()
   const updated = g:dpp#_check_files->copy()
-        \ ->filter({ _, val -> time < dpp#util#_expand(val)->getftime() })
-  if !(updated->empty()) && exists('g:dpp#_config_path')
+        \ ->filter({ _, val -> time < val->dpp#util#_expand()->getftime() })
+  if !updated->empty() && 'g:dpp#_config_path'->exists()
     call dpp#make_state(g:dpp#_base_path, g:dpp#_config_path, a:name)
   endif
 
@@ -47,7 +47,7 @@ function dpp#util#_split_rtp(runtimepath) abort
     let rtps = split
           \ ->map({ _, val -> val->substitute('\\\([\\,]\)', '\1', 'g') })
   endif
-  return rtps->map({ _, val -> dpp#util#_substitute_path(val) })
+  return rtps->map({ _, val -> val->dpp#util#_substitute_path() })
 endfunction
 function dpp#util#_join_rtp(list, runtimepath, rtp) abort
   return (a:runtimepath->stridx('\,') < 0 && a:rtp->stridx(',') < 0) ?
@@ -56,7 +56,7 @@ function dpp#util#_join_rtp(list, runtimepath, rtp) abort
 endfunction
 
 function dpp#util#_add_after(rtps, path) abort
-  const idx = a:rtps->index(dpp#util#_substitute_path($VIMRUNTIME))
+  const idx = a:rtps->index($VIMRUNTIME->dpp#util#_substitute_path())
   call insert(a:rtps, a:path, (idx <= 0 ? -1 : idx + 1))
 endfunction
 
@@ -71,7 +71,7 @@ function dpp#util#_expand(path) abort
     let path = path->fnamemodify(':p')
   endif
   return ((s:is_windows && path =~# '\\') ?
-        \ dpp#util#_substitute_path(path) : path)->substitute('/$', '', '')
+        \ path->dpp#util#_substitute_path() : path)->substitute('/$', '', '')
 endfunction
 function dpp#util#_substitute_path(path) abort
   return ((s:is_windows || has('win32unix')) && a:path =~# '\\') ?
@@ -80,7 +80,7 @@ endfunction
 
 function dpp#util#_call_hook(hook_name, plugins = []) abort
   const hook = 'hook_' .. a:hook_name
-  let plugins = dpp#util#_tsort(dpp#util#_get_plugins(a:plugins))
+  let plugins = a:plugins->dpp#util#_get_plugins()->dpp#util#_tsort()
         \ ->filter({ _, val ->
         \    ((a:hook_name !=# 'source'
         \      && a:hook_name !=# 'post_source') || val.sourced)
@@ -141,7 +141,7 @@ function s:tsort_impl(target, mark, sorted) abort
   let a:mark[a:target.name] = 1
   if a:target->has_key('depends')
     for depend in a:target.depends
-      call s:tsort_impl(dpp#get(depend), a:mark, a:sorted)
+      call s:tsort_impl(depend->dpp#get(), a:mark, a:sorted)
     endfor
   endif
 
