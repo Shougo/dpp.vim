@@ -85,7 +85,7 @@ function dpp#util#_call_hook(hook_name, plugins = []) abort
         \    ((a:hook_name !=# 'source'
         \      && a:hook_name !=# 'post_source') || val.sourced)
         \    && val->has_key(hook) && val.path->isdirectory()
-        \    && (!(val->has_key('if')) || val.if->eval())
+        \    && (!val->has_key('if') || val.if->eval())
         \ })
   for plugin in plugins
     call dpp#util#_execute_hook(plugin, hook, plugin[hook])
@@ -93,7 +93,7 @@ function dpp#util#_call_hook(hook_name, plugins = []) abort
 endfunction
 function dpp#util#_execute_hook(plugin, hook_name, hook) abort
   " Skip twice call
-  if !(a:plugin->has_key('called'))
+  if !a:plugin->has_key('called')
     let a:plugin.called = {}
   endif
   if a:plugin.called->has_key(a:hook->string())
@@ -104,7 +104,7 @@ function dpp#util#_execute_hook(plugin, hook_name, hook) abort
     " NOTE: hook may contain \r in Windows
     const cmds = a:hook->split('\r\?\n')
           \ ->map({ _, val -> val->substitute('\r', '', 'g')})
-    if !(cmds->empty()) && cmds[0] =~# '^\s*vim9script' && exists(':vim9')
+    if !cmds->empty() && cmds[0] =~# '^\s*vim9script' && exists(':vim9')
       vim9 call execute(cmds[1 : ], '')
     else
       call execute(cmds, '')
@@ -172,7 +172,7 @@ function dpp#util#_generate_ftplugin(runtimepath, ftplugin) abort
   let ftplugin = {}
   for [key, string] in a:ftplugin->items()
     for ft in (key ==# '_' ? ['_'] : key->split('_'))
-      if !(ftplugin->has_key(ft))
+      if !ftplugin->has_key(ft)
         if ft ==# '_'
           let ftplugin[ft] = []
         else

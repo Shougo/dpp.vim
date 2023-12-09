@@ -18,8 +18,8 @@ function dpp#source#_source(plugins) abort
   let sourced = []
   for plugin in plugins
         \ ->filter({ _, val ->
-        \  !(val->empty()) && !val.sourced && val.rtp !=# ''
-        \  && (!(v:val->has_key('if')) || v:val.if->eval())
+        \  !val->empty() && !val.sourced && val.rtp !=# ''
+        \  && (!v:val->has_key('if') || v:val.if->eval())
         \  && v:val.path->isdirectory()
         \ })
     call s:source_plugin(rtps, index, plugin, sourced)
@@ -36,7 +36,7 @@ function dpp#source#_source(plugins) abort
           \ ->filter({ _, val -> (plugin.rtp .. '/' .. val)->isdirectory() })
           \ ->map({ _, val -> plugin.rtp .. '/' .. val })
       if directory =~# 'ftdetect'
-        if !(plugin->get('merge_ftdetect'))
+        if !plugin->get('merge_ftdetect')
           execute 'augroup filetypedetect'
         endif
       endif
