@@ -421,6 +421,11 @@ export class Dpp {
       }
     }
 
+    // Reset loader cache.
+    if (denops.meta.host === "nvim") {
+      await denops.cmd("lua vim.loader.reset()");
+    }
+
     await denops.cmd("doautocmd <nomodeline> User Dpp:makeStatePost");
   }
 
