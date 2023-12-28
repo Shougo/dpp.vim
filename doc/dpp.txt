@@ -330,6 +330,7 @@ on_func		(List) or (String)
 		NOTE: It does not work when Vim initialized.
 		NOTE: It does not work for Vim9 script. It is |FuncUndefined|
 		limitation.
+		NOTE: It does not work for |autoload-functions|.
 		NOTE: To use the feature, you need to install "dpp-ext-lazy".
 		https://github.com/Shougo/dpp-ext-lazy
 
