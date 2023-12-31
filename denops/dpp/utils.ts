@@ -1,7 +1,6 @@
 import {
   assertEquals,
   assertInstanceOf,
-  copy,
   Denops,
   is,
   join,
@@ -79,20 +78,6 @@ export async function safeStat(path: string): Promise<Deno.FileInfo | null> {
 }
 
 export async function linkPath(hasWindows: boolean, src: string, dest: string) {
-  if (!hasWindows) {
-    try {
-      // NOTE: For non Windows, copy() is faster...
-      await copy(src, dest, { overwrite: false });
-    } catch (e) {
-      // NOTE: In Linux (and probably MacOS as well) systems, merging causes
-      // permission errors on overwriting a file (like .gitignore) when a
-      // source directory is read-only, because copy in deno_std preserve the
-      // permissions of the original file for the copied one.
-      assertInstanceOf(e, Deno.errors.AlreadyExists);
-    }
-    return;
-  }
-
   if (await isDirectory(src)) {
     if (!await safeStat(dest)) {
       // Not exists directory
