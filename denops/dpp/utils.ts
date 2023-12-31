@@ -1,10 +1,4 @@
-import {
-  assertEquals,
-  assertInstanceOf,
-  Denops,
-  is,
-  join,
-} from "./deps.ts";
+import { assertEquals, assertInstanceOf, Denops, is, join } from "./deps.ts";
 import { Plugin } from "./types.ts";
 
 export async function errorException(
