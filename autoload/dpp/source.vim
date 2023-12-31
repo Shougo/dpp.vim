@@ -1,3 +1,4 @@
+const s:sep = has('win32') ? '\' : '/'
 function dpp#source#_source(plugins) abort
   let plugins = a:plugins->dpp#util#_convert2list()
   if plugins->empty()
@@ -75,7 +76,10 @@ function dpp#source#_source(plugins) abort
 
           if denops#server#status() ==# 'running'
             " NOTE: denops#plugin#register() may be failed
-            silent! call denops#plugin#register(name, #{ mode: 'skip' })
+            silent! call dpp#denops#_load(
+                  \   name,
+                  \   [plugin.rtp, 'denops', name, 'main.ts']->join(s:sep),
+                  \ )
           endif
 
           if plugin->get('denops_wait', v:true)

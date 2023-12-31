@@ -87,9 +87,18 @@ endfunction
 const s:root_dir = '<sfile>'->expand()->fnamemodify(':h:h:h')
 const s:sep = has('win32') ? '\' : '/'
 function dpp#denops#_register() abort
-  call denops#plugin#register('dpp',
-        \ [s:root_dir, 'denops', 'dpp', 'app.ts']->join(s:sep),
-        \ #{ mode: 'skip' })
+  call dpp#denops#_load(
+        \   'dpp',
+        \   [s:root_dir, 'denops', 'dpp', 'app.ts']->join(s:sep)
+        \ )
 
   autocmd dpp User DenopsClosed call s:stopped()
+endfunction
+function dpp#denops#_load(name, path) abort
+  try
+    call denops#plugin#load(a:name, a:path)
+  catch /^Vim\%((\a\+)\)\=:E117:/
+    " Fallback to `register` for backward compatibility
+    call denops#plugin#register(a:name, a:path, #{ mode: 'skip' })
+  endtry
 endfunction
