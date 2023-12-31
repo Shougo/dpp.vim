@@ -99,6 +99,6 @@ function dpp#denops#_load(name, path) abort
     call denops#plugin#load(a:name, a:path)
   catch /^Vim\%((\a\+)\)\=:E117:/
     " Fallback to `register` for backward compatibility
-    call denops#plugin#register(a:name, a:path, #{ mode: 'skip' })
+    silent! call denops#plugin#register(a:name, a:path, #{ mode: 'skip' })
   endtry
 endfunction
