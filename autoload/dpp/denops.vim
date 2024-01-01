@@ -1,3 +1,9 @@
+function dpp#denops#_denops_running() abort
+  return 'g:loaded_denops'->exists()
+        \ && denops#server#status() ==# 'running'
+        \ && denops#plugin#is_loaded('dpp')
+endfunction
+
 function dpp#denops#_request(method, args) abort
   if s:init()
     return {}
@@ -30,14 +36,13 @@ function dpp#denops#_notify(method, args) abort
   return s:notify(a:method, a:args)
 endfunction
 
-function dpp#denops#_denops_running() abort
-  return 'g:loaded_denops'->exists()
-        \ && denops#server#status() ==# 'running'
-        \ && denops#plugin#is_loaded('dpp')
-endfunction
-
-function s:stopped() abort
-  unlet! s:initialized
+function dpp#denops#_load(name, path) abort
+  try
+    call denops#plugin#load(a:name, a:path)
+  catch /^Vim\%((\a\+)\)\=:E117:/
+    " Fallback to `register` for backward compatibility
+    silent! call denops#plugin#register(a:name, a:path, #{ mode: 'skip' })
+  endtry
 endfunction
 
 function s:init() abort
@@ -69,9 +74,9 @@ function s:init() abort
   " NOTE: dpp.vim must be registered manually.
 
   " NOTE: denops load may be started
-  autocmd dpp User DenopsReady silent! call dpp#denops#_register()
+  autocmd dpp User DenopsReady silent! call s:register()
   if 'g:loaded_denops'->exists() && denops#server#status() ==# 'running'
-    silent! call dpp#denops#_register()
+    silent! call s:register()
   endif
 endfunction
 
@@ -86,7 +91,7 @@ endfunction
 
 const s:root_dir = '<sfile>'->expand()->fnamemodify(':h:h:h')
 const s:sep = has('win32') ? '\' : '/'
-function dpp#denops#_register() abort
+function s:register() abort
   call dpp#denops#_load(
         \   'dpp',
         \   [s:root_dir, 'denops', 'dpp', 'app.ts']->join(s:sep)
@@ -94,11 +99,6 @@ function dpp#denops#_register() abort
 
   autocmd dpp User DenopsClosed call s:stopped()
 endfunction
-function dpp#denops#_load(name, path) abort
-  try
-    call denops#plugin#load(a:name, a:path)
-  catch /^Vim\%((\a\+)\)\=:E117:/
-    " Fallback to `register` for backward compatibility
-    silent! call denops#plugin#register(a:name, a:path, #{ mode: 'skip' })
-  endtry
+function s:stopped() abort
+  unlet! s:initialized
 endfunction
