@@ -296,17 +296,7 @@ export class Dpp {
 
         // Use ftplugin only
         if (parsedHooksFile.ftplugin && is.Record(parsedHooksFile.ftplugin)) {
-          // Merge ftplugins
-          for (const filetype of Object.keys(parsedHooksFile.ftplugin)) {
-            if (configReturn.ftplugins[filetype]) {
-              configReturn.ftplugins[filetype] += `\n${
-                parsedHooksFile.ftplugin[filetype]
-              }`;
-            } else {
-              configReturn.ftplugins[filetype] =
-                parsedHooksFile.ftplugin[filetype];
-            }
-          }
+          mergeFtplugins(configReturn.ftplugins, parsedHooksFile.ftplugin);
         }
       }
     }
@@ -360,17 +350,8 @@ export class Dpp {
         stateLines.push(plugin.hook_add);
       }
 
-      // Merge ftplugins
       if (plugin.ftplugin) {
-        for (const filetype of Object.keys(plugin.ftplugin)) {
-          if (configReturn.ftplugins[filetype]) {
-            configReturn.ftplugins[filetype] += `\n${
-              plugin.ftplugin[filetype]
-            }`;
-          } else {
-            configReturn.ftplugins[filetype] = plugin.ftplugin[filetype];
-          }
-        }
+        mergeFtplugins(configReturn.ftplugins, plugin.ftplugin);
       }
     }
 
@@ -749,6 +730,23 @@ function initPlugin(plugin: Plugin, basePath: string): Plugin {
   Object.assign(plugin, hooks);
 
   return plugin;
+}
+
+function mergeFtplugins(
+  ftplugins: Record<string, string>,
+  ftplugin: Record<string, string>,
+) {
+  for (const [filetype, srcFtplugin] of Object.entries(ftplugin)) {
+    const plugin = filetype.startsWith("lua_")
+      ? `lua <<EOF\n${srcFtplugin}\nEOF\n`
+      : srcFtplugin;
+    const destFiletype = filetype.replace(/^lua_/, "");
+    if (ftplugins[destFiletype]) {
+      ftplugins[destFiletype] += `\n${plugin}`;
+    } else {
+      ftplugins[destFiletype] = plugin;
+    }
+  }
 }
 
 async function detectPlugin(
