@@ -1,4 +1,4 @@
-import { assertEquals, assertInstanceOf, Denops, is, join } from "./deps.ts";
+import { assertEquals, Denops, is, join } from "./deps.ts";
 import { Plugin } from "./types.ts";
 
 export async function errorException(
@@ -139,6 +139,7 @@ export function parseHooksFile(
         hookName.startsWith("hook_") ||
         hookName === "lua_add" ||
         hookName === "lua_source" ||
+        hookName === "lua_depends_update" ||
         hookName.startsWith("lua_done_") ||
         hookName.startsWith("lua_post_")
       ) {
