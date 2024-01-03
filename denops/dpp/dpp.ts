@@ -652,8 +652,8 @@ function protocolArgs<
   );
   const p = foldMerge(mergeProtocolParams, defaultDummy, [
     protocol.params(),
-    options.extParams["_"],
-    options.extParams[protocol.name],
+    options.protocolParams["_"],
+    options.protocolParams[protocol.name],
   ]);
   return [o, p];
 }
