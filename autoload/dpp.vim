@@ -50,8 +50,15 @@ function dpp#make_state(
   const base_path = dpp#util#_expand(a:base_path)
   const config_path = dpp#util#_expand(a:config_path)
 
+  if base_path ==# ''
+    call dpp#util#_error('dpp#make_state() base_path is empty.')
+    return 1
+  endif
+
   if !config_path->filereadable()
-    call dpp#util#_error(printf('"%s" is not found.', a:config_path))
+    call dpp#util#_error(printf(
+          \ 'dpp#make_state() config_path: "%s" is not found.',
+          \ a:config_path))
     return 1
   endif
 
