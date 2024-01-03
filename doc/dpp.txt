@@ -312,8 +312,8 @@ normalized_name	(String)
 
                                                     *dpp-plugin-option-on_cmd*
 on_cmd		(List) or (String)
-		If it is prefix matched to the executed command name, dpp will
-		call |dpp#source()|.
+		If it is matched to the executed command name, dpp will call
+		|dpp#source()|.
 		NOTE: To use the feature, you need to install "dpp-ext-lazy".
 		https://github.com/Shougo/dpp-ext-lazy
 
