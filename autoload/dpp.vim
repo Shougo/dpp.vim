@@ -3,8 +3,9 @@ function dpp#get(name = '') abort
         \ g:dpp#_plugins->copy() : g:dpp#_plugins->get(a:name, {})
 endfunction
 
-function dpp#source(plugins = g:dpp#_plugins->values()) abort
-  return dpp#source#_source(a:plugins)
+function dpp#source(
+      \ plugins = g:dpp#_plugins->values(), function_prefix = '') abort
+  return dpp#source#_source(a:plugins, a:function_prefix)
 endfunction
 
 function dpp#sync_ext_action(ext_name, action_name, action_params={}) abort

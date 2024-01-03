@@ -1,5 +1,5 @@
 const s:sep = has('win32') ? '\' : '/'
-function dpp#source#_source(plugins) abort
+function dpp#source#_source(plugins, function_prefix) abort
   let plugins = a:plugins->dpp#util#_convert2list()
   if plugins->empty()
     return []
@@ -30,6 +30,13 @@ function dpp#source#_source(plugins) abort
   let &runtimepath = rtps->dpp#util#_join_rtp(&runtimepath, '')
 
   call dpp#util#_call_hook('source', sourced)
+
+  if a:function_prefix->stridx('#') > 0
+    " NOTE: Reload autoload script
+    " Because autoload script is not loaded twice.
+    execute 'runtime' 'autoload/' .. a:function_prefix
+          \ ->substitute('#$', '.vim', '')->substitute('#', '/', 'g')
+  endif
 
   " Reload script files.
   for plugin in sourced
