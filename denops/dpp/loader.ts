@@ -94,8 +94,7 @@ export class Loader {
 
 class Extension {
   #exts: Record<ExtName, BaseExt<BaseExtParams>> = {};
-  #protocols: Record<ProtocolName, BaseProtocol<BaseProtocolParams>> =
-    {};
+  #protocols: Record<ProtocolName, BaseProtocol<BaseProtocolParams>> = {};
 
   getExt(mod: Mod, name: string): BaseExt<BaseExtParams> {
     if (!this.#exts[name]) {
