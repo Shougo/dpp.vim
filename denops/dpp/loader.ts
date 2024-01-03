@@ -16,15 +16,15 @@ type Mod = {
 };
 
 export class Loader {
-  private extension: Extension = new Extension();
-  private mods: Record<DppExtType, Record<string, Mod>> = {
+  #extension: Extension = new Extension();
+  #mods: Record<DppExtType, Record<string, Mod>> = {
     ext: {},
     protocol: {},
   };
-  private checkPaths: Record<string, boolean> = {};
-  private registerLock = new Lock(0);
-  private cachedPaths: Record<string, string> = {};
-  private prevRuntimepath = "";
+  #checkPaths: Record<string, boolean> = {};
+  #registerLock = new Lock(0);
+  #cachedPaths: Record<string, string> = {};
+  #prevRuntimepath = "";
 
   async autoload(
     denops: Denops,
@@ -32,52 +32,52 @@ export class Loader {
     name: string,
   ) {
     const runtimepath = await op.runtimepath.getGlobal(denops);
-    if (runtimepath !== this.prevRuntimepath) {
-      this.cachedPaths = await globpath(
+    if (runtimepath !== this.#prevRuntimepath) {
+      this.#cachedPaths = await globpath(
         denops,
         "denops/@dpp-*s",
       );
-      this.prevRuntimepath = runtimepath;
+      this.#prevRuntimepath = runtimepath;
     }
 
     const key = `@dpp-${type}s/${name}`;
 
-    if (!this.cachedPaths[key]) {
+    if (!this.#cachedPaths[key]) {
       return;
     }
 
-    await this.registerPath(type, this.cachedPaths[key]);
+    await this.registerPath(type, this.#cachedPaths[key]);
   }
 
   async registerPath(type: DppExtType, path: string) {
-    await this.registerLock.lock(async () => {
-      await this.register(type, path);
+    await this.#registerLock.lock(async () => {
+      await this.#register(type, path);
     });
   }
 
   getExt(name: ExtName): BaseExt<BaseExtParams> | null {
-    const mod = this.mods.ext[name];
+    const mod = this.#mods.ext[name];
     if (!mod) {
       return null;
     }
 
-    return this.extension.getExt(mod, name);
+    return this.#extension.getExt(mod, name);
   }
   getProtocol(name: ProtocolName): BaseProtocol<BaseProtocolParams> | null {
-    const mod = this.mods.protocol[name];
+    const mod = this.#mods.protocol[name];
     if (!mod) {
       return null;
     }
 
-    return this.extension.getProtocol(mod, name);
+    return this.#extension.getProtocol(mod, name);
   }
 
-  private async register(type: DppExtType, path: string) {
-    if (path in this.checkPaths) {
+  async #register(type: DppExtType, path: string) {
+    if (path in this.#checkPaths) {
       return;
     }
 
-    const mods = this.mods[type];
+    const mods = this.#mods[type];
 
     const name = parse(path).name;
 
@@ -88,33 +88,33 @@ export class Loader {
 
     mods[name] = mod;
 
-    this.checkPaths[path] = true;
+    this.#checkPaths[path] = true;
   }
 }
 
 class Extension {
-  private exts: Record<ExtName, BaseExt<BaseExtParams>> = {};
-  private protocols: Record<ProtocolName, BaseProtocol<BaseProtocolParams>> =
+  #exts: Record<ExtName, BaseExt<BaseExtParams>> = {};
+  #protocols: Record<ProtocolName, BaseProtocol<BaseProtocolParams>> =
     {};
 
   getExt(mod: Mod, name: string): BaseExt<BaseExtParams> {
-    if (!this.exts[name]) {
+    if (!this.#exts[name]) {
       const obj = new mod.mod.Ext();
       obj.name = name;
       obj.path = mod.path;
-      this.exts[obj.name] = obj;
+      this.#exts[obj.name] = obj;
     }
-    return this.exts[name];
+    return this.#exts[name];
   }
 
   getProtocol(mod: Mod, name: string): BaseProtocol<BaseProtocolParams> {
-    if (!this.protocols[name]) {
+    if (!this.#protocols[name]) {
       const obj = new mod.mod.Protocol();
       obj.name = name;
       obj.path = mod.path;
-      this.protocols[obj.name] = obj;
+      this.#protocols[obj.name] = obj;
     }
-    return this.protocols[name];
+    return this.#protocols[name];
   }
 }
 

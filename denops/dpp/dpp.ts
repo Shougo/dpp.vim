@@ -44,10 +44,10 @@ import {
 } from "./utils.ts";
 
 export class Dpp {
-  private loader: Loader;
+  #loader: Loader;
 
   constructor(loader: Loader) {
-    this.loader = loader;
+    this.#loader = loader;
   }
 
   async getProtocols(denops: Denops, options: DppOptions) {
@@ -55,7 +55,7 @@ export class Dpp {
 
     for (const procotolName of options.protocols) {
       const [protocol, protocolOptions, protocolParams] = await this
-        .getProtocol(denops, options, procotolName);
+        .#getProtocol(denops, options, procotolName);
       if (!protocol) {
         continue;
       }
@@ -78,7 +78,7 @@ export class Dpp {
     actionName: ActionName,
     actionParams: unknown = {},
   ): Promise<unknown | undefined> {
-    const [ext, extOptions, extParams] = await this.getExt(
+    const [ext, extOptions, extParams] = await this.#getExt(
       denops,
       options,
       extName,
@@ -379,7 +379,7 @@ export class Dpp {
     //console.log(stateLines);
     //console.log(cacheLines);
 
-    await this.mergePlugins(denops, dppRuntimepath, recordPlugins);
+    await this.#mergePlugins(denops, dppRuntimepath, recordPlugins);
 
     // Generate ftplugin files
     if (configReturn.ftplugins) {
@@ -410,7 +410,7 @@ export class Dpp {
     await denops.cmd("doautocmd <nomodeline> User Dpp:makeStatePost");
   }
 
-  private async mergePlugins(
+  async #mergePlugins(
     denops: Denops,
     dppRuntimepath: string,
     recordPlugins: Record<string, Plugin>,
@@ -482,7 +482,7 @@ export class Dpp {
     }
   }
 
-  private async getExt(
+  async #getExt(
     denops: Denops,
     options: DppOptions,
     name: ExtName,
@@ -493,11 +493,11 @@ export class Dpp {
       BaseExtParams,
     ]
   > {
-    if (!this.loader.getExt(name)) {
-      await this.loader.autoload(denops, "ext", name);
+    if (!this.#loader.getExt(name)) {
+      await this.#loader.autoload(denops, "ext", name);
     }
 
-    const ext = this.loader.getExt(name);
+    const ext = this.#loader.getExt(name);
     if (!ext) {
       if (name.length !== 0) {
         await denops.call(
@@ -518,7 +518,7 @@ export class Dpp {
     return [ext, extOptions, extParams];
   }
 
-  private async getProtocol(
+  async #getProtocol(
     denops: Denops,
     options: DppOptions,
     name: ProtocolName,
@@ -529,11 +529,11 @@ export class Dpp {
       BaseProtocolParams,
     ]
   > {
-    if (!this.loader.getProtocol(name)) {
-      await this.loader.autoload(denops, "protocol", name);
+    if (!this.#loader.getProtocol(name)) {
+      await this.#loader.autoload(denops, "protocol", name);
     }
 
-    const protocol = this.loader.getProtocol(name);
+    const protocol = this.#loader.getProtocol(name);
     if (!protocol) {
       if (name.length !== 0) {
         await denops.call(
