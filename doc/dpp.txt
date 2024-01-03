@@ -317,6 +317,8 @@ on_cmd		(List) or (String)
 		NOTE: To use the feature, you need to install "dpp-ext-lazy".
 		https://github.com/Shougo/dpp-ext-lazy
 
+		Default: Prefix match name from |dpp-plugin-option-name|.
+
                                                   *dpp-plugin-option-on_event*
 on_event	(String) or (List)
 		dpp will call |dpp#source()| on the events.
@@ -325,13 +327,15 @@ on_event	(String) or (List)
 
                                                    *dpp-plugin-option-on_func*
 on_func		(List) or (String)
-		If it is prefix matched to the called function name, dpp will
-		call |dpp#source()|.
+		If it is matched to the called function name, dpp will call
+		|dpp#source()|.
 		NOTE: It does not work when Vim initialized.
 		NOTE: It does not work for Vim9 script. It is |FuncUndefined|
 		limitation.
 		NOTE: To use the feature, you need to install "dpp-ext-lazy".
 		https://github.com/Shougo/dpp-ext-lazy
+
+		Default: Prefix match name from |dpp-plugin-option-name|.
 
                                                      *dpp-plugin-option-on_ft*
 on_ft		(List) or (String)
