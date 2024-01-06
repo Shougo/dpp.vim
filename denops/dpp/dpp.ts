@@ -106,6 +106,17 @@ export class Dpp {
       actionParams,
     });
 
+    if (
+      await fn.exists(
+        denops,
+        `#User#Dpp:extActionPost:${extName}:${actionName}`,
+      )
+    ) {
+      await denops.cmd(
+        `doautocmd <nomodeline> User Dpp:extActionPost:${extName}:${actionName}`,
+      );
+    }
+
     return ret;
   }
 

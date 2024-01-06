@@ -677,6 +677,11 @@ AUTOCMDS                                                        *dpp-autocmds*
 
 dpp.vim defines some |User| autocmds.
 
+                                               *dpp-autocmd-Dpp:extActionPost*
+Dpp:extActionPost:{ext-name}:{action-name}
+		Called after |dpp#sync_ext_action()| or
+		|dpp#async_ext_action()| is finished.
+
                                                *dpp-autocmd-Dpp:makeStatePost*
 Dpp:makeStatePost
 		Called after |dpp#make_state()| is finished.
