@@ -234,7 +234,7 @@ function s:get_default_ftplugin() abort
           \ 'ftplugin/' .. ft .. '_*.vim'
           \ 'ftplugin/' .. ft .. '/*.vim'
           if has('nvim')
-            execute 'runtime!'
+            silent! execute 'runtime!'
             \ 'ftplugin/' .. ft .. '.lua'
             \ 'ftplugin/' .. ft .. '_*.lua'
             \ 'ftplugin/' .. ft .. '/*.lua'
