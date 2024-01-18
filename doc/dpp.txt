@@ -125,7 +125,7 @@ dpp#async_ext_action({ext-name}, {action-name}[, {action-params}])
 		ext asynchronously.
 		{action-params} behavior depends on {action-name}.
 		NOTE: It must be executed after |dpp#min#load_state()|.
-		NOTE: It must be after |DenopsReady|.
+		NOTE: It must be called after |DenopsReady|.
 
                                                            *dpp#check_files()*
 dpp#check_files([{name}])
@@ -159,7 +159,7 @@ dpp#make_state({base-path}, {config-path}[, {name}])
 		"nvim".
 		When the state file is created,
 		|dpp-autocmd-Dpp:makeStatePost| event is fired.
-		NOTE: It must be after |DenopsReady|.
+		NOTE: It must be called after |DenopsReady|.
 		NOTE: It saves your 'runtimepath' completely, you must not
 		call it after change 'runtimepath' dynamically.
 
@@ -201,7 +201,7 @@ dpp#sync_ext_action({ext-name}, {action-name}[, {action-params}])
 		ext synchronously.
 		{action-params} behavior depends on {action-name}.
 		NOTE: It must be executed after |dpp#min#load_state()|.
-		NOTE: It must be after |DenopsReady|.
+		NOTE: It must be called after |DenopsReady|.
 
 ------------------------------------------------------------------------------
 PLUGIN OPTIONS                                            *dpp-plugin-options*
