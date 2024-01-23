@@ -129,6 +129,7 @@ export class Dpp {
     configReturn: ConfigReturn,
   ) {
     const hasWindows = await fn.has(denops, "win32");
+    const hasLua = denops.meta.host === "nvim" || await fn.has(denops, "lua");
 
     // Initialize plugins
     const protocols = await this.getProtocols(denops, options);
@@ -165,6 +166,7 @@ export class Dpp {
       recordPlugins[plugin.name] = initPlugin(
         plugin,
         basePath,
+        hasLua,
       );
     }
 
@@ -334,11 +336,13 @@ export class Dpp {
     for await (const vimrc of inlineVimrcs) {
       const vimrcLines = (await Deno.readTextFile(vimrc)).split(/\r?\n/);
       if (extname(vimrc) == ".lua") {
-        stateLines = stateLines.concat(
-          ["lua <<EOF"],
-          vimrcLines.filter((line) => !line.match(/^\s*$|^\s*--/)),
-          ["EOF"],
-        );
+        if (hasLua) {
+          stateLines = stateLines.concat(
+            ["lua <<EOF"],
+            vimrcLines.filter((line) => !line.match(/^\s*$|^\s*--/)),
+              ["EOF"],
+          );
+        }
       } else {
         stateLines = stateLines.concat(
           vimrcLines.filter((line) => !line.match(/^\s*$|^\s*"/)),
@@ -669,7 +673,7 @@ function protocolArgs<
   return [o, p];
 }
 
-function initPlugin(plugin: Plugin, basePath: string): Plugin {
+function initPlugin(plugin: Plugin, basePath: string, hasLua: boolean): Plugin {
   plugin.sourced = false;
 
   if (!plugin.path) {
@@ -725,16 +729,19 @@ function initPlugin(plugin: Plugin, basePath: string): Plugin {
       "",
     );
   }
+
   // Convert lua_xxx keys
-  for (
-    const key of Object.keys(plugin).filter((key) => key.startsWith("lua_"))
-  ) {
-    const hook = key.replace(/^lua_/, "hook_");
-    const lua = `lua <<EOF\n${plugin[key as keyof typeof plugin]}\nEOF\n`;
-    if (hooks[hook]) {
-      hooks[hook] += "\n" + lua;
-    } else {
-      hooks[hook] = lua;
+  if (hasLua) {
+    for (
+      const key of Object.keys(plugin).filter((key) => key.startsWith("lua_"))
+    ) {
+      const hook = key.replace(/^lua_/, "hook_");
+      const lua = `lua <<EOF\n${plugin[key as keyof typeof plugin]}\nEOF\n`;
+      if (hooks[hook]) {
+        hooks[hook] += "\n" + lua;
+      } else {
+        hooks[hook] = lua;
+      }
     }
   }
 
@@ -802,7 +809,7 @@ Deno.test("initPlugin", () => {
       rev: "[hoge]",
       script_type: "foo",
       rtp: "autoload",
-    }, "base"),
+    }, "base", false),
     {
       name: "foo",
       path: "base/repos/foo__hoge_/foo",
@@ -820,7 +827,7 @@ Deno.test("initPlugin", () => {
     initPlugin({
       name: "foo",
       on_ft: "foo",
-    }, "base"),
+    }, "base", false),
     {
       name: "foo",
       path: "base/repos/foo",
@@ -837,7 +844,7 @@ Deno.test("initPlugin", () => {
     initPlugin({
       name: "foo",
       lua_add: "foo",
-    }, "base"),
+    }, "base", true),
     {
       name: "foo",
       path: "base/repos/foo",

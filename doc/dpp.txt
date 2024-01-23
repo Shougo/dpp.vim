@@ -505,32 +505,38 @@ hook_source	(String) or (Function)
 lua_add		(String)
 		Lua language string hook instead of Vim script.
 		It is converted to |dpp-plugin-option-hook_add| key.
+		NOTE: It works only for neovim or |+lua|.
 
                                         *dpp-plugin-option-lua_depends_update*
 lua_depends_update (String)
 		Lua language string hook instead of Vim script.
 		It is converted to |dpp-plugin-option-hook_depends_update|
 		key.
+		NOTE: It works only for neovim or |+lua|.
 
                                            *dpp-plugin-option-lua_done_update*
 lua_done_update	(String)
 		Lua language string hook instead of Vim script.
 		It is converted to |dpp-plugin-option-hook_done_update| key.
+		NOTE: It works only for neovim or |+lua|.
 
                                            *dpp-plugin-option-lua_post_source*
 lua_post_sources (String)
 		Lua language string hook instead of Vim script.
 		It is converted to |dpp-plugin-option-hook_post_source| key.
+		NOTE: It works only for neovim or |+lua|.
 
                                            *dpp-plugin-option-lua_post_update*
 lua_post_update	(String)
 		Lua language string hook instead of Vim script.
 		It is converted to |dpp-plugin-option-hook_post_update| key.
+		NOTE: It works only for neovim or |+lua|.
 
                                                 *dpp-plugin-option-lua_source*
 lua_source	(String)
 		Lua language string hook instead of Vim script.
 		It is converted to |dpp-plugin-option-hook_source| key.
+		NOTE: It works only for neovim or |+lua|.
 
 ------------------------------------------------------------------------------
 LUA FUNCTIONS                                              *dpp-lua-functions*
