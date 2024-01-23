@@ -340,7 +340,7 @@ export class Dpp {
           stateLines = stateLines.concat(
             ["lua <<EOF"],
             vimrcLines.filter((line) => !line.match(/^\s*$|^\s*--/)),
-              ["EOF"],
+            ["EOF"],
           );
         }
       } else {
@@ -804,12 +804,16 @@ async function detectPlugin(
 
 Deno.test("initPlugin", () => {
   assertEquals(
-    initPlugin({
-      name: "foo",
-      rev: "[hoge]",
-      script_type: "foo",
-      rtp: "autoload",
-    }, "base", false),
+    initPlugin(
+      {
+        name: "foo",
+        rev: "[hoge]",
+        script_type: "foo",
+        rtp: "autoload",
+      },
+      "base",
+      false,
+    ),
     {
       name: "foo",
       path: "base/repos/foo__hoge_/foo",
@@ -824,10 +828,14 @@ Deno.test("initPlugin", () => {
 
   // lazy
   assertEquals(
-    initPlugin({
-      name: "foo",
-      on_ft: "foo",
-    }, "base", false),
+    initPlugin(
+      {
+        name: "foo",
+        on_ft: "foo",
+      },
+      "base",
+      false,
+    ),
     {
       name: "foo",
       path: "base/repos/foo",
@@ -841,10 +849,14 @@ Deno.test("initPlugin", () => {
 
   // hooks
   assertEquals(
-    initPlugin({
-      name: "foo",
-      lua_add: "foo",
-    }, "base", true),
+    initPlugin(
+      {
+        name: "foo",
+        lua_add: "foo",
+      },
+      "base",
+      true,
+    ),
     {
       name: "foo",
       path: "base/repos/foo",
