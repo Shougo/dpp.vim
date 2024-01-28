@@ -795,6 +795,9 @@ FAQ 4:							|dpp-faq-4|
 FAQ 5:							|dpp-faq-5|
 	I want to use dpp functions in lua.
 
+FAQ 6:							|dpp-faq-6|
+	|DenopsReady| is not executed when |dpp#min#load_state()| is failed.
+
 ------------------------------------------------------------------------------
                                                                    *dpp-faq-1*
 Q: How to donate money to you?
@@ -861,6 +864,16 @@ A: You can use |dpp-lua-functions| like this.
     end,
   })
 END
+<
+
+                                                                   *dpp-faq-6*
+Q: |DenopsReady| is not executed when |dpp#min#load_state()| is failed.
+
+A: "plugin/denops.vim" is not loaded.  I think you have enabled "--noplugin".
+You need to execute "plugin/denops.vim" manually by |:runtime| command.
+
+>
+  runtime! plugin/denops.vim
 <
 
 ==============================================================================
