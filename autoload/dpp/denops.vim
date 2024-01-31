@@ -72,11 +72,12 @@ function s:init() abort
   let g:dpp#_started = reltime()
 
   " NOTE: dpp.vim must be registered manually.
-
-  " NOTE: denops load may be started
-  autocmd dpp User DenopsReady silent! call s:register()
-  if 'g:loaded_denops'->exists() && denops#server#status() ==# 'running'
+  if 'g:loaded_denops'->exists() &&
+        \ (denops#server#status() ==# 'preparing' ||
+        \  denops#server#status() ==# 'running')
     silent! call s:register()
+  else
+    autocmd dpp User DenopsReady silent! call s:register()
   endif
 endfunction
 
