@@ -404,6 +404,9 @@ on_source	(List) or (String)
 path		(String)
 		Specify the plugin downloaded path.
 
+		Default:
+		"{base-path}/repos/{site-name}/{user-name}/{plugin-name}"
+
                                                        *dpp-plugin-option-rev*
 rev		(String)
 		Specify a revision number or branch/tag name.
@@ -418,6 +421,8 @@ rtp		(String)
 		For example: https://github.com/rstacruz/sparkup
 		If it is empty string, dpp will not add the path to
 		'runtimepath'
+
+		Default: Same of |dpp-plugin-option-path|
 
 
 ------------------------------------------------------------------------------
@@ -594,9 +599,10 @@ EXAMPLES                                                        *dpp-examples*
 	const s:dpp_base = '~/.cache/dpp/'
 	
 	" Set dpp source path (required)
+	" NOTE: The plugins must be cloned before.
 	const s:dpp_src = '~/.cache/dpp/repos/github.com/Shougo/dpp.vim'
 	const s:denops_src = '~/.cache/dpp/repos/github.com/denops/denops.vim'
-	
+
 	" Set dpp runtime path (required)
 	execute 'set runtimepath^=' .. s:dpp_src
 	

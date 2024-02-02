@@ -63,6 +63,7 @@ set nocompatible
 const s:dpp_base = '~/.cache/dpp/'
 
 " Set dpp source path (required)
+" NOTE: The plugins must be cloned before.
 const s:dpp_src = '~/.cache/dpp/repos/github.com/Shougo/dpp.vim'
 const s:denops_src = '~/.cache/dpp/repos/github.com/denops/denops.vim'
 
