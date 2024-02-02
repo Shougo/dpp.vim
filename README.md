@@ -35,6 +35,10 @@ see "FAQ" section in [help](doc/dpp.txt).
 recommended) or Vim 9.0.1276. See [requirements](#requirements) if you aren't
 sure whether you have this.
 
+NOTE: To install plugins from remote, you need to install
+[dpp-ext-installer](https://github.com/Shougo/dpp-ext-installer).
+
+
 ### Requirements
 
 Dpp.vim requires both Deno and denops.vim.

@@ -52,10 +52,13 @@ Please install both Deno and "denops.vim".
 https://deno.land/
 https://github.com/vim-denops/denops.vim
 
+NOTE: To install plugins from remote, you need to install "dpp-ext-installer".
+
+https://github.com/Shougo/dpp-ext-installer
+
 NOTE: dpp.vim does not include any extensions.
 You must install them you want manually.
 You can search dpp.vim plugins from https://github.com/topics/dpp-vim.
-
 
 ==============================================================================
 INTERFACE                                                      *dpp-interface*
