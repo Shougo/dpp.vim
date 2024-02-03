@@ -202,13 +202,16 @@ export class Dpp {
         return;
       }
 
-      plugin.sourced = true;
-      rtps.splice(runtimeIndex, 0, plugin.rtp);
+      if (!plugin.merged) {
+        rtps.splice(runtimeIndex, 0, plugin.rtp);
 
-      const afterDir = `${plugin.rtp}/after`;
-      if (await isDirectory(afterDir)) {
-        rtps.splice(rtps.indexOf(runtimePath) + 1, 0, afterDir);
+        const afterDir = `${plugin.rtp}/after`;
+        if (await isDirectory(afterDir)) {
+          rtps.splice(rtps.indexOf(runtimePath) + 1, 0, afterDir);
+        }
       }
+
+      plugin.sourced = true;
     };
 
     // Check plugin-option-if is enabled
