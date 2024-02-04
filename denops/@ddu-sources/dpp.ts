@@ -3,8 +3,8 @@ import {
   ActionFlags,
   BaseSource,
   Item,
-} from "https://deno.land/x/ddu_vim@v3.9.0/types.ts";
-import { Denops, vars } from "https://deno.land/x/ddu_vim@v3.9.0/deps.ts";
+} from "https://deno.land/x/ddu_vim@v3.10.2/types.ts";
+import { Denops, vars } from "https://deno.land/x/ddu_vim@v3.10.2/deps.ts";
 import { ActionData } from "https://deno.land/x/ddu_kind_file@v0.7.1/file.ts";
 import { Plugin } from "../dpp/types.ts";
 
