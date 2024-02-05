@@ -73,11 +73,11 @@ function s:init() abort
 
   " NOTE: dpp.vim must be registered manually.
   if 'g:loaded_denops'->exists() &&
-        \ (denops#server#status() ==# 'preparing' ||
+        \ ('<amatch>'->expand() ==# 'DenopsReady' ||
         \  denops#server#status() ==# 'running')
-    silent! call s:register()
+    call s:register()
   else
-    autocmd dpp User DenopsReady silent! call s:register()
+    autocmd dpp User DenopsReady call s:register()
   endif
 endfunction
 
