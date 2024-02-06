@@ -475,7 +475,8 @@ hooks_file	(String) or (List)
 <
                                                   *dpp-plugin-option-hook_add*
 hook_add	(String)
-		It is executed after the line is parsed.
+		It is executed after the plugin is added.
+		It is mainly used for defining mappings.
 		NOTE: You cannot call plugin function in "hook_add".
 		Because the plugin is not sourced when "hook_add".
 
@@ -490,7 +491,7 @@ hook_done_update (String)
 
                                           *dpp-plugin-option-hook_post_source*
 hook_post_source (String)
-		It is executed after plugins are sourced.
+		It is executed after the plugin script files are sourced.
 
 		NOTE: In Vim initializing, you must call the
 		"hook_post_source" hooks manually in |VimEnter| if needed.
@@ -505,7 +506,9 @@ hook_post_update (String)
 
                                                *dpp-plugin-option-hook_source*
 hook_source	(String) or (Function)
-		It is executed before plugins are sourced.
+		It is executed after plugin runtimepath is added and before
+		the plugin script files are sourced.
+		It is mainly used for plugin configure.
 		NOTE: The "sourced" means after |dpp#min#load_state()| or when
 		|VimEnter| or autoloaded.
 

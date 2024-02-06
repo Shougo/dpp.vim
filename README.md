@@ -66,16 +66,28 @@ const s:dpp_base = '~/.cache/dpp/'
 " NOTE: The plugins must be cloned before.
 const s:dpp_src = '~/.cache/dpp/repos/github.com/Shougo/dpp.vim'
 const s:denops_src = '~/.cache/dpp/repos/github.com/denops/denops.vim'
+"const s:denops_installer = '~/.cache/dpp/repos/github.com/Shougo/dpp-ext-installer'
 
 " Set dpp runtime path (required)
 execute 'set runtimepath^=' .. s:dpp_src
 
 if s:dpp_base->dpp#min#load_state()
   " NOTE: dpp#make_state() requires denops.vim
+  " NOTE: denops.vim and dpp plugins are must be added
   execute 'set runtimepath^=' .. s:denops_src
+  "execute 'set runtimepath^=' .. s:denops_installer
+
   autocmd User DenopsReady
-  \ call dpp#make_state(s:dpp_base, '{TypeScript config file path}')
+  \ : echohl WarningMsg
+  \ | echomsg 'dpp load_state() is failed'
+  \ | echohl NONE
+  \ | call dpp#make_state(s:dpp_base, '{TypeScript config file path}')
 endif
+
+autocmd User Dpp:makeStatePost
+      \ : echohl WarningMsg
+      \ | echomsg 'dpp make_state() is done'
+      \ | echohl NONE
 
 " Attempt to determine the type of a file based on its name and
 " possibly its " contents. Use this to allow intelligent
@@ -100,6 +112,7 @@ endif
 ```lua
 local dppSrc = "~/.cache/dpp/repos/github.com/Shougo/dpp.vim"
 local denopsSrc = "~/.cache/dpp/repos/github.com/denops/denops.vim"
+--local denopsInstaller = "~/.cache/dpp/repos/github.com/Shougo/dpp-ext-installer"
 
 vim.opt.runtimepath:prepend(dppSrc)
 
@@ -108,6 +121,7 @@ local dpp = require("dpp")
 local dppBase = "~/.cache/dpp"
 if dpp.load_state(dppBase) then
   vim.opt.runtimepath:prepend(denopsSrc)
+  --vim.opt.runtimepath:prepend(denopsInstaller)
 
   vim.api.nvim_create_autocmd("User", {
     pattern = "DenopsReady",
