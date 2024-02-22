@@ -26,9 +26,12 @@ function dpp#min#_init() abort
         \ && $HOME ==# ('~'.$SUDO_USER)->expand()
   const g:dpp#_init_runtimepath = &runtimepath
   const g:dpp#_did_load_filetypes =
-        \ g:->get('did_load_filetypes', v:false)
+        \    g:->get('did_load_filetypes', v:false)
+        \ || has('nvim')
   const g:dpp#_did_load_ftplugin =
-        \ b:->get('did_ftplugin', v:false) || b:->get('did_indent', v:false)
+        \    b:->get('did_ftplugin', v:false)
+        \ || b:->get('did_indent', v:false)
+        \ || has('nvim')
 
   let g:dpp#_plugins = {}
   let g:dpp#_options = {}
