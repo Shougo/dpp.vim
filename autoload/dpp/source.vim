@@ -107,8 +107,7 @@ function dpp#source#_source(plugins, function_prefix) abort
 
   if (is_reset || filetype_before !=# filetype_after) && &l:filetype !=# ''
     " Recall FileType autocmd
-    " NOTE: Use silent! because ftplugins may be broken.
-    silent! let &l:filetype = &l:filetype
+    let &l:filetype = &l:filetype
   endif
 
   if !has('vim_starting')
