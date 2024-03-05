@@ -393,6 +393,13 @@ on_path		(List) or (String)
 		NOTE: To use the feature, you need to install "dpp-ext-lazy".
 		https://github.com/Shougo/dpp-ext-lazy
 
+                                            *dpp-plugin-option-on_post_source*
+on_post_source	(List) or (String)
+		Load the plugin after the listed plugins are loaded.
+		NOTE: The plugins must be lazy loaded plugins.
+		NOTE: To use the feature, you need to install "dpp-ext-lazy".
+		https://github.com/Shougo/dpp-ext-lazy
+
                                                  *dpp-plugin-option-on_source*
 on_source	(List) or (String)
 		Load the plugin before the listed plugins are loaded.

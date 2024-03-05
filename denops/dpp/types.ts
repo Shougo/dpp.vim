@@ -114,6 +114,7 @@ export type Plugin = {
   on_lua?: string | string[];
   on_map?: string | string[];
   on_path?: string | string[];
+  on_post_source?: string | string[];
   on_source?: string | string[];
   path?: string;
   protocol?: string;

@@ -127,13 +127,13 @@ function s:source_plugin(rtps, index, plugin, sourced) abort
 
   let index = a:index
 
-  " NOTE: on_source must sourced after depends
-  for on_source in dpp#util#_get_lazy_plugins()
+  " NOTE: on_source must be sourced before depends
+  for source in dpp#util#_get_lazy_plugins()
         \ ->filter({ _, val ->
         \   dpp#util#_convert2list(val->get('on_source', []))
         \   ->index(a:plugin.name) >= 0
         \ })
-    if s:source_plugin(a:rtps, index, on_source, a:sourced)
+    if s:source_plugin(a:rtps, index, source, a:sourced)
       let index += 1
     endif
   endfor
@@ -181,6 +181,17 @@ function s:source_plugin(rtps, index, plugin, sourced) abort
       call dpp#util#_add_after(a:rtps, a:plugin.rtp .. '/after')
     endif
   endif
+
+  " Load on_post_source
+  for source in dpp#util#_get_lazy_plugins()
+        \ ->filter({ _, val ->
+        \   dpp#util#_convert2list(val->get('on_post_source', []))
+        \   ->index(a:plugin.name) >= 0
+        \ })
+    if s:source_plugin(a:rtps, index, source, a:sourced)
+      let index += 1
+    endif
+  endfor
 endfunction
 
 function s:is_reset_ftplugin(plugins) abort
