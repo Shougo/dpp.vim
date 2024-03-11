@@ -462,7 +462,6 @@ export class Dpp {
     for await (const _ of Deno.readDir(docDir)) {
       try {
         await denops.cmd(`silent helptags ${docDir}`);
-        break;
       } catch (e: unknown) {
         await errorException(
           denops,
@@ -470,6 +469,7 @@ export class Dpp {
           `:helptags failed`,
         );
       }
+      break;
     }
 
     // Merge plugin files
