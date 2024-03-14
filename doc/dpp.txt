@@ -216,7 +216,7 @@ augroup		(String)
 		An augroup name that the plugin uses for |VimEnter| or
 		|GUIEnter| autocmd events.
 
-                                                    *dpp-plugin-option-build*
+                                                     *dpp-plugin-option-build*
 build		(String)
 		Specify the build script.
 		This command is executed by |system()| in the plugin
@@ -225,7 +225,7 @@ build		(String)
 		type dictionary, but that is now deprecated.
 		Please use |dpp-plugin-option-hook_post_update| instead.
 
-                                              *dpp-plugin-option-denops_wait*
+                                               *dpp-plugin-option-denops_wait*
 denops_wait	(Bool)
 		If set to v:false, dpp doesn't wait until the denops plugin
 		is loaded.
@@ -799,22 +799,22 @@ params			(function)			(Required)
 ==============================================================================
 FAQ                                                                  *dpp-faq*
 
-FAQ 1:							|dpp-faq-1|
+FAQ 1:                                                             |dpp-faq-1|
 	How to donate money to you?
 
-FAQ 2:							|dpp-faq-2|
+FAQ 2:                                                             |dpp-faq-2|
 	What means "dark powered"?
 
-FAQ 3:							|dpp-faq-3|
+FAQ 3:                                                             |dpp-faq-3|
 	Why dpp.vim uses Deno?
 
-FAQ 4:							|dpp-faq-4|
+FAQ 4:                                                             |dpp-faq-4|
 	I want to update cache file automatically when the config is updated.
 
-FAQ 5:							|dpp-faq-5|
+FAQ 5:                                                             |dpp-faq-5|
 	I want to use dpp functions in lua.
 
-FAQ 6:							|dpp-faq-6|
+FAQ 6:                                                             |dpp-faq-6|
 	|DenopsReady| is not executed when |dpp#min#load_state()| is failed.
 
 ------------------------------------------------------------------------------
