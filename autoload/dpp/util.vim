@@ -194,7 +194,7 @@ function dpp#util#_generate_ftplugin(runtimepath, ftplugin) abort
   let ftplugin_generated += ['function! s:after_ftplugin()']
   let ftplugin_generated += ftplugin->get('_', [])
   let ftplugin_generated += ['endfunction']
-  let generated[a:runtimepath .. '/after/ftplugin.vim'] = ftplugin_generated
+  let generated[a:runtimepath .. '/ftplugin.vim'] = ftplugin_generated
 
   " Generate after/ftplugin
   const after = a:runtimepath .. '/after/ftplugin'
@@ -207,11 +207,10 @@ function dpp#util#_generate_ftplugin(runtimepath, ftplugin) abort
 endfunction
 function s:get_default_ftplugin() abort
   let default_ftplugin =<< trim END
-    if exists('g:did_load_after_ftplugin')
+    if exists('g:did_load_ftplugin')
       finish
     endif
     let g:did_load_ftplugin = 1
-    let g:did_load_after_ftplugin = 1
 
     augroup filetypeplugin
       autocmd!
