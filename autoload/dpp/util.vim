@@ -149,13 +149,13 @@ function s:tsort_impl(target, mark, sorted) abort
 endfunction
 
 function dpp#util#_clear_state(name) abort
+  const startup = printf('%s/%s/startup.vim', g:dpp#_base_path, a:name)
+  if startup->filereadable()
+    call delete(startup)
+  endif
   const state = printf('%s/%s/state.vim', g:dpp#_base_path, a:name)
   if state->filereadable()
     call delete(state)
-  endif
-  const cache = printf('%s/%s/cache.vim', g:dpp#_base_path, a:name)
-  if cache->filereadable()
-    call delete(cache)
   endif
 endfunction
 

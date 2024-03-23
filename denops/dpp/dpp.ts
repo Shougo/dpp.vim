@@ -280,11 +280,11 @@ export class Dpp {
       dppRuntimepath,
     );
 
-    const cacheVersion = await vars.g.get(denops, "dpp#_cache_version");
-    let stateLines = [
-      `if g:dpp#_cache_version !=# ${cacheVersion}` +
-      `| throw "Cache version error" | endif`,
-      "let [g:dpp#_plugins, g:dpp#ftplugin, g:dpp#_options, g:dpp#_check_files] = g:dpp#_cache",
+    const stateVersion = await vars.g.get(denops, "dpp#_state_version");
+    let startupLines = [
+      `if g:dpp#_state_version !=# ${stateVersion}` +
+      `| throw "State version error" | endif`,
+      "let [g:dpp#_plugins, g:dpp#ftplugin, g:dpp#_options, g:dpp#_check_files] = g:dpp#_state",
       `let g:dpp#_config_path = '${configPath}'`,
       `let &runtimepath = '${newRuntimepath}'`,
     ];
@@ -323,13 +323,13 @@ export class Dpp {
     }
 
     if (await vars.g.get(denops, "dpp#_did_load_filetypes", false)) {
-      stateLines.push("filetype off");
+      startupLines.push("filetype off");
     }
     if (await vars.g.get(denops, "dpp#_did_load_ftplugin", false)) {
-      stateLines.push("filetype plugin indent off");
+      startupLines.push("filetype plugin indent off");
     }
     if (configReturn.stateLines) {
-      stateLines = stateLines.concat(configReturn.stateLines);
+      startupLines = startupLines.concat(configReturn.stateLines);
     }
 
     // NOTE: inlineVimrcs must be before plugins hook_add.
@@ -340,14 +340,14 @@ export class Dpp {
       const vimrcLines = (await Deno.readTextFile(vimrc)).split(/\r?\n/);
       if (extname(vimrc) == ".lua") {
         if (hasLua) {
-          stateLines = stateLines.concat(
+          startupLines = startupLines.concat(
             ["lua <<EOF"],
             vimrcLines.filter((line) => !line.match(/^\s*$|^\s*--/)),
             ["EOF"],
           );
         }
       } else {
-        stateLines = stateLines.concat(
+        startupLines = startupLines.concat(
           vimrcLines.filter((line) => !line.match(/^\s*$|^\s*"/)),
         );
       }
@@ -365,7 +365,7 @@ export class Dpp {
       }
 
       if (plugin.hook_add) {
-        stateLines.push(plugin.hook_add);
+        startupLines.push(plugin.hook_add);
       }
 
       if (plugin.ftplugin) {
@@ -373,15 +373,16 @@ export class Dpp {
       }
     }
 
-    // Write state file
-    const stateFile = `${basePath}/${name}/state.vim`;
-    await Deno.writeTextFile(stateFile, stateLines.join("\n"));
+    // Write startup script
+    const startupFile = `${basePath}/${name}/startup.vim`;
+    await Deno.writeTextFile(startupFile, startupLines.join("\n"));
     if (hasWindows) {
-      await denops.call("dpp#util#_dos2unix", stateFile);
+      await denops.call("dpp#util#_dos2unix", startupFile);
     }
 
-    const cacheFile = `${basePath}/${name}/cache.vim`;
-    const cacheLines = [
+    // Write state file
+    const stateFile = `${basePath}/${name}/state.vim`;
+    const stateLines = [
       JSON.stringify([
         recordPlugins,
         {},
@@ -389,13 +390,13 @@ export class Dpp {
         checkFiles,
       ]),
     ];
-    await Deno.writeTextFile(cacheFile, cacheLines.join("\n"));
+    await Deno.writeTextFile(stateFile, stateLines.join("\n"));
     if (hasWindows) {
-      await denops.call("dpp#util#_dos2unix", cacheFile);
+      await denops.call("dpp#util#_dos2unix", stateFile);
     }
 
+    //console.log(startupLines);
     //console.log(stateLines);
-    //console.log(cacheLines);
 
     await this.#mergePlugins(denops, dppRuntimepath, recordPlugins);
 
