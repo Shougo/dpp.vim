@@ -48,8 +48,9 @@ function dpp#util#_split_rtp(runtimepath) abort
           \ ->map({ _, val -> val->substitute('\\\([\\,]\)', '\1', 'g') })
   endif
 
-  return rtps->map({ _, val -> val->dpp#util#_substitute_path() })
-        \ ->filter({ _, val -> val->isdirectory() })
+  return rtps->map({ _, val ->
+        \   val->dpp#util#_substitute_path()
+        \ })->filter({ _, val -> val->dpp#util#_expand()->isdirectory() })
 endfunction
 function dpp#util#_join_rtp(list, runtimepath, rtp) abort
   return (a:runtimepath->stridx('\,') < 0 && a:rtp->stridx(',') < 0) ?
