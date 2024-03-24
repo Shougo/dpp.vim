@@ -131,7 +131,8 @@ function s:source_plugin(rtps, index, plugin, sourced) abort
   " NOTE: on_source must be sourced before depends
   for source in dpp#util#_get_lazy_plugins()
         \ ->filter({ _, val ->
-        \   dpp#util#_convert2list(val->get('on_source', []))
+        \   val->get('on_source', [])
+        \   ->dpp#util#_convert2list()
         \   ->index(a:plugin.name) >= 0
         \ })
     if s:source_plugin(a:rtps, index, source, a:sourced)
@@ -186,7 +187,8 @@ function s:source_plugin(rtps, index, plugin, sourced) abort
   " Load on_post_source
   for source in dpp#util#_get_lazy_plugins()
         \ ->filter({ _, val ->
-        \   dpp#util#_convert2list(val->get('on_post_source', []))
+        \   val->get('on_post_source', [])
+        \   ->dpp#util#_convert2list()
         \   ->index(a:plugin.name) >= 0
         \ })
     if s:source_plugin(a:rtps, index, source, a:sourced)

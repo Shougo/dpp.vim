@@ -47,8 +47,8 @@ function dpp#make_state(
       \   config_path=g:->get('dpp#_config_path', ''),
       \   name=g:->get('dpp#_name', v:progname->fnamemodify(':r')),
       \ ) abort
-  const base_path = dpp#util#_expand(a:base_path)
-  const config_path = dpp#util#_expand(a:config_path)
+  const base_path = a:base_path->dpp#util#_expand()
+  const config_path = a:config_path->dpp#util#_expand()
 
   if base_path ==# ''
     call dpp#util#_error('dpp#make_state() base_path is empty.')
