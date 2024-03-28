@@ -15,8 +15,8 @@ export function main(denops: Denops) {
       arg2: unknown,
       arg3: unknown,
     ): Promise<unknown | undefined> {
-      const extName = ensure(arg1, is.String);
-      const actionName = ensure(arg2, is.String);
+      const extName = ensure(arg1, is.String) as string;
+      const actionName = ensure(arg2, is.String) as string;
       const actionParams = ensure(arg3, is.Record);
 
       // Set current options from dpp#_options
@@ -43,9 +43,9 @@ export function main(denops: Denops) {
       arg3: unknown,
     ): Promise<void> {
       //const startTime = Date.now();
-      const basePath = ensure(arg1, is.String);
-      const configPath = ensure(arg2, is.String);
-      const name = ensure(arg3, is.String);
+      const basePath = ensure(arg1, is.String) as string;
+      const configPath = ensure(arg2, is.String) as string;
+      const name = ensure(arg3, is.String) as string;
 
       // NOTE: Import module with fragment so that reload works properly.
       // https://github.com/vim-denops/denops.vim/issues/227
