@@ -3,6 +3,7 @@ import { ContextBuilder } from "./context.ts";
 import { Dpp } from "./dpp.ts";
 import { DppOptions } from "./types.ts";
 import { Loader } from "./loader.ts";
+import { extAction } from "./ext.ts";
 
 export function main(denops: Denops) {
   const loader = new Loader();
@@ -28,8 +29,9 @@ export function main(denops: Denops) {
 
       const [context, options] = await contextBuilder.get(denops);
 
-      return await dpp.extAction(
+      return await extAction(
         denops,
+        loader,
         context,
         options,
         extName,
