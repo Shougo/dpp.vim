@@ -387,6 +387,10 @@ export class Dpp {
         }
 
         for await (const entry of Deno.readDir(srcDir)) {
+          if (entry.name.match(/^tags(?:-\w\w)?$/)) {
+            // Skip exists tag file to avoid overwrite
+            continue;
+          }
           await linkPath(
             hasWindows,
             join(srcDir, entry.name),
