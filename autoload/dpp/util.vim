@@ -1,9 +1,11 @@
 const s:is_windows = has('win32') || has('win64')
 
 function dpp#util#_error(msg) abort
-  for mes in a:msg->s:msg2list()
-    echohl WarningMsg | echomsg '[dpp] ' .. mes | echohl None
+  echohl Error
+  for line in a:string->string()->split("\n")
+    echomsg printf('[%s] %s', a:name, line)
   endfor
+  echohl None
 endfunction
 
 function dpp#util#_get_plugins(plugins) abort
@@ -131,9 +133,6 @@ function dpp#util#_tsort(plugins) abort
   endfor
 
   return sorted
-endfunction
-function s:msg2list(expr) abort
-  return a:expr->type() ==# v:t_list ? a:expr : a:expr->split('\n')
 endfunction
 
 function s:tsort_impl(target, mark, sorted) abort

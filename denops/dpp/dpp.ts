@@ -22,10 +22,10 @@ import { ConfigReturn } from "./base/config.ts";
 import { extAction, getProtocols } from "./ext.ts";
 import {
   convert2List,
-  errorException,
   isDirectory,
   linkPath,
   parseHooksFile,
+  printError,
 } from "./utils.ts";
 
 export class Dpp {
@@ -186,8 +186,8 @@ export class Dpp {
     for (const depend of depends) {
       const plugin = recordPlugins[depend];
       if (!plugin) {
-        await denops.call(
-          "dpp#util#_error",
+        await printError(
+          denops,
           `Not found dependency: "${depend}"`,
         );
         continue;
@@ -405,7 +405,7 @@ export class Dpp {
       try {
         await denops.cmd(`silent helptags ${docDir}`);
       } catch (e: unknown) {
-        await errorException(
+        await printError(
           denops,
           e,
           `:helptags failed`,

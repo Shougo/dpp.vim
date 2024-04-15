@@ -7,6 +7,7 @@ import {
   ExtOptions,
   ProtocolOptions,
 } from "./types.ts";
+import { printError } from "./utils.ts";
 
 // where
 // T: Object
@@ -194,8 +195,8 @@ export class ContextBuilder {
   ) {
     for (const key in options) {
       if (!(key in defaults)) {
-        await denops.call(
-          "dpp#util#_error",
+        await printError(
+          denops,
           `Invalid ${name}: "${key}"`,
         );
       }

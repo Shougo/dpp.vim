@@ -24,7 +24,7 @@ import {
 import { Loader } from "./loader.ts";
 import { defaultExtOptions } from "./base/ext.ts";
 import { defaultProtocolOptions } from "./base/protocol.ts";
-import { errorException } from "./utils.ts";
+import { printError } from "./utils.ts";
 
 export async function getProtocols(
   denops: Denops,
@@ -75,8 +75,8 @@ export async function extAction(
 
   const action = ext.actions[actionName];
   if (!action) {
-    await denops.call(
-      "dpp#util#_error",
+    await printError(
+      denops,
       `Not found UI action: ${actionName}`,
     );
     return;
@@ -125,8 +125,8 @@ async function getExt(
   const ext = loader.getExt(name);
   if (!ext) {
     if (name.length !== 0) {
-      await denops.call(
-        "dpp#util#_error",
+      await printError(
+        denops,
         `Not found ext: "${name}"`,
       );
     }
@@ -162,8 +162,8 @@ async function getProtocol(
   const protocol = loader.getProtocol(name);
   if (!protocol) {
     if (name.length !== 0) {
-      await denops.call(
-        "dpp#util#_error",
+      await printError(
+        denops,
         `Not found protocol: "${name}"`,
       );
     }
@@ -204,7 +204,7 @@ async function checkExtOnInit(
 
     ext.isInitialized = true;
   } catch (e: unknown) {
-    await errorException(
+    await printError(
       denops,
       e,
       `ext: ${ext.name} "onInit()" failed`,
@@ -253,7 +253,7 @@ async function checkProtocolOnInit(
 
     protocol.isInitialized = true;
   } catch (e: unknown) {
-    await errorException(
+    await printError(
       denops,
       e,
       `protocol: ${protocol.name} "onInit()" failed`,
