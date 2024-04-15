@@ -1,8 +1,8 @@
 const s:is_windows = has('win32') || has('win64')
 
-function dpp#util#_error(string, name = 'ddx') abort
+function dpp#util#_error(string, name = 'dpp') abort
   echohl Error
-  for line in a:string->string()->split("\n")
+  for line in a:string->string()->split("\n")->filter({ _, val -> val != ''})
     echomsg printf('[%s] %s', a:name, line)
   endfor
   echohl None
