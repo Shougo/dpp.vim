@@ -1,6 +1,6 @@
 const s:is_windows = has('win32') || has('win64')
 
-function dpp#util#_error(msg) abort
+function dpp#util#_error(string, name = 'ddx') abort
   echohl Error
   for line in a:string->string()->split("\n")
     echomsg printf('[%s] %s', a:name, line)
