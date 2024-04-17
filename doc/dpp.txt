@@ -423,6 +423,7 @@ rev		(String)
 		You can specify the wildcards like "0.*".
 		NOTE: If the type is "raw", rev must be hash number.
 
+                                                       *dpp-plugin-option-rtp*
 rtp		(String)
 		Specify the runtime path.
 		You can use it when the repository has the Vim plugin in a
