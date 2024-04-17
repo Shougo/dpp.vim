@@ -276,6 +276,10 @@ lazy		(Bool)
 		"dpp-ext-lazy".
 		https://github.com/Shougo/dpp-ext-lazy
 
+                                                     *dpp-plugin-option-local*
+local		(Bool)
+		If set to v:true, it is local installed plugin.
+
                                                     *dpp-plugin-option-merged*
 merged		(Bool)
 		If set to v:false, dpp doesn't merge the plugin directory.
@@ -300,20 +304,6 @@ name		(String)
 		previous settings with the new one.  If the repo tail is bound
 		to conflict, you can set the "name" option manually to prevent
 		overwriting an existing plugin setting.
-
-                                           *dpp-plugin-option-normalized_name*
-normalized_name	(String)
-		Specify the normalized name of the plugin.  If omitted, dpp
-		will normalize the tail of the repository name.
-		NOTE: Must be unique across all plugins.
-		Normalized name example:
-		name            : normalized name
-
-		denite.nvim       denite
-		dpp.vim           dpp
-		vim-quickrun      quickrun
-		dps-dial          dial
-		denops-foo        foo
 
                                                     *dpp-plugin-option-on_cmd*
 on_cmd		(List) or (String)
