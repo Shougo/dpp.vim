@@ -406,6 +406,10 @@ path		(String)
 		Default:
 		"{base-path}/repos/{site-name}/{user-name}/{plugin-name}"
 
+                                                      *dpp-plugin-option-repo*
+repo		(String)
+		Specify the plugin repository.
+
                                                        *dpp-plugin-option-rev*
 rev		(String)
 		Specify a revision number or branch/tag name.
