@@ -619,15 +619,22 @@ EXAMPLES                                                        *dpp-examples*
 	" NOTE: The plugins must be cloned before.
 	const s:dpp_src = '~/.cache/dpp/repos/github.com/Shougo/dpp.vim'
 	const s:denops_src = '~/.cache/dpp/repos/github.com/denops/denops.vim'
+	"const s:denops_installer =
+	"\ '~/.cache/dpp/repos/github.com/Shougo/dpp-ext-installer'
 
 	" Set dpp runtime path (required)
 	execute 'set runtimepath^=' .. s:dpp_src
 	
 	if s:dpp_base->dpp#min#load_state()
 	  " NOTE: dpp#make_state() requires denops.vim
+	  " NOTE: denops.vim and dpp plugins are must be added
 	  execute 'set runtimepath^=' .. s:denops_src
+	  "execute 'set runtimepath^=' .. s:denops_installer
 	  autocmd User DenopsReady
-	  \ call dpp#make_state(s:dpp_base, '{TypeScript config file path}')
+	  \ : echohl WarningMsg
+	  \ | echomsg 'dpp load_state() is failed'
+	  \ | echohl NONE
+	  \ | call dpp#make_state(s:dpp_base, '{TypeScript config file path}')
 	endif
 	
 	" Attempt to determine the type of a file based on its name and

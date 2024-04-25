@@ -65,7 +65,8 @@ const s:dpp_base = '~/.cache/dpp/'
 " NOTE: The plugins must be cloned before.
 const s:dpp_src = '~/.cache/dpp/repos/github.com/Shougo/dpp.vim'
 const s:denops_src = '~/.cache/dpp/repos/github.com/denops/denops.vim'
-"const s:denops_installer = '~/.cache/dpp/repos/github.com/Shougo/dpp-ext-installer'
+"const s:denops_installer =
+"\ '~/.cache/dpp/repos/github.com/Shougo/dpp-ext-installer'
 
 " Set dpp runtime path (required)
 execute 'set runtimepath^=' .. s:dpp_src
@@ -111,7 +112,8 @@ endif
 ```lua
 local dppSrc = "~/.cache/dpp/repos/github.com/Shougo/dpp.vim"
 local denopsSrc = "~/.cache/dpp/repos/github.com/denops/denops.vim"
---local denopsInstaller = "~/.cache/dpp/repos/github.com/Shougo/dpp-ext-installer"
+--local denopsInstaller =
+--  "~/.cache/dpp/repos/github.com/Shougo/dpp-ext-installer"
 
 vim.opt.runtimepath:prepend(dppSrc)
 
