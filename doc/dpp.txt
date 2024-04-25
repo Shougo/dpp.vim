@@ -130,6 +130,12 @@ dpp#async_ext_action({ext-name}, {action-name}[, {action-params}])
 		NOTE: It must be executed after |dpp#min#load_state()|.
 		NOTE: It must be called after |DenopsReady|.
 
+                                                           *dpp#check_clean()*
+dpp#check_clean()
+		Returns the non-used plugins directories from dpp base path.
+		You can write the wrap command to remove them.
+		NOTE: It must be executed after |dpp#min#load_state()|.
+
                                                            *dpp#check_files()*
 dpp#check_files([{name}])
 		Check dpp.vim cache file is outdated.
@@ -560,6 +566,10 @@ LUA FUNCTIONS                                              *dpp-lua-functions*
 dpp.async_ext_action({ext-name}, {action-name}[, {action-params}])
 		Same as |dpp#async_ext_action()|.
 
+                                                           *dpp.check_clean()*
+dpp.check_clean()
+		Same as |dpp#check_clean()|.
+
                                                            *dpp.check_files()*
 dpp.check_files([{name}])
 		Same as |dpp#check_files()|.
@@ -814,6 +824,9 @@ FAQ 5:                                                             |dpp-faq-5|
 FAQ 6:                                                             |dpp-faq-6|
 	|DenopsReady| is not executed when |dpp#min#load_state()| is failed.
 
+FAQ 7:                                                             |dpp-faq-7|
+	How to remove the disabled plugins?
+
 ------------------------------------------------------------------------------
                                                                    *dpp-faq-1*
 Q: How to donate money to you?
@@ -890,6 +903,14 @@ You need to execute "plugin/denops.vim" manually by |:runtime| command.
 
 >
   runtime! plugin/denops.vim
+<
+
+                                                                   *dpp-faq-7*
+Q: How to remove the disabled plugins?
+
+A: You can remove them like below.
+>
+	call map(dpp#check_clean(), { _, val -> delete(val, 'rf') })
 <
 
 ==============================================================================

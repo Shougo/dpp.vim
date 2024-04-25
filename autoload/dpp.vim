@@ -76,3 +76,7 @@ function dpp#check_files(
       \ ) abort
   return dpp#util#_check_files(a:name)
 endfunction
+
+function dpp#check_clean() abort
+  return dpp#util#_check_clean()
+endfunction

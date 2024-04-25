@@ -258,3 +258,14 @@ function dpp#util#_dos2unix(path) abort
         \   a:path
         \ )
 endfunction
+
+function! dpp#util#_check_clean() abort
+  const plugins_directories = dpp#get()->values()
+        \ ->map({ _, val -> val.path })
+  const path = dpp#util#_substitute_path(
+        \ 'repos/*/*/*'->globpath(g:dpp#_base_path, v:true))
+  return path->split("\n")->filter( { _, val ->
+        \  val->isdirectory() && val->fnamemodify(':t') !=# 'dpp.vim'
+        \  && plugins_directories->index(val) < 0
+        \ })
+endfunction
