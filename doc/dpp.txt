@@ -834,6 +834,9 @@ FAQ 6:                                                             |dpp-faq-6|
 FAQ 7:                                                             |dpp-faq-7|
 	How to remove the disabled plugins?
 
+FAQ 8:                                                             |dpp-faq-8|
+	Why filetype plugin and detection are disabled in default?
+
 ------------------------------------------------------------------------------
                                                                    *dpp-faq-1*
 Q: How to donate money to you?
@@ -919,6 +922,14 @@ A: You can remove them like below.
 >
 	call map(dpp#check_clean(), { _, val -> delete(val, 'rf') })
 <
+
+                                                                   *dpp-faq-8*
+Q: Why filetype plugin and detection are disabled in default?
+
+A: Because it is Vim's default behavior.  Some plugin managers and neovim is
+default enabled for the features.
+But I don't like to enable the feature by default because it affects the
+editor performance.  You must explicitly enable it if necessary.
 
 ==============================================================================
 COMPATIBILITY                                              *dpp-compatibility*
