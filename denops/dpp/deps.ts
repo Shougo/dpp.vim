@@ -11,12 +11,8 @@ export * as op from "https://deno.land/x/denops_std@v6.4.0/option/mod.ts";
 export * as fn from "https://deno.land/x/denops_std@v6.4.0/function/mod.ts";
 export * as vars from "https://deno.land/x/denops_std@v6.4.0/variable/mod.ts";
 export * as autocmd from "https://deno.land/x/denops_std@v6.4.0/autocmd/mod.ts";
-export { ensure, is } from "https://deno.land/x/unknownutil@v3.18.0/mod.ts";
-export {
-  assertEquals,
-  assertInstanceOf,
-  equal,
-} from "https://deno.land/std@0.224.0/assert/mod.ts";
+
+export { assertEquals, assertInstanceOf, equal } from "jsr:@std/assert@0.224.0";
 export {
   basename,
   dirname,
@@ -25,10 +21,9 @@ export {
   parse,
   SEPARATOR as pathsep,
   toFileUrl,
-} from "https://deno.land/std@0.224.0/path/mod.ts";
-export {
-  deadline,
-  DeadlineError,
-} from "https://deno.land/std@0.224.0/async/mod.ts";
+} from "jsr:@std/path@0.224.0";
+export { deadline, DeadlineError } from "jsr:@std/async@0.224.0";
+
 export { TimeoutError } from "https://deno.land/x/msgpack_rpc@v4.0.1/response_waiter.ts";
 export { Lock } from "https://deno.land/x/async@v2.1.0/mod.ts";
+export { ensure, is } from "https://deno.land/x/unknownutil@v3.18.0/mod.ts";
