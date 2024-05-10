@@ -1,18 +1,18 @@
-export type { Denops } from "https://deno.land/x/denops_std@v6.4.0/mod.ts";
+export type { Denops } from "https://deno.land/x/denops_std@v6.4.2/mod.ts";
 export {
   echo,
   execute,
-} from "https://deno.land/x/denops_std@v6.4.0/helper/mod.ts";
+} from "https://deno.land/x/denops_std@v6.4.2/helper/mod.ts";
 export {
   batch,
   collect,
-} from "https://deno.land/x/denops_std@v6.4.0/batch/mod.ts";
-export * as op from "https://deno.land/x/denops_std@v6.4.0/option/mod.ts";
-export * as fn from "https://deno.land/x/denops_std@v6.4.0/function/mod.ts";
-export * as vars from "https://deno.land/x/denops_std@v6.4.0/variable/mod.ts";
-export * as autocmd from "https://deno.land/x/denops_std@v6.4.0/autocmd/mod.ts";
+} from "https://deno.land/x/denops_std@v6.4.2/batch/mod.ts";
+export * as op from "https://deno.land/x/denops_std@v6.4.2/option/mod.ts";
+export * as fn from "https://deno.land/x/denops_std@v6.4.2/function/mod.ts";
+export * as vars from "https://deno.land/x/denops_std@v6.4.2/variable/mod.ts";
+export * as autocmd from "https://deno.land/x/denops_std@v6.4.2/autocmd/mod.ts";
 
-export { assertEquals, assertInstanceOf, equal } from "jsr:@std/assert@0.224.0";
+export { assertEquals, assertInstanceOf, equal } from "jsr:@std/assert@0.225.1";
 export {
   basename,
   dirname,
