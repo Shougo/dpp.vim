@@ -519,8 +519,8 @@ hook_source	(String) or (Function)
 		It is executed after plugin runtimepath is added and before
 		the plugin script files are sourced.
 		It is mainly used for plugin configure.
-		NOTE: The "sourced" means after |dpp#min#load_state()| or when
-		|VimEnter| or autoloaded.
+		NOTE: The "sourced" means after |dpp#min#load_state()| or
+		autoloaded.
 
                                                    *dpp-plugin-option-lua_add*
 lua_add		(String)

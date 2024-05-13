@@ -164,11 +164,11 @@ export class Dpp {
 
     // Add plugins runtimepath
     const depends = new Set<string>();
-    for (
-      const plugin of Object.values(recordPlugins).filter((plugin) =>
-        !plugin.lazy
-      )
-    ) {
+    const nonLazyPlugins = Object.values(recordPlugins).filter((plugin) =>
+      !plugin.lazy
+    );
+    const hookSources = [];
+    for (const plugin of nonLazyPlugins) {
       if (
         !plugin.rtp || !await isDirectory(plugin.rtp) || !await checkIf(plugin)
       ) {
@@ -177,6 +177,10 @@ export class Dpp {
 
       for (const depend of convert2List(plugin.depends)) {
         depends.add(depend);
+      }
+
+      if (plugin.hook_source) {
+        hookSources.push(plugin.hook_source);
       }
 
       await addRtp(plugin);
@@ -202,6 +206,10 @@ export class Dpp {
       }
 
       await addRtp(plugin);
+
+      if (plugin.hook_source) {
+        hookSources.push(plugin.hook_source);
+      }
     }
 
     rtps.splice(rtps.indexOf(runtimePath), 0, dppRuntimepath);
@@ -306,6 +314,9 @@ export class Dpp {
         mergeFtplugins(configReturn.ftplugins, plugin.ftplugin);
       }
     }
+
+    // Merge non lazy plugins hook_source
+    startupLines = startupLines.concat(hookSources);
 
     // Write startup script
     const startupFile = `${basePath}/${name}/startup.vim`;
