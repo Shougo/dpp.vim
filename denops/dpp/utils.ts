@@ -103,6 +103,7 @@ export function parseHooksFile(
     | Record<string, string>
     | null = null;
   let hookName = "";
+  let nestedCount = 0;
 
   for (const line of hooksFile) {
     if (hookName.length === 0) {
@@ -137,9 +138,20 @@ export function parseHooksFile(
         dest = ftplugin;
       }
     } else {
+      if (line.endsWith(startMarker)) {
+        // Nested start
+        nestedCount++;
+      }
+
       if (line.endsWith(endMarker)) {
-        hookName = "";
-        continue;
+        // End marker
+        nestedCount--;
+
+        if (nestedCount < 0) {
+          // Nested end
+          hookName = "";
+          continue;
+        }
       }
 
       if (!dest) {
@@ -196,6 +208,22 @@ Deno.test("parseHooksFile", () => {
     ]),
     {
       hook_source: "piyo",
+      ftplugin: {},
+    },
+  );
+
+  // Nested line
+  assertEquals(
+    parseHooksFile("{{{,}}}", [
+      '" hook_source {{{',
+      "piyo",
+      '" {{{',
+      "hogera",
+      '" }}}',
+      '" }}}',
+    ]),
+    {
+      hook_source: 'piyo\n" {{{\nhogera\n" }}}',
       ftplugin: {},
     },
   );
