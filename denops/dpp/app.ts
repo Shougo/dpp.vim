@@ -1,11 +1,11 @@
-import { Denops, ensure, is, toFileUrl, vars } from "./deps.ts";
+import { Denops, Entrypoint, ensure, is, toFileUrl, vars } from "./deps.ts";
 import { ContextBuilder } from "./context.ts";
 import { Dpp } from "./dpp.ts";
 import { DppOptions } from "./types.ts";
 import { Loader } from "./loader.ts";
 import { extAction } from "./ext.ts";
 
-export function main(denops: Denops) {
+export const main: Entrypoint = (denops: Denops) => {
   const loader = new Loader();
   const dpp = new Dpp(loader);
   const contextBuilder = new ContextBuilder();
