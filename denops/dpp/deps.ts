@@ -1,4 +1,7 @@
-export type { Denops, Entrypoint } from "https://deno.land/x/denops_std@v6.5.0/mod.ts";
+export type {
+  Denops,
+  Entrypoint,
+} from "https://deno.land/x/denops_std@v6.5.0/mod.ts";
 export {
   echo,
   execute,

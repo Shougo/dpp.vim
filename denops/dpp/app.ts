@@ -1,4 +1,4 @@
-import { Denops, Entrypoint, ensure, is, toFileUrl, vars } from "./deps.ts";
+import { Denops, ensure, Entrypoint, is, toFileUrl, vars } from "./deps.ts";
 import { ContextBuilder } from "./context.ts";
 import { Dpp } from "./dpp.ts";
 import { DppOptions } from "./types.ts";
@@ -79,4 +79,4 @@ export const main: Entrypoint = (denops: Denops) => {
       //console.log(`${Date.now() - startTime} ms`);
     },
   };
-}
+};
