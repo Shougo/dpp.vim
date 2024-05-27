@@ -494,10 +494,16 @@ hook_add	(String)
 hook_depends_update (String)
 		It is executed after |dpp-plugin-option-depends| plugins are
 		updated.
+		NOTE: To use the feature, you need to install
+		"dpp-ext-installer".
+		https://github.com/Shougo/dpp-ext-installer
 
                                           *dpp-plugin-option-hook_done_update*
 hook_done_update (String)
 		It is executed after plugins are updated.
+		NOTE: To use the feature, you need to install
+		"dpp-ext-installer".
+		https://github.com/Shougo/dpp-ext-installer
 
                                           *dpp-plugin-option-hook_post_source*
 hook_post_source (String)
@@ -510,9 +516,12 @@ hook_post_source (String)
 <
                                           *dpp-plugin-option-hook_post_update*
 hook_post_update (String)
-		It is executed after are updated and before
+		It is executed after updated and before
 		|dpp-plugin-option-build|.
 		NOTE: The plugin may not be sourced.
+		NOTE: To use the feature, you need to install
+		"dpp-ext-installer".
+		https://github.com/Shougo/dpp-ext-installer
 
                                                *dpp-plugin-option-hook_source*
 hook_source	(String) or (Function)
@@ -534,12 +543,18 @@ lua_depends_update (String)
 		It is converted to |dpp-plugin-option-hook_depends_update|
 		key.
 		NOTE: It works only for neovim or |+lua|.
+		NOTE: To use the feature, you need to install
+		"dpp-ext-installer".
+		https://github.com/Shougo/dpp-ext-installer
 
                                            *dpp-plugin-option-lua_done_update*
 lua_done_update	(String)
 		Lua language string hook instead of Vim script.
 		It is converted to |dpp-plugin-option-hook_done_update| key.
 		NOTE: It works only for neovim or |+lua|.
+		NOTE: To use the feature, you need to install
+		"dpp-ext-installer".
+		https://github.com/Shougo/dpp-ext-installer
 
                                            *dpp-plugin-option-lua_post_source*
 lua_post_sources (String)
@@ -552,6 +567,9 @@ lua_post_update	(String)
 		Lua language string hook instead of Vim script.
 		It is converted to |dpp-plugin-option-hook_post_update| key.
 		NOTE: It works only for neovim or |+lua|.
+		NOTE: To use the feature, you need to install
+		"dpp-ext-installer".
+		https://github.com/Shougo/dpp-ext-installer
 
                                                 *dpp-plugin-option-lua_source*
 lua_source	(String)

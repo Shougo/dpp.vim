@@ -39,6 +39,6 @@ function dpp#min#_init() abort
 
   augroup dpp
     autocmd!
-    autocmd User Dpp:makeStatePost :
+    autocmd User Dpp:makeStatePost ++nested :
   augroup END
 endfunction

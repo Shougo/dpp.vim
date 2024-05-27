@@ -66,7 +66,7 @@ function s:init() abort
 
   augroup dpp
     autocmd!
-    autocmd User DenopsPluginPost:dpp let s:initialized = v:true
+    autocmd User DenopsPluginPost:dpp ++nested let s:initialized = v:true
   augroup END
 
   let g:dpp#_started = reltime()
@@ -77,7 +77,7 @@ function s:init() abort
         \  denops#server#status() ==# 'running')
     call s:register()
   else
-    autocmd dpp User DenopsReady call s:register()
+    autocmd dpp User DenopsReady ++nested call s:register()
   endif
 endfunction
 
@@ -98,7 +98,7 @@ function s:register() abort
         \   [s:root_dir, 'denops', 'dpp', 'app.ts']->join(s:sep)
         \ )
 
-  autocmd dpp User DenopsClosed call s:stopped()
+  autocmd dpp User DenopsClosed ++nested call s:stopped()
 endfunction
 function s:stopped() abort
   unlet! s:initialized
