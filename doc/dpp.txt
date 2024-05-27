@@ -747,7 +747,6 @@ Dpp:makeStatePost
 		autocmd User Dpp:makeStatePost quit!
 <
 
-
 ==============================================================================
 CREATE EXT                                                    *dpp-create-ext*
 
