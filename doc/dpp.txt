@@ -622,6 +622,9 @@ DDU SOURCES                                                  *dpp-ddu-sources*
 dpp
 		Nominates dpp plugins as items.
 
+		params:
+			{names}:	Plugin names.
+					(Default: [])
 
 ==============================================================================
 EXAMPLES                                                        *dpp-examples*

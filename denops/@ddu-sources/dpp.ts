@@ -8,7 +8,9 @@ import { Denops, vars } from "https://deno.land/x/ddu_vim@v4.1.0/deps.ts";
 import { ActionData } from "https://deno.land/x/ddu_kind_file@v0.7.1/file.ts";
 import { Plugin } from "../dpp/types.ts";
 
-type Params = Record<string, never>;
+type Params = {
+  names: string[];
+};
 
 type Action = {
   path: string;
@@ -24,12 +26,18 @@ export class Source extends BaseSource<Params> {
   }): ReadableStream<Item<ActionData>[]> {
     return new ReadableStream({
       async start(controller) {
-        const plugins = Object.values(
+        let plugins = Object.values(
           await vars.g.get(
             args.denops,
             "dpp#_plugins",
           ),
         ) as Plugin[];
+
+        if (args.sourceParams.names.length > 0) {
+          plugins = plugins.filter((plugin) =>
+            args.sourceParams.names.indexOf(plugin.name) >= 0
+          );
+        }
 
         const items = plugins.map((plugin) => {
           return {
@@ -54,6 +62,8 @@ export class Source extends BaseSource<Params> {
   > = {};
 
   override params(): Params {
-    return {};
+    return {
+      names: [],
+    };
   }
 }
