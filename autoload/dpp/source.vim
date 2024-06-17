@@ -82,7 +82,7 @@ function dpp#source#_source(plugins, function_prefix) abort
               \ ->filter({ _, val -> !val->denops#plugin#is_loaded() })
 
           if denops#server#status() ==# 'running'
-            call dpp#denops#_load(
+            call denops#plugin#load(
                   \   name,
                   \   [plugin.rtp, 'denops', name, 'main.ts']->join(s:sep),
                   \ )
