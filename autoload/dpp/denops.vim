@@ -36,15 +36,6 @@ function dpp#denops#_notify(method, args) abort
   return s:notify(a:method, a:args)
 endfunction
 
-function dpp#denops#_load(name, path) abort
-  try
-    call denops#plugin#load(a:name, a:path)
-  catch /^Vim\%((\a\+)\)\=:E117:/
-    " Fallback to `register` for backward compatibility
-    silent! call denops#plugin#register(a:name, a:path, #{ mode: 'skip' })
-  endtry
-endfunction
-
 function s:init() abort
   if 's:initialized'->exists()
     return
@@ -103,7 +94,7 @@ endfunction
 const s:root_dir = '<sfile>'->expand()->fnamemodify(':h:h:h')
 const s:sep = has('win32') ? '\' : '/'
 function s:register() abort
-  call dpp#denops#_load(
+  call denops#plugin#load(
         \   'dpp',
         \   [s:root_dir, 'denops', 'dpp', 'app.ts']->join(s:sep)
         \ )
