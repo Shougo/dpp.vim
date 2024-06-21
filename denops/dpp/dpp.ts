@@ -183,10 +183,10 @@ export class Dpp {
     const depends = new Set<string>();
     const availablePlugins = Object.values(recordPlugins).filter(async (
       plugin,
-    ) => plugin.path && await isDirectory(plugin.path) && await checkIf(plugin));
-    const nonLazyPlugins = availablePlugins.filter((plugin) =>
-      !plugin.lazy
+    ) =>
+      plugin.path && await isDirectory(plugin.path) && await checkIf(plugin)
     );
+    const nonLazyPlugins = availablePlugins.filter((plugin) => !plugin.lazy);
     const hookSources = [];
     for (const plugin of nonLazyPlugins) {
       if (!plugin.rtp || !await isDirectory(plugin.rtp)) {
@@ -336,12 +336,8 @@ export class Dpp {
     }
 
     // Check hook_add for multipleHooks
-    const availablePluginNames = availablePlugins.map((plugin) =>
-      plugin.name
-    );
-    const nonLazyPluginNames = nonLazyPlugins.map((plugin) =>
-      plugin.name
-    );
+    const availablePluginNames = availablePlugins.map((plugin) => plugin.name);
+    const nonLazyPluginNames = nonLazyPlugins.map((plugin) => plugin.name);
     for (const hooks of multipleHooks) {
       if (
         hooks.hook_add &&
