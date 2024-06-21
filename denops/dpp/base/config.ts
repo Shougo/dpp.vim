@@ -10,10 +10,18 @@ export type ConfigArguments = {
   name: string;
 };
 
+export type MultipleHook = {
+  hook_add?: string;
+  hook_post_source?: string;
+  hook_source?: string;
+  plugins: string[];
+};
+
 export type ConfigReturn = {
   checkFiles?: string[];
   ftplugins?: Record<string, string>;
   hooksFiles?: string[];
+  multipleHooks?: MultipleHook[];
   plugins: Plugin[];
   stateLines?: string[];
 };

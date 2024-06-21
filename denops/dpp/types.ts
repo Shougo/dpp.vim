@@ -3,7 +3,11 @@ import { BaseProtocol, BaseProtocolParams } from "./base/protocol.ts";
 import { Denops } from "./deps.ts";
 
 export { BaseConfig } from "./base/config.ts";
-export type { ConfigArguments, ConfigReturn } from "./base/config.ts";
+export type {
+  ConfigArguments,
+  ConfigReturn,
+  MultipleHook,
+} from "./base/config.ts";
 export { BaseExt } from "./base/ext.ts";
 export type { BaseExtParams } from "./base/ext.ts";
 export { BaseProtocol } from "./base/protocol.ts";

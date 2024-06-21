@@ -65,6 +65,23 @@ export class Dpp {
     const hasWindows = await fn.has(denops, "win32");
     const hasLua = denops.meta.host === "nvim" || await fn.has(denops, "lua");
 
+    const multipleHooks = configReturn.multipleHooks ?? [];
+    // Convert head backslashes
+    for (const hooks of multipleHooks) {
+      if (hooks.hook_add) {
+        hooks.hook_add = hooks.hook_add.replaceAll(
+          /\n\s*\\/g,
+          "",
+        );
+      }
+      if (hooks.hook_source) {
+        hooks.hook_source = hooks.hook_source.replaceAll(
+          /\n\s*\\/g,
+          "",
+        );
+      }
+    }
+
     // Initialize plugins
     const protocols = await getProtocols(denops, this.#loader, options);
     const recordPlugins: Record<string, Plugin> = {};
@@ -164,14 +181,15 @@ export class Dpp {
 
     // Add plugins runtimepath
     const depends = new Set<string>();
-    const nonLazyPlugins = Object.values(recordPlugins).filter((plugin) =>
+    const availablePlugins = Object.values(recordPlugins).filter(async (
+      plugin,
+    ) => plugin.path && await isDirectory(plugin.path) && await checkIf(plugin));
+    const nonLazyPlugins = availablePlugins.filter((plugin) =>
       !plugin.lazy
     );
     const hookSources = [];
     for (const plugin of nonLazyPlugins) {
-      if (
-        !plugin.rtp || !await isDirectory(plugin.rtp) || !await checkIf(plugin)
-      ) {
+      if (!plugin.rtp || !await isDirectory(plugin.rtp)) {
         continue;
       }
 
@@ -226,7 +244,13 @@ export class Dpp {
     let startupLines = [
       `if g:dpp#_state_version !=# ${stateVersion}` +
       `| throw "State version error" | endif`,
-      "let [g:dpp#_plugins, g:dpp#ftplugin, g:dpp#_options, g:dpp#_check_files] = g:dpp#_state",
+      "let [" +
+      "g:dpp#_plugins," +
+      "g:dpp#ftplugin," +
+      "g:dpp#_options," +
+      "g:dpp#_check_files," +
+      "g:dpp#_multiple_hooks" +
+      "] = g:dpp#_state",
       `let g:dpp#_config_path = '${configPath}'`,
       `let &runtimepath = '${newRuntimepath}'`,
     ];
@@ -295,11 +319,7 @@ export class Dpp {
       }
     }
 
-    for (const plugin of Object.values(recordPlugins)) {
-      if (!plugin.path || !await isDirectory(plugin.path)) {
-        continue;
-      }
-
+    for (const plugin of availablePlugins) {
       if (plugin.hooks_file) {
         for (const hooksFile of convert2List(plugin.hooks_file)) {
           checkFiles.push(hooksFile);
@@ -312,6 +332,35 @@ export class Dpp {
 
       if (plugin.ftplugin) {
         mergeFtplugins(configReturn.ftplugins, plugin.ftplugin);
+      }
+    }
+
+    // Check hook_add for multipleHooks
+    const availablePluginNames = availablePlugins.map((plugin) =>
+      plugin.name
+    );
+    const nonLazyPluginNames = nonLazyPlugins.map((plugin) =>
+      plugin.name
+    );
+    for (const hooks of multipleHooks) {
+      if (
+        hooks.hook_add &&
+        hooks.plugins.every((pluginName) =>
+          availablePluginNames.includes(pluginName)
+        )
+      ) {
+        startupLines.push(hooks.hook_add);
+        hooks.hook_add = "";
+      }
+
+      if (
+        hooks.hook_source &&
+        hooks.plugins.every((pluginName) =>
+          nonLazyPluginNames.includes(pluginName)
+        )
+      ) {
+        hookSources.push(hooks.hook_source);
+        hooks.hook_source = "";
       }
     }
 
@@ -333,6 +382,7 @@ export class Dpp {
         {},
         options,
         checkFiles,
+        multipleHooks,
       ]),
     ];
     await Deno.writeTextFile(stateFile, stateLines.join("\n"));

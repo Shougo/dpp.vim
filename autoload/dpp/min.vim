@@ -20,7 +20,7 @@ function dpp#min#load_state(path, name=v:progname->fnamemodify(':r')) abort
   endtry
 endfunction
 function dpp#min#_init() abort
-  const g:dpp#_state_version = 1
+  const g:dpp#_state_version = 2
   const g:dpp#_is_sudo = $SUDO_USER !=# '' && $USER !=# $SUDO_USER
         \ && $HOME !=# ('~'.$USER)->expand()
         \ && $HOME ==# ('~'.$SUDO_USER)->expand()
@@ -36,6 +36,7 @@ function dpp#min#_init() abort
   let g:dpp#_plugins = {}
   let g:dpp#_options = {}
   let g:dpp#_check_files = []
+  let g:dpp#_multiple_hooks = []
 
   augroup dpp
     autocmd!

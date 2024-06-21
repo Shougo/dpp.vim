@@ -95,16 +95,39 @@ function dpp#util#_call_hook(hook_name, plugins = []) abort
         \    && (!val->has_key('if') || val.if->eval())
         \ })
   for plugin in plugins
-    call dpp#util#_execute_hook(plugin, hook, plugin[hook])
+    call dpp#util#_execute_hook(plugin, hook, plugin.name, plugin[hook])
   endfor
-endfunction
-function dpp#util#_execute_hook(plugin, hook_name, hook) abort
-  " Skip twice call
-  if !a:plugin->has_key('called')
-    let a:plugin.called = {}
+
+  if a:hook_name ==# 'source' || a:hook_name ==# 'post_source'
+    " Check multiple_hooks
+    for hooks in g:dpp#_multiple_hooks
+      if hooks->get(hook, '') ==# ''
+        continue
+      endif
+
+      if hooks.plugins->len() ==#
+            \ dpp#util#_get_plugins(hooks.plugins)
+            \ ->filter({ _, val -> val.sourced })->len()
+        " All plugins are sourced
+
+        call dpp#util#_execute_hook(
+              \ {}, hook, string(hooks.plugins), hooks[hook])
+
+        " Skip twice call
+        let hooks[hook] = ''
+      endif
+    endfor
   endif
-  if a:plugin.called->has_key(a:hook->string())
-    return
+endfunction
+function dpp#util#_execute_hook(plugin, hook_name, plugin_name, hook) abort
+  " Skip twice call
+  if !a:plugin->empty()
+    if !a:plugin->has_key('called')
+      let a:plugin.called = {}
+    endif
+    if a:plugin.called->has_key(a:hook->string())
+      return
+    endif
   endif
 
   try
@@ -116,15 +139,17 @@ function dpp#util#_execute_hook(plugin, hook_name, hook) abort
     else
       call execute(cmds, '')
     endif
-
-    let a:plugin.called[string(a:hook)] = v:true
   catch
     call dpp#util#_error(
           \ printf('Error occurred while executing %s: %s',
           \        a:hook_name,
-          \        a:plugin->get('name', 'g:dpp#_hook_add')))
+          \        a:plugin_name))
     call dpp#util#_error(v:exception)
   endtry
+
+  if !a:plugin->empty()
+    let a:plugin.called[string(a:hook)] = v:true
+  endif
 endfunction
 
 function dpp#util#_tsort(plugins) abort
