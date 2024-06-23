@@ -181,11 +181,14 @@ export class Dpp {
 
     // Add plugins runtimepath
     const depends = new Set<string>();
-    const availablePlugins = Object.values(recordPlugins).filter(async (
-      plugin,
-    ) =>
-      plugin.path && await isDirectory(plugin.path) && await checkIf(plugin)
-    );
+    const availablePlugins = [];
+    for (const plugin of Object.values(recordPlugins)) {
+      if (
+        plugin.path && !await isDirectory(plugin.path) && await checkIf(plugin)
+      ) {
+        availablePlugins.push(plugin);
+      }
+    }
     const nonLazyPlugins = availablePlugins.filter((plugin) => !plugin.lazy);
     const hookSources = [];
     for (const plugin of nonLazyPlugins) {
