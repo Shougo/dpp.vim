@@ -138,8 +138,8 @@ export class Dpp {
       recordPlugins[plugin.name] = plugin;
 
       if (
-        plugin.path && await isDirectory(plugin.path) &&
-        plugin.rtp && await isDirectory(plugin.rtp) &&
+        await isDirectory(plugin.path) &&
+        await isDirectory(plugin.rtp) &&
         await checkIf(plugin)
       ) {
         availablePlugins[plugin.name] = plugin;
@@ -475,7 +475,7 @@ export class Dpp {
         plugin.merged
       )
     ) {
-      if (!plugin.path || !await isDirectory(plugin.path)) {
+      if (!await isDirectory(plugin.path)) {
         continue;
       }
 
