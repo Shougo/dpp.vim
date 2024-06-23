@@ -99,6 +99,7 @@ export class Dpp {
     // Initialize plugins
     const protocols = await getProtocols(denops, this.#loader, options);
     const recordPlugins: Record<string, Plugin> = {};
+    const availablePlugins: Record<string, Plugin> = {};
     for (const basePlugin of configReturn.plugins) {
       // NOTE: detectPlugin changes "plugin" value
       await detectPlugin(
@@ -135,6 +136,14 @@ export class Dpp {
       );
 
       recordPlugins[plugin.name] = plugin;
+
+      if (
+        plugin.path && await isDirectory(plugin.path) &&
+        plugin.rtp && await isDirectory(plugin.rtp) &&
+        await checkIf(plugin)
+      ) {
+        availablePlugins[plugin.name] = plugin;
+      }
     }
 
     const dppRuntimepath = `${basePath}/${name}/.dpp`;
@@ -183,17 +192,9 @@ export class Dpp {
 
     // Add plugins runtimepath
     const depends = new Set<string>();
-    const availablePlugins = [];
-    for (const plugin of Object.values(recordPlugins)) {
-      if (
-        plugin.path && await isDirectory(plugin.path)
-          && plugin.rtp && await isDirectory(plugin.rtp)
-          && await checkIf(plugin)
-      ) {
-        availablePlugins.push(plugin);
-      }
-    }
-    const nonLazyPlugins = availablePlugins.filter((plugin) => !plugin.lazy);
+    const nonLazyPlugins = Object.values(availablePlugins).filter((plugin) =>
+      !plugin.lazy
+    );
     const hookSources = [];
     for (const plugin of nonLazyPlugins) {
       for (const depend of convert2List(plugin.depends)) {
@@ -209,20 +210,12 @@ export class Dpp {
 
     // Load dependencies
     for (const depend of depends) {
-      const plugin = recordPlugins[depend];
+      const plugin = availablePlugins[depend];
       if (!plugin) {
         await printError(
           denops,
-          `Not found dependency: "${depend}"`,
+          `Not available dependency: "${depend}"`,
         );
-        continue;
-      }
-
-      if (
-        plugin.rtp || plugin.sourced ||
-        !await isDirectory(plugin.rtp) ||
-        !await checkIf(plugin)
-      ) {
         continue;
       }
 
@@ -322,7 +315,7 @@ export class Dpp {
       }
     }
 
-    for (const plugin of availablePlugins) {
+    for (const plugin of Object.values(availablePlugins)) {
       if (plugin.hooks_file) {
         for (const hooksFile of convert2List(plugin.hooks_file)) {
           checkFiles.push(hooksFile);
@@ -339,7 +332,9 @@ export class Dpp {
     }
 
     // Check hook_add for multipleHooks
-    const availablePluginNames = availablePlugins.map((plugin) => plugin.name);
+    const availablePluginNames = Object.values(availablePlugins).map((plugin) =>
+      plugin.name
+    );
     const nonLazyPluginNames = nonLazyPlugins.map((plugin) => plugin.name);
     for (const hooks of multipleHooks) {
       if (
@@ -519,7 +514,8 @@ function initPlugin(plugin: Plugin, basePath: string, hasLua: boolean): Plugin {
   }
 
   // Set rtp
-  if (!plugin.rtp || plugin.rtp.length != 0) {
+  // NOTE: !plugin.rtp === true if empty string
+  if (plugin.rtp === undefined || plugin.rtp.length != 0) {
     plugin.rtp = !plugin.rtp ? plugin.path : `${plugin.path}/${plugin.rtp}`;
   }
   // Chomp
