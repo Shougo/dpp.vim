@@ -82,20 +82,34 @@ export class Dpp {
       }
     }
 
+    // Check plugin-option-if is enabled
+    const checkIf = async (plugin: Plugin) => {
+      if (!("if" in plugin)) {
+        return true;
+      }
+
+      if (is.Boolean(plugin.if)) {
+        return plugin.if;
+      }
+
+      // Eval plugin-option-if string.
+      return await denops.call("eval", plugin.if) as boolean;
+    };
+
     // Initialize plugins
     const protocols = await getProtocols(denops, this.#loader, options);
     const recordPlugins: Record<string, Plugin> = {};
-    for (const plugin of configReturn.plugins) {
+    for (const basePlugin of configReturn.plugins) {
       // NOTE: detectPlugin changes "plugin" value
       await detectPlugin(
         denops,
         options,
         protocols,
-        plugin,
+        basePlugin,
       );
 
-      if (plugin.hooks_file) {
-        for (const hooksFile of convert2List(plugin.hooks_file)) {
+      if (basePlugin.hooks_file) {
+        for (const hooksFile of convert2List(basePlugin.hooks_file)) {
           const hooksFilePath = await denops.call(
             "dpp#util#_expand",
             hooksFile,
@@ -105,7 +119,7 @@ export class Dpp {
           );
 
           Object.assign(
-            plugin,
+            basePlugin,
             parseHooksFile(
               options.hooksFileMarker,
               hooksFileLines,
@@ -114,11 +128,13 @@ export class Dpp {
         }
       }
 
-      recordPlugins[plugin.name] = initPlugin(
-        plugin,
+      const plugin = initPlugin(
+        basePlugin,
         basePath,
         hasLua,
       );
+
+      recordPlugins[plugin.name] = plugin;
     }
 
     const dppRuntimepath = `${basePath}/${name}/.dpp`;
@@ -165,26 +181,14 @@ export class Dpp {
       plugin.sourced = true;
     };
 
-    // Check plugin-option-if is enabled
-    const checkIf = async (plugin: Plugin) => {
-      if (!("if" in plugin)) {
-        return true;
-      }
-
-      if (is.Boolean(plugin.if)) {
-        return plugin.if;
-      }
-
-      // Eval plugin-option-if string.
-      return await denops.call("eval", plugin.if) as boolean;
-    };
-
     // Add plugins runtimepath
     const depends = new Set<string>();
     const availablePlugins = [];
     for (const plugin of Object.values(recordPlugins)) {
       if (
-        plugin.path && await isDirectory(plugin.path) && await checkIf(plugin)
+        plugin.path && await isDirectory(plugin.path)
+          && plugin.rtp && await isDirectory(plugin.rtp)
+          && await checkIf(plugin)
       ) {
         availablePlugins.push(plugin);
       }
@@ -192,10 +196,6 @@ export class Dpp {
     const nonLazyPlugins = availablePlugins.filter((plugin) => !plugin.lazy);
     const hookSources = [];
     for (const plugin of nonLazyPlugins) {
-      if (!plugin.rtp || !await isDirectory(plugin.rtp)) {
-        continue;
-      }
-
       for (const depend of convert2List(plugin.depends)) {
         depends.add(depend);
       }
