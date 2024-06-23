@@ -184,7 +184,7 @@ export class Dpp {
     const availablePlugins = [];
     for (const plugin of Object.values(recordPlugins)) {
       if (
-        plugin.path && !await isDirectory(plugin.path) && await checkIf(plugin)
+        plugin.path && await isDirectory(plugin.path) && await checkIf(plugin)
       ) {
         availablePlugins.push(plugin);
       }
