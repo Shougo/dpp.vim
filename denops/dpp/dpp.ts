@@ -475,7 +475,7 @@ export class Dpp {
         plugin.merged
       )
     ) {
-      if (!await isDirectory(plugin.path)) {
+      if (!plugin.path || !await isDirectory(plugin.path)) {
         continue;
       }
 
