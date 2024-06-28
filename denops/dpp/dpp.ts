@@ -525,14 +525,15 @@ function initPlugin(plugin: Plugin, basePath: string, hasLua: boolean): Plugin {
     plugin.depends = [plugin.depends];
   }
 
-  if (!("lazy" in plugin)) {
+  if (plugin.lazy === undefined) {
     // Default lazy set
     plugin.lazy = Object.keys(plugin).filter((key) =>
       key.startsWith("on_")
     ).length > 0;
   }
 
-  if (!plugin.merged) {
+  if (plugin.merged === undefined) {
+    // Default merged set
     plugin.merged = !plugin.lazy && [
           "local",
           "build",
