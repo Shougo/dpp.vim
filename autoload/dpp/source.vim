@@ -27,6 +27,7 @@ function dpp#source#_source(plugins, function_prefix) abort
   endfor
 
   const filetype_before = 'autocmd FileType'->execute()
+
   let &runtimepath = rtps->dpp#util#_join_rtp(&runtimepath, '')
 
   call dpp#util#_call_hook('source', sourced)

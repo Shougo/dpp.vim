@@ -25,7 +25,7 @@ endfunction
 function dpp#util#_get_runtime_path() abort
   return dpp#util#_substitute_path($VIMRUNTIME)
 endfunction
-function! dpp#util#_check_files(name) abort
+function dpp#util#_check_files(name) abort
   const time = printf('%s/%s/state.vim', g:dpp#_base_path, a:name)->getftime()
   const updated = g:dpp#_check_files->copy()
         \ ->filter({ _, val -> time < val->dpp#util#_expand()->getftime() })
@@ -57,9 +57,10 @@ function dpp#util#_split_rtp(runtimepath) abort
         \ })->filter({ _, val -> val->dpp#util#_expand()->isdirectory() })
 endfunction
 function dpp#util#_join_rtp(list, runtimepath, rtp) abort
-  return (a:runtimepath->stridx('\,') < 0 && a:rtp->stridx(',') < 0) ?
-        \ a:list->join(',') : a:list->copy()
-        \ ->map({ _, val -> s:escape(val) })->join(',')
+  let list = dpp#util#_uniq(a:list)
+  return (a:runtimepath->stridx('\,') < 0 && a:rtp->stridx(',') < 0)
+        \ ? list->join(',')
+        \ : list->map({ _, val -> s:escape(val) })->join(',')
 endfunction
 
 function dpp#util#_add_after(rtps, path) abort
@@ -284,7 +285,7 @@ function dpp#util#_dos2unix(path) abort
         \ )
 endfunction
 
-function! dpp#util#_check_clean() abort
+function dpp#util#_check_clean() abort
   const plugins_directories = dpp#get()->values()
         \ ->map({ _, val -> val.path })
   const path = dpp#util#_substitute_path(
@@ -293,4 +294,22 @@ function! dpp#util#_check_clean() abort
         \  val->isdirectory() && val->fnamemodify(':t') !=# 'dpp.vim'
         \  && plugins_directories->index(val) < 0
         \ })
+endfunction
+
+function dpp#util#_uniq(list) abort
+  let list = a:list->copy()
+  let i = 0
+  let seen = {}
+  while i < list->len()
+    let key = list[i]
+    if key !=# '' && seen->has_key(key)
+      call remove(list, i)
+    else
+      if key !=# ''
+        let seen[key] = 1
+      endif
+      let i += 1
+    endif
+  endwhile
+  return list
 endfunction
