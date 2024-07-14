@@ -135,6 +135,13 @@ export class Dpp {
         hasLua,
       );
 
+      if (recordPlugins[plugin.name]) {
+        await printError(
+          denops,
+          `Duplicated plugin is detected: "${plugin.name}"`,
+        );
+      }
+
       recordPlugins[plugin.name] = plugin;
 
       if (
