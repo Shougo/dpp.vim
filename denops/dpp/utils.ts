@@ -123,6 +123,8 @@ export function parseHooksFile(
         continue;
       }
 
+      nestedCount++;
+
       hookName = match.groups.hookName;
       if (
         hookName.startsWith("hook_") ||
@@ -147,7 +149,7 @@ export function parseHooksFile(
         // End marker
         nestedCount--;
 
-        if (nestedCount < 0) {
+        if (nestedCount <= 0) {
           // Nested end
           hookName = "";
           continue;
