@@ -232,16 +232,21 @@ Deno.test("parseHooksFile", () => {
 
   assertEquals(
     parseHooksFile("{{{,}}}", [
+      '" hook_source {{{',
+      '" }}}',
+      "",
       '" hook_add {{{',
       " comment1 {{{",
+      "hoge",
       '" }}}',
-      '',
+      "",
       " comment2 {{{",
+      "fuga",
       '" }}}',
       '" }}}',
     ]),
     {
-      hook_add: ' comment1 {{{\n" }}}\n\n comment2 {{{\n" }}}',
+      hook_add: ' comment1 {{{\nhoge\n" }}}\n\n comment2 {{{\nfuga\n" }}}',
       ftplugin: {},
     },
   );
