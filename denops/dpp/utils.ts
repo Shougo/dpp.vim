@@ -230,6 +230,21 @@ Deno.test("parseHooksFile", () => {
     },
   );
 
+  assertEquals(
+    parseHooksFile("{{{,}}}", [
+      '" hook_add {{{',
+      "comment1 {{{",
+      '" }}}',
+      "comment2 {{{",
+      '" }}}',
+      '" }}}',
+    ]),
+    {
+      hook_add: 'comment1 {{{\n" }}}\ncomment2 {{{\n" }}}',
+      ftplugin: {},
+    },
+  );
+
   // Lua
   assertEquals(
     parseHooksFile("{{{,}}}", [
