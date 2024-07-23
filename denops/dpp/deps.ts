@@ -24,8 +24,7 @@ export {
   parse,
   SEPARATOR as pathsep,
   toFileUrl,
-} from "jsr:@std/path@1.0.0";
-export { deadline, DeadlineError } from "jsr:@std/async@0.224.2";
+} from "jsr:@std/path@1.0.1";
 
 export { Lock } from "jsr:@lambdalisue/async@2.1.1";
 export { ensure, is } from "jsr:@core/unknownutil@3.18.1";

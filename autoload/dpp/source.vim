@@ -166,14 +166,14 @@ function s:source_plugin(rtps, index, plugin, sourced) abort
 
   if a:plugin->has_key('dummy_commands')
     for command in a:plugin.dummy_commands
-      silent! execute 'delcommand' command[0]
+      silent! execute 'delcommand' command
     endfor
     let a:plugin.dummy_commands = []
   endif
 
   if a:plugin->has_key('dummy_mappings')
-    for map in a:plugin.dummy_mappings
-      silent! execute map[0].'unmap' map[1]
+    for [mode, map] in a:plugin.dummy_mappings
+      execute mode..'unmap' map
     endfor
     let a:plugin.dummy_mappings = []
   endif

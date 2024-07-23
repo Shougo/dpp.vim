@@ -87,7 +87,7 @@ export type Plugin = {
   build?: string;
   depends?: string | string[];
   dummy_commands?: string[];
-  dummy_mappings?: string[];
+  dummy_mappings?: [string, string][];
   frozen?: boolean;
   ftplugin?: Record<string, string>;
   hook_add?: string;

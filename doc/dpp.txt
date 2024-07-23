@@ -316,6 +316,7 @@ name		(String)
 on_cmd		(List) or (String)
 		If it is matched to the executed command name, dpp will call
 		|dpp#source()|.
+		NOTE: It must be unique.
 		NOTE: To use the feature, you need to install "dpp-ext-lazy".
 		https://github.com/Shougo/dpp-ext-lazy
 
@@ -380,6 +381,7 @@ on_map		(Dictionary) or (List) or (String)
 		NOTE: You can use plugin prefix mappings.
 		For example, you can use "<Plug>(ref-" instead of
 		"<Plug>(ref-back)" and so on.
+		NOTE: It must be unique.
 		NOTE: To use the feature, you need to install "dpp-ext-lazy".
 		https://github.com/Shougo/dpp-ext-lazy
 
