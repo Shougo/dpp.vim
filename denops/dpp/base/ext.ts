@@ -20,7 +20,7 @@ export abstract class BaseExt<Params extends BaseExtParams> {
 
   abstract params(): Params;
 
-  actions: Actions<Params> = {};
+  abstract actions: Actions<Params>;
 }
 
 export function defaultExtOptions(): ExtOptions {
