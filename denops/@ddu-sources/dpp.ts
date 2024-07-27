@@ -4,7 +4,7 @@ import {
   BaseSource,
   type Item,
 } from "jsr:@shougo/ddu-vim@v5.0.0-pre6/types";
-import { type Denops, vars } from "jsr:@shougo/ddu-vim@v5.0.0-pre6";
+import { type Denops, vars } from "jsr:@shougo/ddu-vim@v5.0.0-pre6/deps";
 import type { ActionData } from "https://deno.land/x/ddu_kind_file@v0.7.1/file.ts";
 import type { Plugin } from "../dpp/types.ts";
 
