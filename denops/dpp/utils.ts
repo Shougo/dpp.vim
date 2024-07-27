@@ -1,5 +1,5 @@
-import { assertEquals, Denops, is, join } from "./deps.ts";
-import { Plugin } from "./types.ts";
+import { assertEquals, type Denops, is, join } from "./deps.ts";
+import type { Plugin } from "./types.ts";
 
 export async function printError(
   denops: Denops,
@@ -22,7 +22,7 @@ export function convert2List<T>(expr: T | T[] | undefined): T[] {
   return !expr ? [] : is.Array(expr) ? expr : [expr];
 }
 
-export async function isDirectory(path: string | undefined) {
+export async function isDirectory(path: string | undefined): Promise<boolean> {
   if (!path) {
     return false;
   }

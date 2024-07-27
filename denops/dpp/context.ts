@@ -1,5 +1,5 @@
-import { Denops } from "./deps.ts";
-import {
+import type { Denops } from "./deps.ts";
+import type {
   BaseExtParams,
   BaseProtocolParams,
   Context,

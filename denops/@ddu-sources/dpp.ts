@@ -1,12 +1,12 @@
 import {
-  ActionArguments,
-  ActionFlags,
+  type ActionArguments,
+  type ActionFlags,
   BaseSource,
-  Item,
+  type Item,
 } from "https://deno.land/x/ddu_vim@v4.2.0/types.ts";
-import { Denops, vars } from "https://deno.land/x/ddu_vim@v4.2.0/deps.ts";
-import { ActionData } from "https://deno.land/x/ddu_kind_file@v0.7.1/file.ts";
-import { Plugin } from "../dpp/types.ts";
+import { type Denops, vars } from "https://deno.land/x/ddu_vim@v4.2.0/deps.ts";
+import type { ActionData } from "https://deno.land/x/ddu_kind_file@v0.7.1/file.ts";
+import type { Plugin } from "../dpp/types.ts";
 
 type Params = {
   names: string[];

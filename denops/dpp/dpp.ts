@@ -1,6 +1,6 @@
 import {
   assertEquals,
-  Denops,
+  type Denops,
   dirname,
   extname,
   fn,
@@ -8,7 +8,7 @@ import {
   join,
   vars,
 } from "./deps.ts";
-import {
+import type {
   ActionName,
   Context,
   DppOptions,
@@ -17,8 +17,8 @@ import {
   Protocol,
   ProtocolName,
 } from "./types.ts";
-import { Loader } from "./loader.ts";
-import { ConfigReturn } from "./base/config.ts";
+import type { Loader } from "./loader.ts";
+import type { ConfigReturn } from "./base/config.ts";
 import { extAction, getProtocols } from "./ext.ts";
 import {
   convert2List,

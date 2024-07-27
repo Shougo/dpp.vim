@@ -1,4 +1,4 @@
-import {
+import type {
   BaseExt,
   BaseExtParams,
   BaseProtocol,
@@ -7,7 +7,15 @@ import {
   ExtName,
   ProtocolName,
 } from "./types.ts";
-import { basename, Denops, fn, Lock, op, parse, toFileUrl } from "./deps.ts";
+import {
+  basename,
+  type Denops,
+  fn,
+  Lock,
+  op,
+  parse,
+  toFileUrl,
+} from "./deps.ts";
 
 type Mod = {
   // deno-lint-ignore no-explicit-any

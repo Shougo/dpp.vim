@@ -1,5 +1,5 @@
-import { Denops } from "../deps.ts";
-import { Plugin, ProtocolOptions } from "../types.ts";
+import type { Denops } from "../deps.ts";
+import type { Plugin, ProtocolOptions } from "../types.ts";
 
 export type BaseProtocolParams = Record<string, unknown>;
 

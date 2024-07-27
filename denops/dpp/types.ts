@@ -1,6 +1,6 @@
-import { BaseExtParams } from "./base/ext.ts";
-import { BaseProtocol, BaseProtocolParams } from "./base/protocol.ts";
-import { Denops } from "./deps.ts";
+import type { BaseExtParams } from "./base/ext.ts";
+import type { BaseProtocol, BaseProtocolParams } from "./base/protocol.ts";
+import type { Denops } from "./deps.ts";
 
 export { BaseConfig } from "./base/config.ts";
 export type {
