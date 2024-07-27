@@ -16,6 +16,7 @@ export type { BaseProtocolParams, Command } from "./base/protocol.ts";
 export { ContextBuilder } from "./context.ts";
 
 export { Dpp } from "./dpp.ts";
+export type { Denops } from "./deps.ts";
 
 export type DppExtType = "ext" | "protocol";
 
