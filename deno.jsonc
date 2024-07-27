@@ -1,4 +1,21 @@
 {
+  "name": "@shougo/dpp-vim",
+  "version": "0.0.0",
+  "exports": {
+    ".": "./denops/dpp/deps.ts",
+    "./config": "./denops/dpp/base/config.ts",
+    "./ext": "./denops/dpp/base/ext.ts",
+    "./protocol": "./denops/dpp/base/protocol.ts",
+    "./types": "./denops/dpp/types.ts",
+    "./utils": "./denops/dpp/utils.ts"
+  },
+  "publish": {
+    "include": [
+      "denops/dpp/**/*.ts",
+    ],
+  },
+  "imports": {
+  },
   "lock": false,
   "tasks": {
     "check": "deno check denops/**/*.ts",
