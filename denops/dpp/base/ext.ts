@@ -1,5 +1,5 @@
-import { Denops } from "../deps.ts";
-import { Actions, ExtOptions } from "../types.ts";
+import type { Denops } from "../deps.ts";
+import type { Actions, ExtOptions } from "../types.ts";
 
 export type BaseExtParams = Record<string, unknown>;
 
@@ -20,7 +20,7 @@ export abstract class BaseExt<Params extends BaseExtParams> {
 
   abstract params(): Params;
 
-  actions: Actions<Params> = {};
+  abstract actions: Actions<Params>;
 }
 
 export function defaultExtOptions(): ExtOptions {

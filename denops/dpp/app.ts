@@ -1,7 +1,14 @@
-import { Denops, ensure, Entrypoint, is, toFileUrl, vars } from "./deps.ts";
+import {
+  type Denops,
+  ensure,
+  type Entrypoint,
+  is,
+  toFileUrl,
+  vars,
+} from "./deps.ts";
 import { ContextBuilder } from "./context.ts";
 import { Dpp } from "./dpp.ts";
-import { DppOptions } from "./types.ts";
+import type { DppOptions } from "./types.ts";
 import { Loader } from "./loader.ts";
 import { extAction } from "./ext.ts";
 

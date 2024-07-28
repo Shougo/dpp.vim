@@ -40,7 +40,7 @@ NOTE: To install plugins from remote, you need to install
 
 ### Requirements
 
-Dpp.vim requires both Deno 1.42+ and denops.vim.
+Please install both Deno 1.45+ and "denops.vim" v7.0+.
 
 - <https://deno.land/>
 - <https://github.com/vim-denops/denops.vim>

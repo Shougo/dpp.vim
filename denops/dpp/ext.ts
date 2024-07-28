@@ -1,5 +1,5 @@
-import { Denops, fn } from "./deps.ts";
-import {
+import { type Denops, fn } from "./deps.ts";
+import type {
   ActionName,
   BaseExt,
   BaseExtParams,
@@ -21,7 +21,7 @@ import {
   mergeProtocolOptions,
   mergeProtocolParams,
 } from "./context.ts";
-import { Loader } from "./loader.ts";
+import type { Loader } from "./loader.ts";
 import { defaultExtOptions } from "./base/ext.ts";
 import { defaultProtocolOptions } from "./base/protocol.ts";
 import { printError } from "./utils.ts";
