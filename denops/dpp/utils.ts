@@ -1,4 +1,4 @@
-import { assertEquals, type Denops, is, join } from "./deps.ts";
+import { assertEquals, type Denops, join } from "./deps.ts";
 import type { Plugin } from "./types.ts";
 
 export async function printError(
@@ -18,8 +18,20 @@ export async function printError(
   await denops.call("dpp#util#_error", message);
 }
 
+// See https://github.com/vim-denops/denops.vim/issues/358 for details
+export function isDenoCacheIssueError(e: unknown): boolean {
+  const expects = [
+    "Could not find constraint in the list of versions: ", // Deno 1.40?
+    "Could not find version of ", // Deno 1.38
+  ] as const;
+  if (e instanceof TypeError) {
+    return expects.some((expect) => e.message.startsWith(expect));
+  }
+  return false;
+}
+
 export function convert2List<T>(expr: T | T[] | undefined): T[] {
-  return !expr ? [] : is.Array(expr) ? expr : [expr];
+  return !expr ? [] : Array.isArray(expr) ? expr : [expr];
 }
 
 export async function isDirectory(path: string | undefined): Promise<boolean> {

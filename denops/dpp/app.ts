@@ -11,6 +11,7 @@ import { Dpp } from "./dpp.ts";
 import type { DppOptions } from "./types.ts";
 import { Loader } from "./loader.ts";
 import { extAction } from "./ext.ts";
+import { isDenoCacheIssueError } from "./utils.ts";
 
 export const main: Entrypoint = (denops: Denops) => {
   const loader = new Loader();
@@ -56,34 +57,48 @@ export const main: Entrypoint = (denops: Denops) => {
       const configPath = ensure(arg2, is.String) as string;
       const name = ensure(arg3, is.String) as string;
 
-      // NOTE: Import module with fragment so that reload works properly.
-      // https://github.com/vim-denops/denops.vim/issues/227
-      const mod = await import(
-        `${toFileUrl(configPath).href}#${performance.now()}`
-      );
-      const obj = new mod.Config();
-      //console.log(`${Date.now() - startTime} ms`);
-      const configReturn = await obj.config({
-        contextBuilder,
-        denops,
-        basePath,
-        dpp,
-        name,
-      });
-      //console.log(`${Date.now() - startTime} ms`);
+      try {
+        // NOTE: Import module with fragment so that reload works properly.
+        // https://github.com/vim-denops/denops.vim/issues/227
+        const mod = await import(
+          `${toFileUrl(configPath).href}#${performance.now()}`
+        );
+        const obj = new mod.Config();
+        //console.log(`${Date.now() - startTime} ms`);
+        const configReturn = await obj.config({
+          contextBuilder,
+          denops,
+          basePath,
+          dpp,
+          name,
+        });
+        //console.log(`${Date.now() - startTime} ms`);
 
-      const [_, options] = await contextBuilder.get(denops);
+        const [_, options] = await contextBuilder.get(denops);
 
-      await dpp.makeState(
-        denops,
-        options,
-        basePath,
-        configPath,
-        name,
-        configReturn,
-      );
+        await dpp.makeState(
+          denops,
+          options,
+          basePath,
+          configPath,
+          name,
+          configReturn,
+        );
 
-      //console.log(`${Date.now() - startTime} ms`);
+        //console.log(`${Date.now() - startTime} ms`);
+      } catch (e) {
+        if (isDenoCacheIssueError(e)) {
+          console.warn("*".repeat(80));
+          console.warn(`Deno module cache issue is detected.`);
+          console.warn(
+            `Execute '!deno cache --reload "${configPath}"' and restart Vim/Neovim.`,
+          );
+          console.warn("*".repeat(80));
+        }
+
+        console.error(`Failed to load file '${configPath}': ${e}`);
+        throw e;
+      }
     },
   };
 };
