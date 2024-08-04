@@ -192,6 +192,23 @@ export function getLazyPlugins(plugins: Plugin[]): Plugin[] {
   );
 }
 
+export function mergeFtplugins(
+  dest: Record<string, string>,
+  src: Record<string, string>,
+) {
+  for (const [filetype, srcFtplugin] of Object.entries(src)) {
+    const plugin = filetype.startsWith("lua_")
+      ? `lua <<EOF\n${srcFtplugin}\nEOF\n`
+      : srcFtplugin;
+    const destFiletype = filetype.replace(/^lua_/, "");
+    if (dest[destFiletype]) {
+      dest[destFiletype] += `\n${plugin}`;
+    } else {
+      dest[destFiletype] = plugin;
+    }
+  }
+}
+
 Deno.test("parseHooksFile", () => {
   assertEquals(
     parseHooksFile("{{{,}}}", [

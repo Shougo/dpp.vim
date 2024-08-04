@@ -24,6 +24,7 @@ import {
   convert2List,
   isDirectory,
   linkPath,
+  mergeFtplugins,
   parseHooksFile,
   printError,
 } from "./utils.ts";
@@ -579,23 +580,6 @@ function initPlugin(plugin: Plugin, basePath: string, hasLua: boolean): Plugin {
   Object.assign(plugin, hooks);
 
   return plugin;
-}
-
-function mergeFtplugins(
-  ftplugins: Record<string, string>,
-  ftplugin: Record<string, string>,
-) {
-  for (const [filetype, srcFtplugin] of Object.entries(ftplugin)) {
-    const plugin = filetype.startsWith("lua_")
-      ? `lua <<EOF\n${srcFtplugin}\nEOF\n`
-      : srcFtplugin;
-    const destFiletype = filetype.replace(/^lua_/, "");
-    if (ftplugins[destFiletype]) {
-      ftplugins[destFiletype] += `\n${plugin}`;
-    } else {
-      ftplugins[destFiletype] = plugin;
-    }
-  }
 }
 
 async function detectPlugin(
