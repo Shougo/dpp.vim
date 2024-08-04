@@ -130,6 +130,8 @@ dpp#async_ext_action({ext-name}, {action-name}[, {action-params}])
 		NOTE: It does not work to get action value.
 		NOTE: It must be executed after |dpp#min#load_state()|.
 		NOTE: It must be called after |DenopsReady|.
+		NOTE: It does not work when |vim_starting|.  The action may be
+		executed lazily.
 
                                                            *dpp#check_clean()*
 dpp#check_clean()
