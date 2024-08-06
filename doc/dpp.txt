@@ -263,6 +263,7 @@ ftplugin	(Dictionary)
 		|:lua|.
 		NOTE: You need to call |dpp#clear_state()| after vimrc is
 		changed.
+		NOTE: It is not executed when the plugin is not installed.
 
                                                         *dpp-plugin-option-if*
 if		(Bool) or (String)
@@ -501,6 +502,7 @@ hook_add	(String)
 		It is mainly used for defining mappings.
 		NOTE: You cannot call plugin function in "hook_add".
 		Because the plugin is not sourced when "hook_add".
+		NOTE: It is not executed when the plugin is not installed.
 
                                        *dpp-plugin-option-hook_depends_update*
 hook_depends_update (String)
