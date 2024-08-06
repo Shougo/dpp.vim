@@ -439,6 +439,13 @@ rtp		(String)
 
 		Default: Same of |dpp-plugin-option-path|
 
+                                              *dpp-plugin-options-script_type*
+script_type	(String)
+		Specify the script type. It is useful for non-official
+		categorized plugins.
+		For example: "indent", "plugin", "ftplugin", ...
+		NOTE: You must not specify it for categorized plugins.
+
 
 ------------------------------------------------------------------------------
 HOOKS                                                              *dpp-hooks*
