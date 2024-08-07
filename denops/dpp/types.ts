@@ -127,6 +127,5 @@ export type Plugin = {
   rtp?: string;
   script_type?: string;
   sourced?: boolean;
-  timeout?: number;
   url?: string;
 };
