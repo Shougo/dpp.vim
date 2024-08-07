@@ -544,7 +544,6 @@ function initPlugin(plugin: Plugin, basePath: string, hasLua: boolean): Plugin {
     // Default merged set
     plugin.merged = !plugin.lazy && [
           "local",
-          "build",
           "if",
           "hook_post_update",
         ].filter((key) => key in plugin).length <= 0;

@@ -85,11 +85,10 @@ export type Action<Params extends BaseActionParams> = {
 
 export type Plugin = {
   augroup?: string;
-  build?: string;
   depends?: string | string[];
   dummy_commands?: string[];
   dummy_mappings?: [string, string][];
-  frozen?: boolean;
+  extAttrs?: unknown;
   ftplugin?: Record<string, string>;
   hook_add?: string;
   hook_depends_update?: string;
@@ -122,6 +121,7 @@ export type Plugin = {
   on_source?: string | string[];
   path?: string;
   protocol?: string;
+  protocolAttrs?: unknown;
   repo?: string;
   rev?: string;
   rtp?: string;
