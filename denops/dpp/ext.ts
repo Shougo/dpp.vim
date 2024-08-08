@@ -106,7 +106,7 @@ export async function extAction(
   return ret;
 }
 
-async function getExt(
+export async function getExt(
   denops: Denops,
   loader: Loader,
   options: DppOptions,

@@ -227,15 +227,6 @@ augroup		(String)
 		An augroup name that the plugin uses for |VimEnter| or
 		|GUIEnter| autocmd events.
 
-                                                     *dpp-plugin-option-build*
-build		(String)
-		Specify the build script.
-		This command is executed by |system()| in the plugin
-		runtimepath.
-		NOTE: In previous versions of dpp, build could also be of
-		type dictionary, but that is now deprecated.
-		Please use |dpp-plugin-option-hook_post_update| instead.
-
                                                *dpp-plugin-option-denops_wait*
 denops_wait	(Bool)
 		If set to v:false, dpp doesn't wait until the denops plugin
@@ -250,10 +241,10 @@ depends		(List or String)
 		Those specified in the list are NOT installed automatically.
 		NOTE: The loading order is not guaranteed in non lazy plugins.
 
-                                                    *dpp-plugin-option-frozen*
-frozen		(Bool)
-		If set to v:true, dpp doesn't update it automatically. It is
-		useful for outdated plugins that can no longer be updated.
+                                                  *dpp-plugin-option-extAttrs*
+extAttrs	(Dictionary)
+		It is a dictionary that exts specific attributes.
+		See also |dpp-ext-attrs|.
 
                                                   *dpp-plugin-option-ftplugin*
 ftplugin	(Dictionary)
@@ -417,6 +408,11 @@ path		(String)
 
 		Default:
 		"{base-path}/repos/{site-name}/{user-name}/{plugin-name}"
+
+                                             *dpp-plugin-option-protocolAttrs*
+protocolAttrs	(Dictionary)
+		It is a dictionary that protocols specific attributes.
+		See also |dpp-protocol-attrs|.
 
                                                       *dpp-plugin-option-repo*
 repo		(String)
@@ -713,6 +709,13 @@ to use dpp.vim.  Please search them by https://github.com/topics/dpp-ext
 
 
 ------------------------------------------------------------------------------
+EXT ATTRS                                                      *dpp-ext-attrs*
+
+There are the ext specific attributes for items.  Please read the Ext
+documentation.
+
+
+------------------------------------------------------------------------------
 EXT OPTIONS                                                  *dpp-ext-options*
 
 NOTE: The Exts cannot set default options.  If they need to specify the
@@ -722,7 +725,7 @@ recommended configuration, you should write it in the documentation instead.
 ------------------------------------------------------------------------------
 EXT PARAMS                                                    *dpp-ext-params*
 
-These are the parameters that each Ext can have.  Please read the Ext
+There are the parameters that each Ext can have.  Please read the Ext
 documentation.
 
 
@@ -734,6 +737,13 @@ to use dpp.vim.  Please search them by https://github.com/topics/dpp-protocol
 
 
 ------------------------------------------------------------------------------
+PROTOCOL ATTRS                                            *dpp-protocol-attrs*
+
+There are the protocol specific attributes for items.  Please read the
+Protocol documentation.
+
+
+------------------------------------------------------------------------------
 PROTOCOL OPTIONS                                        *dpp-protocol-options*
 
 NOTE: The Protocols cannot set default options.  If they need to specify the
@@ -742,7 +752,7 @@ recommended configuration, you should write it in the documentation instead.
 ------------------------------------------------------------------------------
 PROTOCOL PARAMS                                          *dpp-protocol-params*
 
-These are the parameters that each Protocol can have.  Please read the
+There are the parameters that each Protocol can have.  Please read the
 Protocol documentation.
 
 
@@ -967,6 +977,10 @@ editor performance.  You must explicitly enable it if necessary.
 
 ==============================================================================
 COMPATIBILITY                                              *dpp-compatibility*
+
+2024.08.07
+* Remove "frozen" and "build".  Please use instead
+  |dpp-plugin-option-extAttrs| instead.
 
 2023.12.06
 * Remove "convertImportPaths".
