@@ -115,7 +115,7 @@ export type Plugin = {
   on_func?: string | string[];
   on_if?: string | string[];
   on_lua?: string | string[];
-  on_map?: string | string[];
+  on_map?: string | string[] | Record<string, string | string[]>;
   on_path?: string | string[];
   on_post_source?: string | string[];
   on_source?: string | string[];
