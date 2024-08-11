@@ -85,11 +85,10 @@ export type Action<Params extends BaseActionParams> = {
 
 export type Plugin = {
   augroup?: string;
-  build?: string;
   depends?: string | string[];
   dummy_commands?: string[];
   dummy_mappings?: [string, string][];
-  frozen?: boolean;
+  extAttrs?: unknown;
   ftplugin?: Record<string, string>;
   hook_add?: string;
   hook_depends_update?: string;
@@ -116,17 +115,17 @@ export type Plugin = {
   on_func?: string | string[];
   on_if?: string | string[];
   on_lua?: string | string[];
-  on_map?: string | string[];
+  on_map?: string | string[] | Record<string, string | string[]>;
   on_path?: string | string[];
   on_post_source?: string | string[];
   on_source?: string | string[];
   path?: string;
   protocol?: string;
+  protocolAttrs?: unknown;
   repo?: string;
   rev?: string;
   rtp?: string;
   script_type?: string;
   sourced?: boolean;
-  timeout?: number;
   url?: string;
 };

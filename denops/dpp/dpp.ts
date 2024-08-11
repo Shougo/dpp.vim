@@ -10,16 +10,19 @@ import {
 } from "./deps.ts";
 import type {
   ActionName,
+  BaseExt,
+  BaseExtParams,
   Context,
   DppOptions,
   ExtName,
+  ExtOptions,
   Plugin,
   Protocol,
   ProtocolName,
 } from "./types.ts";
 import type { Loader } from "./loader.ts";
 import type { ConfigReturn } from "./base/config.ts";
-import { extAction, getProtocols } from "./ext.ts";
+import { extAction, getExt, getProtocols } from "./ext.ts";
 import {
   convert2List,
   isDirectory,
@@ -53,6 +56,32 @@ export class Dpp {
       actionName,
       actionParams,
     );
+  }
+
+  async getExt(
+    denops: Denops,
+    options: DppOptions,
+    extName: ExtName,
+  ): Promise<
+    [
+      BaseExt<BaseExtParams> | undefined,
+      ExtOptions,
+      BaseExtParams,
+    ]
+  > {
+    return await getExt(
+      denops,
+      this.#loader,
+      options,
+      extName,
+    );
+  }
+
+  async getProtocols(
+    denops: Denops,
+    options: DppOptions,
+  ): Promise<Record<ProtocolName, Protocol>> {
+    return await getProtocols(denops, this.#loader, options);
   }
 
   async makeState(
@@ -544,7 +573,6 @@ function initPlugin(plugin: Plugin, basePath: string, hasLua: boolean): Plugin {
     // Default merged set
     plugin.merged = !plugin.lazy && [
           "local",
-          "build",
           "if",
           "hook_post_update",
         ].filter((key) => key in plugin).length <= 0;
