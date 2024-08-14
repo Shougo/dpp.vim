@@ -69,18 +69,17 @@ export type ActionArguments<Params extends BaseActionParams> = {
   actionParams: unknown;
 };
 
-export type ActionCallback<Params extends BaseExtParams> = (
+export type ActionCallback<Params extends BaseExtParams, ReturnType = unknown> = (
   args: ActionArguments<Params>,
-) => undefined | unknown;
+) => Promise<ReturnType> | ReturnType;
 
-export type Actions<Params extends BaseActionParams> = Record<
-  ActionName,
-  Action<Params>
->;
-
-export type Action<Params extends BaseActionParams> = {
+export type Action<Params extends BaseActionParams, ReturnType = unknown> = {
   description: string;
-  callback: ActionCallback<Params>;
+  callback: ActionCallback<Params, ReturnType>;
+};
+
+export type Actions<Params extends BaseActionParams> = {
+  [K in ActionName]: Action<Params, unknown>;
 };
 
 export type Plugin = {
