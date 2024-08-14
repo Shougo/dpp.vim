@@ -69,9 +69,10 @@ export type ActionArguments<Params extends BaseActionParams> = {
   actionParams: unknown;
 };
 
-export type ActionCallback<Params extends BaseExtParams, ReturnType = unknown> = (
-  args: ActionArguments<Params>,
-) => Promise<ReturnType> | ReturnType;
+export type ActionCallback<Params extends BaseExtParams, ReturnType = unknown> =
+  (
+    args: ActionArguments<Params>,
+  ) => Promise<ReturnType> | ReturnType;
 
 export type Action<Params extends BaseActionParams, ReturnType = unknown> = {
   description: string;
