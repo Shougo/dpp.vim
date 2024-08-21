@@ -119,6 +119,14 @@ protocols		(string[])
 		
 		Default: []
 
+                                         *dpp-option-skipMergeFilenamePattern*
+skipMergeFilenamePattern (string)
+		It is the pattern of skip filename when
+		|dpp-plugin-option-merged| is set.
+		NOTE: It must be TypeScript regexp.
+
+		Default: "^tags(?:-\w\w)?$|^package.json$"
+
 ------------------------------------------------------------------------------
 FUNCTIONS                                                      *dpp-functions*
 

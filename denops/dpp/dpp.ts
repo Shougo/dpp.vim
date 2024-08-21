@@ -424,7 +424,12 @@ export class Dpp {
     //console.log(startupLines);
     //console.log(stateLines);
 
-    await this.#mergePlugins(denops, dppRuntimepath, recordPlugins);
+    await this.#mergePlugins(
+      denops,
+      dppRuntimepath,
+      options.skipMergeFilenamePattern,
+      recordPlugins,
+    );
 
     // Generate ftplugin files
     if (configReturn.ftplugins) {
@@ -458,6 +463,7 @@ export class Dpp {
   async #mergePlugins(
     denops: Denops,
     dppRuntimepath: string,
+    skipMergeFilenamePattern: string,
     recordPlugins: Record<string, Plugin>,
   ) {
     const hasWindows = await fn.has(denops, "win32");
@@ -479,7 +485,7 @@ export class Dpp {
         }
 
         for await (const entry of Deno.readDir(srcDir)) {
-          if (entry.name.match(/^tags(?:-\w\w)?$/)) {
+          if (entry.name.match(skipMergeFilenamePattern)) {
             // Skip exists tag file to avoid overwrite
             continue;
           }

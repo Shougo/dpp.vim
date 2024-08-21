@@ -37,6 +37,7 @@ export type DppOptions = {
   protocolOptions: Record<ProtocolName, Partial<ExtOptions>>;
   protocolParams: Record<ProtocolName, Partial<BaseProtocolParams>>;
   protocols: ProtocolName[];
+  skipMergeFilenamePattern: string;
 };
 
 export type UserOptions = Record<string, unknown>;
