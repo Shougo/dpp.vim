@@ -32,12 +32,6 @@ function dpp#async_ext_action(ext_name, action_name, action_params={}) abort
     return
   endif
 
-  if !'g:loaded_denops'->exists()
-    call dpp#util#_error(
-          \ 'denops.vim must be loaded before "dpp#async_ext_action()".')
-    return
-  endif
-
   return dpp#denops#_notify('extAction', [
         \ a:ext_name, a:action_name, a:action_params])
 endfunction
