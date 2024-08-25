@@ -18,4 +18,4 @@ export {
 } from "jsr:@std/path@~1.0.2";
 
 export { Lock } from "jsr:@lambdalisue/async@~2.1.1";
-export { ensure, is } from "jsr:@core/unknownutil@~4.2.0";
+export { ensure, is } from "jsr:@core/unknownutil@~4.3.0";

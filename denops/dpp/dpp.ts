@@ -523,7 +523,10 @@ export class Dpp {
       }
 
       for await (const entry of Deno.readDir(plugin.path)) {
-        if (["doc", "ftdetect", ".git"].indexOf(entry.name) >= 0) {
+        if (
+          ["doc", "ftdetect", ".git"].indexOf(entry.name) >= 0 ||
+          entry.name.match(skipMergeFilenamePattern)
+        ) {
           // Skip
           continue;
         }
