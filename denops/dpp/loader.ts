@@ -7,16 +7,16 @@ import type {
   ExtName,
   ProtocolName,
 } from "./types.ts";
-import {
-  basename,
-  type Denops,
-  fn,
-  Lock,
-  op,
-  parse,
-  toFileUrl,
-} from "./deps.ts";
 import { isDenoCacheIssueError } from "./utils.ts";
+
+import type { Denops } from "jsr:@denops/std@~7.1.0";
+import * as op from "jsr:@denops/std@~7.1.0/option";
+import * as fn from "jsr:@denops/std@~7.1.0/function";
+
+import { basename } from "jsr:@std/path@~1.0.2/basename";
+import { parse } from "jsr:@std/path@~1.0.2/parse";
+import { toFileUrl } from "jsr:@std/path@~1.0.2/to-file-url";
+import { Lock } from "jsr:@core/asyncutil@~1.1.1/lock";
 
 type Mod = {
   // deno-lint-ignore no-explicit-any

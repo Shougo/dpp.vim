@@ -1,3 +1,8 @@
+import type { Plugin } from "../dpp/types.ts";
+
+import type { Denops } from "jsr:@denops/std@~7.1.0";
+import * as vars from "jsr:@denops/std@~7.1.0/variable";
+
 import {
   type ActionArguments,
   type ActionFlags,
@@ -5,9 +10,6 @@ import {
   type Item,
 } from "jsr:@shougo/ddu-vim@5.0.0/types";
 import type { ActionData } from "jsr:@shougo/ddu-kind-file@0.8.0";
-
-import type { Denops, Plugin } from "../dpp/types.ts";
-import { vars } from "../dpp/deps.ts";
 
 type Params = {
   names: string[];

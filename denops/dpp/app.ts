@@ -1,17 +1,16 @@
-import {
-  type Denops,
-  ensure,
-  type Entrypoint,
-  is,
-  toFileUrl,
-  vars,
-} from "./deps.ts";
 import { ContextBuilder } from "./context.ts";
 import { Dpp } from "./dpp.ts";
 import type { DppOptions } from "./types.ts";
 import { Loader } from "./loader.ts";
 import { extAction } from "./ext.ts";
 import { isDenoCacheIssueError } from "./utils.ts";
+
+import type { Denops, Entrypoint } from "jsr:@denops/std@~7.1.0";
+import * as vars from "jsr:@denops/std@~7.1.0/variable";
+
+import { ensure } from "jsr:@core/unknownutil@~4.3.0/ensure";
+import { is } from "jsr:@core/unknownutil@~4.3.0/is";
+import { toFileUrl } from "jsr:@std/path@~1.0.2/to-file-url";
 
 export const main: Entrypoint = (denops: Denops) => {
   const loader = new Loader();

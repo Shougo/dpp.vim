@@ -1,4 +1,3 @@
-import type { Denops } from "./deps.ts";
 import type {
   BaseExtParams,
   BaseProtocolParams,
@@ -8,6 +7,8 @@ import type {
   ProtocolOptions,
 } from "./types.ts";
 import { printError } from "./utils.ts";
+
+import type { Denops } from "jsr:@denops/std@~7.1.0";
 
 // where
 // T: Object

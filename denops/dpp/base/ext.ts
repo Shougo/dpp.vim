@@ -1,5 +1,6 @@
-import type { Denops } from "../deps.ts";
 import type { Actions, ExtOptions } from "../types.ts";
+
+import type { Denops } from "jsr:@denops/std@~7.1.0";
 
 export type BaseExtParams = Record<string, unknown>;
 

@@ -1,4 +1,3 @@
-import { type Denops, fn } from "./deps.ts";
 import type {
   ActionName,
   BaseExt,
@@ -25,6 +24,9 @@ import type { Loader } from "./loader.ts";
 import { defaultExtOptions } from "./base/ext.ts";
 import { defaultProtocolOptions } from "./base/protocol.ts";
 import { printError } from "./utils.ts";
+
+import type { Denops } from "jsr:@denops/std@~7.1.0";
+import * as fn from "jsr:@denops/std@~7.1.0/function";
 
 export async function getProtocols(
   denops: Denops,

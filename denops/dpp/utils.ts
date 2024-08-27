@@ -1,5 +1,9 @@
-import { assertEquals, type Denops, join } from "./deps.ts";
 import type { Plugin } from "./types.ts";
+
+import type { Denops } from "jsr:@denops/std@~7.1.0";
+
+import { join } from "jsr:@std/path@~1.0.2/join";
+import { assertEquals } from "jsr:@std/assert@~1.0.2/equals";
 
 export async function printError(
   denops: Denops,

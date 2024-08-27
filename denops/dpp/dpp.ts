@@ -1,13 +1,3 @@
-import {
-  assertEquals,
-  type Denops,
-  dirname,
-  extname,
-  fn,
-  is,
-  join,
-  vars,
-} from "./deps.ts";
 import type {
   ActionName,
   BaseExt,
@@ -31,6 +21,16 @@ import {
   parseHooksFile,
   printError,
 } from "./utils.ts";
+
+import type { Denops } from "jsr:@denops/std@~7.1.0";
+import * as fn from "jsr:@denops/std@~7.1.0/function";
+import * as vars from "jsr:@denops/std@~7.1.0/variable";
+
+import { dirname } from "jsr:@std/path@~1.0.2/dirname";
+import { extname } from "jsr:@std/path@~1.0.2/extname";
+import { join } from "jsr:@std/path@~1.0.2/join";
+import { assertEquals } from "jsr:@std/assert@~1.0.2/equals";
+import { is } from "jsr:@core/unknownutil@~4.3.0/is";
 
 export class Dpp {
   #loader: Loader;

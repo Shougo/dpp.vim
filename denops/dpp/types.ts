@@ -1,6 +1,6 @@
 import type { BaseExtParams } from "./base/ext.ts";
 import type { BaseProtocol, BaseProtocolParams } from "./base/protocol.ts";
-import type { Denops } from "./deps.ts";
+import type { Denops } from "jsr:@denops/std@~7.1.0";
 
 export { BaseConfig } from "./base/config.ts";
 export type {
@@ -16,7 +16,7 @@ export type { BaseProtocolParams, Command } from "./base/protocol.ts";
 export { ContextBuilder } from "./context.ts";
 
 export { Dpp } from "./dpp.ts";
-export type { Denops } from "./deps.ts";
+export type { Denops } from "jsr:@denops/std@~7.1.0";
 
 export type DppExtType = "ext" | "protocol";
 
