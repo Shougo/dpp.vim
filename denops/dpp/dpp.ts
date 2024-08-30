@@ -45,7 +45,7 @@ export class Dpp {
     options: DppOptions,
     extName: ExtName,
     actionName: ActionName,
-    actionParams: unknown = {},
+    actionParams: BaseParams = {},
   ): Promise<unknown | undefined> {
     return await extAction(
       denops,

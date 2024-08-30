@@ -62,7 +62,7 @@ export async function extAction(
   options: DppOptions,
   extName: ExtName,
   actionName: ActionName,
-  actionParams: unknown = {},
+  actionParams: BaseParams = {},
 ): Promise<unknown | undefined> {
   const [ext, extOptions, extParams] = await getExt(
     denops,
