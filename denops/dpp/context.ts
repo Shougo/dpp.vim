@@ -1,6 +1,5 @@
 import type {
-  BaseExtParams,
-  BaseProtocolParams,
+  BaseParams,
   Context,
   DppOptions,
   ExtOptions,
@@ -29,8 +28,8 @@ function overwrite<T>(a: T, b: Partial<T>): T {
 export const mergeExtOptions: Merge<ExtOptions> = overwrite;
 export const mergeProtocolOptions: Merge<ProtocolOptions> = overwrite;
 
-export const mergeExtParams: Merge<BaseExtParams> = overwrite;
-export const mergeProtocolParams: Merge<BaseProtocolParams> = overwrite;
+export const mergeExtParams: Merge<BaseParams> = overwrite;
+export const mergeProtocolParams: Merge<BaseParams> = overwrite;
 
 export function foldMerge<T>(
   merge: Merge<T>,

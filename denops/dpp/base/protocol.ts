@@ -1,37 +1,35 @@
-import type { Plugin, ProtocolOptions } from "../types.ts";
+import type { BaseParams, Plugin, ProtocolOptions } from "../types.ts";
 
 import type { Denops } from "jsr:@denops/std@~7.1.0";
 
-export type BaseProtocolParams = Record<string, unknown>;
-
-export type OnInitArguments<Params extends BaseProtocolParams> = {
+export type OnInitArguments<Params extends BaseParams> = {
   denops: Denops;
   protocolOptions: ProtocolOptions;
   protocolParams: Params;
 };
 
-export type DetectArguments<Params extends BaseProtocolParams> = {
+export type DetectArguments<Params extends BaseParams> = {
   denops: Denops;
   plugin: Plugin;
   protocolOptions: ProtocolOptions;
   protocolParams: Params;
 };
 
-export type GetUrlArguments<Params extends BaseProtocolParams> = {
+export type GetUrlArguments<Params extends BaseParams> = {
   denops: Denops;
   plugin: Plugin;
   protocolOptions: ProtocolOptions;
   protocolParams: Params;
 };
 
-export type GetSyncCommandsArguments<Params extends BaseProtocolParams> = {
+export type GetSyncCommandsArguments<Params extends BaseParams> = {
   denops: Denops;
   plugin: Plugin;
   protocolOptions: ProtocolOptions;
   protocolParams: Params;
 };
 
-export type GetLogCommandsArguments<Params extends BaseProtocolParams> = {
+export type GetLogCommandsArguments<Params extends BaseParams> = {
   denops: Denops;
   plugin: Plugin;
   protocolOptions: ProtocolOptions;
@@ -41,7 +39,7 @@ export type GetLogCommandsArguments<Params extends BaseProtocolParams> = {
 };
 
 export type GetRevisionLockCommandsArguments<
-  Params extends BaseProtocolParams,
+  Params extends BaseParams,
 > = {
   denops: Denops;
   plugin: Plugin;
@@ -49,7 +47,7 @@ export type GetRevisionLockCommandsArguments<
   protocolParams: Params;
 };
 
-export type GetRollbackCommandsArguments<Params extends BaseProtocolParams> = {
+export type GetRollbackCommandsArguments<Params extends BaseParams> = {
   denops: Denops;
   plugin: Plugin;
   protocolOptions: ProtocolOptions;
@@ -57,7 +55,7 @@ export type GetRollbackCommandsArguments<Params extends BaseProtocolParams> = {
   rev: string;
 };
 
-export type GetDiffCommandsArguments<Params extends BaseProtocolParams> = {
+export type GetDiffCommandsArguments<Params extends BaseParams> = {
   denops: Denops;
   plugin: Plugin;
   protocolOptions: ProtocolOptions;
@@ -66,7 +64,7 @@ export type GetDiffCommandsArguments<Params extends BaseProtocolParams> = {
   oldRev: string;
 };
 
-export type GetRevisionArguments<Params extends BaseProtocolParams> = {
+export type GetRevisionArguments<Params extends BaseParams> = {
   denops: Denops;
   plugin: Plugin;
   protocolOptions: ProtocolOptions;
@@ -78,7 +76,7 @@ export type Command = {
   args: string[];
 };
 
-export abstract class BaseProtocol<Params extends BaseProtocolParams> {
+export abstract class BaseProtocol<Params extends BaseParams> {
   apiVersion = 1;
 
   name = "";

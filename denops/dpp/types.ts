@@ -1,5 +1,4 @@
-import type { BaseExtParams } from "./base/ext.ts";
-import type { BaseProtocol, BaseProtocolParams } from "./base/protocol.ts";
+import type { BaseProtocol } from "./base/protocol.ts";
 import type { Denops } from "jsr:@denops/std@~7.1.0";
 
 export { BaseConfig } from "./base/config.ts";
@@ -9,9 +8,8 @@ export type {
   MultipleHook,
 } from "./base/config.ts";
 export { BaseExt } from "./base/ext.ts";
-export type { BaseExtParams } from "./base/ext.ts";
 export { BaseProtocol } from "./base/protocol.ts";
-export type { BaseProtocolParams, Command } from "./base/protocol.ts";
+export type { Command } from "./base/protocol.ts";
 
 export { ContextBuilder } from "./context.ts";
 
@@ -31,14 +29,16 @@ export type Context = {
 
 export type DppOptions = {
   extOptions: Record<ExtName, Partial<ExtOptions>>;
-  extParams: Record<ExtName, Partial<BaseExtParams>>;
+  extParams: Record<ExtName, Partial<BaseParams>>;
   hooksFileMarker: string;
   inlineVimrcs: string[];
   protocolOptions: Record<ProtocolName, Partial<ExtOptions>>;
-  protocolParams: Record<ProtocolName, Partial<BaseProtocolParams>>;
+  protocolParams: Record<ProtocolName, Partial<BaseParams>>;
   protocols: ProtocolName[];
   skipMergeFilenamePattern: string;
 };
+
+export type BaseParams = Record<string, unknown>;
 
 export type UserOptions = Record<string, unknown>;
 
@@ -53,34 +53,31 @@ export type ProtocolOptions = {
 };
 
 export type Protocol = {
-  protocol: BaseProtocol<BaseProtocolParams>;
+  protocol: BaseProtocol<BaseParams>;
   options: ProtocolOptions;
-  params: BaseProtocolParams;
+  params: BaseParams;
 };
 
-export type BaseActionParams = Record<string, unknown>;
-
-export type ActionArguments<Params extends BaseActionParams> = {
+export type ActionArguments<Params extends BaseParams> = {
   denops: Denops;
   context: Context;
   protocols: Record<ProtocolName, Protocol>;
   options: DppOptions;
   extOptions: ExtOptions;
   extParams: Params;
-  actionParams: unknown;
+  actionParams: BaseParams;
 };
 
-export type ActionCallback<Params extends BaseExtParams, ReturnType = unknown> =
-  (
-    args: ActionArguments<Params>,
-  ) => Promise<ReturnType> | ReturnType;
+export type ActionCallback<Params extends BaseParams, ReturnType = unknown> = (
+  args: ActionArguments<Params>,
+) => Promise<ReturnType> | ReturnType;
 
-export type Action<Params extends BaseActionParams, ReturnType = unknown> = {
+export type Action<Params extends BaseParams, ReturnType = unknown> = {
   description: string;
   callback: ActionCallback<Params, ReturnType>;
 };
 
-export type Actions<Params extends BaseActionParams> = {
+export type Actions<Params extends BaseParams> = {
   [K in ActionName]: Action<Params, unknown>;
 };
 

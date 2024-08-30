@@ -1,9 +1,8 @@
 import type {
   ActionName,
   BaseExt,
-  BaseExtParams,
+  BaseParams,
   BaseProtocol,
-  BaseProtocolParams,
   Context,
   DppOptions,
   ExtName,
@@ -115,9 +114,9 @@ export async function getExt(
   name: ExtName,
 ): Promise<
   [
-    BaseExt<BaseExtParams> | undefined,
+    BaseExt<BaseParams> | undefined,
     ExtOptions,
-    BaseExtParams,
+    BaseParams,
   ]
 > {
   if (!loader.getExt(name)) {
@@ -152,9 +151,9 @@ async function getProtocol(
   name: ProtocolName,
 ): Promise<
   [
-    BaseProtocol<BaseProtocolParams> | undefined,
+    BaseProtocol<BaseParams> | undefined,
     ProtocolOptions,
-    BaseProtocolParams,
+    BaseParams,
   ]
 > {
   if (!loader.getProtocol(name)) {
@@ -188,10 +187,10 @@ async function getProtocol(
 }
 
 async function checkExtOnInit(
-  ext: BaseExt<BaseExtParams>,
+  ext: BaseExt<BaseParams>,
   denops: Denops,
   extOptions: ExtOptions,
-  extParams: BaseExtParams,
+  extParams: BaseParams,
 ) {
   if (ext.isInitialized) {
     return;
@@ -215,11 +214,11 @@ async function checkExtOnInit(
 }
 
 function extArgs<
-  Params extends BaseExtParams,
+  Params extends BaseParams,
 >(
   options: DppOptions,
   ext: BaseExt<Params>,
-): [ExtOptions, BaseExtParams] {
+): [ExtOptions, BaseParams] {
   const o = foldMerge(
     mergeExtOptions,
     defaultExtOptions,
@@ -237,10 +236,10 @@ function extArgs<
 }
 
 async function checkProtocolOnInit(
-  protocol: BaseProtocol<BaseProtocolParams>,
+  protocol: BaseProtocol<BaseParams>,
   denops: Denops,
   protocolOptions: ProtocolOptions,
-  protocolParams: BaseProtocolParams,
+  protocolParams: BaseParams,
 ) {
   if (protocol.isInitialized) {
     return;
@@ -264,11 +263,11 @@ async function checkProtocolOnInit(
 }
 
 function protocolArgs<
-  Params extends BaseProtocolParams,
+  Params extends BaseParams,
 >(
   options: DppOptions,
   protocol: BaseProtocol<Params>,
-): [ExtOptions, BaseExtParams] {
+): [ExtOptions, BaseParams] {
   const o = foldMerge(
     mergeProtocolOptions,
     defaultProtocolOptions,

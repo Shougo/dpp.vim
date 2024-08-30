@@ -1,7 +1,7 @@
 import type {
   ActionName,
   BaseExt,
-  BaseExtParams,
+  BaseParams,
   Context,
   DppOptions,
   ExtName,
@@ -64,9 +64,9 @@ export class Dpp {
     extName: ExtName,
   ): Promise<
     [
-      BaseExt<BaseExtParams> | undefined,
+      BaseExt<BaseParams> | undefined,
       ExtOptions,
-      BaseExtParams,
+      BaseParams,
     ]
   > {
     return await getExt(

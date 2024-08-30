@@ -1,8 +1,7 @@
 import type {
   BaseExt,
-  BaseExtParams,
+  BaseParams,
   BaseProtocol,
-  BaseProtocolParams,
   DppExtType,
   ExtName,
   ProtocolName,
@@ -78,7 +77,7 @@ export class Loader {
     });
   }
 
-  getExt(name: ExtName): BaseExt<BaseExtParams> | null {
+  getExt(name: ExtName): BaseExt<BaseParams> | null {
     const mod = this.#mods.ext[name];
     if (!mod) {
       return null;
@@ -86,7 +85,7 @@ export class Loader {
 
     return this.#extension.getExt(mod, name);
   }
-  getProtocol(name: ProtocolName): BaseProtocol<BaseProtocolParams> | null {
+  getProtocol(name: ProtocolName): BaseProtocol<BaseParams> | null {
     const mod = this.#mods.protocol[name];
     if (!mod) {
       return null;
@@ -116,10 +115,10 @@ export class Loader {
 }
 
 class Extension {
-  #exts: Record<ExtName, BaseExt<BaseExtParams>> = {};
-  #protocols: Record<ProtocolName, BaseProtocol<BaseProtocolParams>> = {};
+  #exts: Record<ExtName, BaseExt<BaseParams>> = {};
+  #protocols: Record<ProtocolName, BaseProtocol<BaseParams>> = {};
 
-  getExt(mod: Mod, name: string): BaseExt<BaseExtParams> {
+  getExt(mod: Mod, name: string): BaseExt<BaseParams> {
     if (!this.#exts[name]) {
       const obj = new mod.mod.Ext();
       obj.name = name;
@@ -129,7 +128,7 @@ class Extension {
     return this.#exts[name];
   }
 
-  getProtocol(mod: Mod, name: string): BaseProtocol<BaseProtocolParams> {
+  getProtocol(mod: Mod, name: string): BaseProtocol<BaseParams> {
     if (!this.#protocols[name]) {
       const obj = new mod.mod.Protocol();
       obj.name = name;
