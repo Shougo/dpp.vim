@@ -3,10 +3,10 @@ import type { Plugin } from "../dpp/types.ts";
 import type { Denops } from "jsr:@denops/std@~7.1.0";
 import * as vars from "jsr:@denops/std@~7.1.0/variable";
 
-import {
-  type ActionArguments,
-  type ActionFlags,
-  type Item,
+import type {
+  ActionArguments,
+  ActionFlags,
+  Item,
 } from "jsr:@shougo/ddu-vim@6.1.0/types";
 import { BaseSource } from "jsr:@shougo/ddu-vim@6.1.0/source";
 import type { ActionData } from "jsr:@shougo/ddu-kind-file@0.9.0";
