@@ -6,9 +6,9 @@ import * as vars from "jsr:@denops/std@~7.1.0/variable";
 import {
   type ActionArguments,
   type ActionFlags,
-  BaseSource,
   type Item,
 } from "jsr:@shougo/ddu-vim@6.1.0/types";
+import { BaseSource } from "jsr:@shougo/ddu-vim@6.1.0/source";
 import type { ActionData } from "jsr:@shougo/ddu-kind-file@0.9.0";
 
 type Params = {
