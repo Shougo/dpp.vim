@@ -1,20 +1,6 @@
 import type { BaseProtocol } from "./base/protocol.ts";
+
 import type { Denops } from "jsr:@denops/std@~7.1.0";
-
-export { BaseConfig } from "./base/config.ts";
-export type {
-  ConfigArguments,
-  ConfigReturn,
-  MultipleHook,
-} from "./base/config.ts";
-export { BaseExt } from "./base/ext.ts";
-export { BaseProtocol } from "./base/protocol.ts";
-export type { Command } from "./base/protocol.ts";
-
-export { ContextBuilder } from "./context.ts";
-
-export { Dpp } from "./dpp.ts";
-export type { Denops } from "jsr:@denops/std@~7.1.0";
 
 export type DppExtType = "ext" | "protocol";
 

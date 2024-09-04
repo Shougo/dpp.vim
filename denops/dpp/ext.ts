@@ -1,8 +1,6 @@
 import type {
   ActionName,
-  BaseExt,
   BaseParams,
-  BaseProtocol,
   Context,
   DppOptions,
   ExtName,
@@ -20,8 +18,8 @@ import {
   mergeProtocolParams,
 } from "./context.ts";
 import type { Loader } from "./loader.ts";
-import { defaultExtOptions } from "./base/ext.ts";
-import { defaultProtocolOptions } from "./base/protocol.ts";
+import { type BaseExt, defaultExtOptions } from "./base/ext.ts";
+import { type BaseProtocol, defaultProtocolOptions } from "./base/protocol.ts";
 import { printError } from "./utils.ts";
 
 import type { Denops } from "jsr:@denops/std@~7.1.0";

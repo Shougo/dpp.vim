@@ -1,6 +1,5 @@
 import type {
   ActionName,
-  BaseExt,
   BaseParams,
   Context,
   DppOptions,
@@ -12,6 +11,7 @@ import type {
 } from "./types.ts";
 import type { Loader } from "./loader.ts";
 import type { ConfigReturn } from "./base/config.ts";
+import type { BaseExt } from "./base/ext.ts";
 import { extAction, getExt, getProtocols } from "./ext.ts";
 import {
   convert2List,

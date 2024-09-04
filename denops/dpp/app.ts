@@ -1,6 +1,13 @@
 import { ContextBuilder } from "./context.ts";
 import { Dpp } from "./dpp.ts";
-import type { DppOptions } from "./types.ts";
+import type {
+  BaseParams,
+  DppOptions,
+  ExtOptions,
+  Protocol,
+  ProtocolName,
+} from "./types.ts";
+import type { BaseExt } from "./base/ext.ts";
 import { Loader } from "./loader.ts";
 import { extAction } from "./ext.ts";
 import { isDenoCacheIssueError } from "./utils.ts";
@@ -68,7 +75,6 @@ export const main: Entrypoint = (denops: Denops) => {
           contextBuilder,
           denops,
           basePath,
-          dpp,
           name,
         });
         //console.log(`${Date.now() - startTime} ms`);
@@ -98,6 +104,32 @@ export const main: Entrypoint = (denops: Denops) => {
         console.error(`Failed to load file '${configPath}': ${e}`);
         throw e;
       }
+    },
+    async getExt(
+      arg1: unknown,
+    ): Promise<
+      [
+        BaseExt<BaseParams> | undefined,
+        ExtOptions,
+        BaseParams,
+      ]
+    > {
+      const extName = ensure(arg1, is.String) as string;
+      const [_, options] = await contextBuilder.get(denops);
+
+      return await dpp.getExt(
+        denops,
+        options,
+        extName,
+      );
+    },
+    async getProtocols(): Promise<Record<ProtocolName, Protocol>> {
+      const [_, options] = await contextBuilder.get(denops);
+
+      return await dpp.getProtocols(
+        denops,
+        options,
+      );
     },
   };
 };

@@ -1,11 +1,6 @@
-import type {
-  BaseExt,
-  BaseParams,
-  BaseProtocol,
-  DppExtType,
-  ExtName,
-  ProtocolName,
-} from "./types.ts";
+import type { BaseParams, DppExtType, ExtName, ProtocolName } from "./types.ts";
+import type { BaseExt } from "./base/ext.ts";
+import type { BaseProtocol } from "./base/protocol.ts";
 import { isDenoCacheIssueError } from "./utils.ts";
 
 import type { Denops } from "jsr:@denops/std@~7.1.0";

@@ -8,8 +8,8 @@ import {
   type ActionFlags,
   BaseSource,
   type Item,
-} from "jsr:@shougo/ddu-vim@5.0.0/types";
-import type { ActionData } from "jsr:@shougo/ddu-kind-file@0.8.0";
+} from "jsr:@shougo/ddu-vim@6.1.0/types";
+import type { ActionData } from "jsr:@shougo/ddu-kind-file@0.9.0";
 
 type Params = {
   names: string[];
