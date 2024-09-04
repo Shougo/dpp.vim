@@ -1,4 +1,4 @@
-import { ContextBuilder } from "./context.ts";
+import { ContextBuilderImpl } from "./context.ts";
 import { Dpp } from "./dpp.ts";
 import type {
   BaseParams,
@@ -22,7 +22,7 @@ import { toFileUrl } from "jsr:@std/path@~1.0.2/to-file-url";
 export const main: Entrypoint = (denops: Denops) => {
   const loader = new Loader();
   const dpp = new Dpp(loader);
-  const contextBuilder = new ContextBuilder();
+  const contextBuilder = new ContextBuilderImpl();
 
   denops.dispatcher = {
     async extAction(

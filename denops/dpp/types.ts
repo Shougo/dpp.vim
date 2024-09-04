@@ -13,6 +13,13 @@ export type Context = {
   placeholder?: unknown;
 };
 
+export interface ContextBuilder {
+  get(denops: Denops): Promise<[Context, DppOptions]>;
+  getGlobal(): Partial<DppOptions>;
+  setGlobal(options: Partial<DppOptions>): void;
+  patchGlobal(options: Partial<DppOptions>): void;
+}
+
 export type DppOptions = {
   extOptions: Record<ExtName, Partial<ExtOptions>>;
   extParams: Record<ExtName, Partial<BaseParams>>;

@@ -170,7 +170,7 @@ class Custom {
   }
 }
 
-export class ContextBuilder {
+export class ContextBuilderImpl implements ContextBuilder {
   #custom: Custom = new Custom();
 
   async get(
@@ -178,7 +178,7 @@ export class ContextBuilder {
   ): Promise<[Context, DppOptions]> {
     const userOptions = this.#custom.get();
 
-    await this.validate(denops, "options", userOptions, defaultDppOptions());
+    await this.#validate(denops, "options", userOptions, defaultDppOptions());
 
     return [
       {
@@ -188,7 +188,19 @@ export class ContextBuilder {
     ];
   }
 
-  async validate(
+  getGlobal(): Partial<DppOptions> {
+    return this.#custom.global;
+  }
+
+  setGlobal(options: Partial<DppOptions>) {
+    this.#custom.setGlobal(options);
+  }
+
+  patchGlobal(options: Partial<DppOptions>) {
+    this.#custom.patchGlobal(options);
+  }
+
+  async #validate(
     denops: Denops,
     name: string,
     options: Record<string, unknown>,
@@ -204,15 +216,4 @@ export class ContextBuilder {
     }
   }
 
-  getGlobal(): Partial<DppOptions> {
-    return this.#custom.global;
-  }
-
-  setGlobal(options: Partial<DppOptions>) {
-    this.#custom.setGlobal(options);
-  }
-
-  patchGlobal(options: Partial<DppOptions>) {
-    this.#custom.patchGlobal(options);
-  }
 }
