@@ -1,5 +1,6 @@
 import type { ContextBuilder } from "../context.ts";
-import type { Dpp, Plugin } from "../types.ts";
+import type { Plugin } from "../types.ts";
+import type { Dpp } from "../dpp.ts";
 
 import type { Denops } from "jsr:@denops/std@~7.1.0";
 
