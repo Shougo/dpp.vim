@@ -1,6 +1,7 @@
 import type {
   BaseParams,
   Context,
+  ContextBuilder,
   DppOptions,
   ExtOptions,
   ProtocolOptions,
@@ -215,5 +216,4 @@ export class ContextBuilderImpl implements ContextBuilder {
       }
     }
   }
-
 }

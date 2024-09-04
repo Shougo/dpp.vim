@@ -1,6 +1,5 @@
-import type { ContextBuilder } from "../context.ts";
+import type { ContextBuilder } from "../types.ts";
 import type { Plugin } from "../types.ts";
-import type { Dpp } from "../dpp.ts";
 
 import type { Denops } from "jsr:@denops/std@~7.1.0";
 
@@ -8,7 +7,6 @@ export type ConfigArguments = {
   basePath: string;
   contextBuilder: ContextBuilder;
   denops: Denops;
-  dpp: Dpp;
   name: string;
 };
 
@@ -29,7 +27,7 @@ export type ConfigReturn = {
 };
 
 export abstract class BaseConfig {
-  apiVersion = 1;
+  apiVersion = 2;
 
   abstract config(_args: ConfigArguments): ConfigReturn | Promise<ConfigReturn>;
 }
