@@ -1,5 +1,3 @@
-import type { BaseProtocol } from "./base/protocol.ts";
-
 import type { Denops } from "jsr:@denops/std@~7.1.0";
 
 export type DppExtType = "ext" | "protocol";
@@ -43,35 +41,6 @@ export type ExtOptions = {
 export type ProtocolOptions = {
   // TODO: remove placeholder
   placeholder?: unknown;
-};
-
-export type Protocol = {
-  protocol: BaseProtocol<BaseParams>;
-  options: ProtocolOptions;
-  params: BaseParams;
-};
-
-export type ActionArguments<Params extends BaseParams> = {
-  denops: Denops;
-  context: Context;
-  protocols: Record<ProtocolName, Protocol>;
-  options: DppOptions;
-  extOptions: ExtOptions;
-  extParams: Params;
-  actionParams: BaseParams;
-};
-
-export type ActionCallback<Params extends BaseParams, ReturnType = unknown> = (
-  args: ActionArguments<Params>,
-) => Promise<ReturnType> | ReturnType;
-
-export type Action<Params extends BaseParams, ReturnType = unknown> = {
-  description: string;
-  callback: ActionCallback<Params, ReturnType>;
-};
-
-export type Actions<Params extends BaseParams> = {
-  [K in ActionName]: Action<Params, unknown>;
 };
 
 export type Plugin = {

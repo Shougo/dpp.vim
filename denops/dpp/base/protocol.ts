@@ -76,6 +76,12 @@ export type Command = {
   args: string[];
 };
 
+export type Protocol = {
+  protocol: BaseProtocol<BaseParams>;
+  options: ProtocolOptions;
+  params: BaseParams;
+};
+
 export abstract class BaseProtocol<Params extends BaseParams> {
   apiVersion = 1;
 

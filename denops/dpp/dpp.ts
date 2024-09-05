@@ -6,12 +6,13 @@ import type {
   ExtName,
   ExtOptions,
   Plugin,
-  Protocol,
   ProtocolName,
 } from "./types.ts";
 import type { Loader } from "./loader.ts";
 import type { ConfigReturn } from "./base/config.ts";
 import type { BaseExt } from "./base/ext.ts";
+import type { Protocol } from "./base/protocol.ts";
+import type { Dpp } from "./base/dpp.ts";
 import { extAction, getExt, getProtocols } from "./ext.ts";
 import {
   convert2List,
@@ -32,7 +33,7 @@ import { join } from "jsr:@std/path@~1.0.2/join";
 import { assertEquals } from "jsr:@std/assert@~1.0.2/equals";
 import { is } from "jsr:@core/unknownutil@~4.3.0/is";
 
-export class Dpp {
+export class DppImpl implements Dpp {
   #loader: Loader;
 
   constructor(loader: Loader) {

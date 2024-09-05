@@ -1,12 +1,14 @@
 import type { ContextBuilder } from "../types.ts";
 import type { Plugin } from "../types.ts";
+import type { Dpp } from "./dpp.ts";
 
 import type { Denops } from "jsr:@denops/std@~7.1.0";
 
 export type ConfigArguments = {
-  basePath: string;
   contextBuilder: ContextBuilder;
   denops: Denops;
+  dpp: Dpp;
+  basePath: string;
   name: string;
 };
 

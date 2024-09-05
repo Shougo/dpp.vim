@@ -5,7 +5,6 @@ import type {
   DppOptions,
   ExtName,
   ExtOptions,
-  Protocol,
   ProtocolName,
   ProtocolOptions,
 } from "./types.ts";
@@ -20,6 +19,7 @@ import {
 import type { Loader } from "./loader.ts";
 import { type BaseExt, defaultExtOptions } from "./base/ext.ts";
 import { type BaseProtocol, defaultProtocolOptions } from "./base/protocol.ts";
+import type { Protocol } from "./base/protocol.ts";
 import { printError } from "./utils.ts";
 
 import type { Denops } from "jsr:@denops/std@~7.1.0";

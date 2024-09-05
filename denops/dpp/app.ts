@@ -1,13 +1,13 @@
 import { ContextBuilderImpl } from "./context.ts";
-import { Dpp } from "./dpp.ts";
+import { DppImpl } from "./dpp.ts";
 import type {
   BaseParams,
   DppOptions,
   ExtOptions,
-  Protocol,
   ProtocolName,
 } from "./types.ts";
 import type { BaseExt } from "./base/ext.ts";
+import type { Protocol } from "./base/protocol.ts";
 import { Loader } from "./loader.ts";
 import { extAction } from "./ext.ts";
 import { isDenoCacheIssueError } from "./utils.ts";
@@ -21,7 +21,7 @@ import { toFileUrl } from "jsr:@std/path@~1.0.2/to-file-url";
 
 export const main: Entrypoint = (denops: Denops) => {
   const loader = new Loader();
-  const dpp = new Dpp(loader);
+  const dpp = new DppImpl(loader);
   const contextBuilder = new ContextBuilderImpl();
 
   denops.dispatcher = {
@@ -69,11 +69,14 @@ export const main: Entrypoint = (denops: Denops) => {
         const mod = await import(
           `${toFileUrl(configPath).href}#${performance.now()}`
         );
+
         const obj = new mod.Config();
+
         //console.log(`${Date.now() - startTime} ms`);
         const configReturn = await obj.config({
           contextBuilder,
           denops,
+          dpp,
           basePath,
           name,
         });

@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "exports": {
     "./config": "./denops/dpp/base/config.ts",
+    "./dpp": "./denops/dpp/base/dpp.ts",
     "./ext": "./denops/dpp/base/ext.ts",
     "./protocol": "./denops/dpp/base/protocol.ts",
     "./types": "./denops/dpp/types.ts",
