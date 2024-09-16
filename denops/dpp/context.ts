@@ -53,7 +53,7 @@ export function defaultDppOptions(): DppOptions {
     protocolOptions: {},
     protocolParams: {},
     protocols: [],
-    skipMergeFilenamePattern: "^tags(?:-\w\w)?$|^package.json$",
+    skipMergeFilenamePattern: "^tags(?:-\\w\\w)?$|^package.json$",
   };
 }
 

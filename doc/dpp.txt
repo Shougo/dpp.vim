@@ -125,7 +125,7 @@ skipMergeFilenamePattern (string)
 		|dpp-plugin-option-merged| is set.
 		NOTE: It must be TypeScript regexp.
 
-		Default: "^tags(?:-\w\w)?$|^package.json$"
+		Default: "^tags(?:-\\w\\w)?$|^package.json$"
 
 ------------------------------------------------------------------------------
 FUNCTIONS                                                      *dpp-functions*
