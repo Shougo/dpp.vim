@@ -175,7 +175,8 @@ function s:source_plugin(rtps, index, plugin, sourced) abort
   if a:plugin->has_key('dummy_mappings')
     for [mode, map] in a:plugin.dummy_mappings
       if map->hasmapto(mode)
-        execute mode..'unmap' map
+        " NOTE: unmap may be failed
+        silent! execute mode..'unmap' map
       endif
     endfor
     let a:plugin.dummy_mappings = []
