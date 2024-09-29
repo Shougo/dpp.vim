@@ -113,7 +113,7 @@ protocolParams		(dictionary)
 		See also |dpp-protocol-params|.
 
 		Default: {}
-                                                     *dpp-option-protocols*
+                                                        *dpp-option-protocols*
 protocols		(string[])
 		It is a list of protocol names.
 		
@@ -124,6 +124,8 @@ skipMergeFilenamePattern (string)
 		It is the pattern of skip filename when
 		|dpp-plugin-option-merged| is set.
 		NOTE: It must be TypeScript regexp.
+		NOTE: It is only effective for files directly under the
+		directory.
 
 		Default: "^tags(?:-\\w\\w)?$|^package.json$"
 
