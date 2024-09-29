@@ -166,9 +166,8 @@ function s:source_plugin(rtps, index, plugin, sourced) abort
 
   if a:plugin->has_key('dummy_commands')
     for command in a:plugin.dummy_commands
-      if (':' .. command)->exists()
-        execute 'delcommand' command
-      endif
+      " NOTE: exists() check does not work well
+      silent! execute 'delcommand' command
     endfor
     let a:plugin.dummy_commands = []
   endif
