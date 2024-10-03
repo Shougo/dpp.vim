@@ -22,8 +22,8 @@ import { type BaseProtocol, defaultProtocolOptions } from "./base/protocol.ts";
 import type { Protocol } from "./base/protocol.ts";
 import { printError } from "./utils.ts";
 
-import type { Denops } from "jsr:@denops/std@~7.1.0";
-import * as fn from "jsr:@denops/std@~7.1.0/function";
+import type { Denops } from "jsr:@denops/std@~7.2.0";
+import * as fn from "jsr:@denops/std@~7.2.0/function";
 
 export async function getProtocols(
   denops: Denops,
