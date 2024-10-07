@@ -204,11 +204,12 @@ export function mergeFtplugins(
     const plugin = filetype.startsWith("lua_")
       ? `lua <<EOF\n${srcFtplugin}\nEOF\n`
       : srcFtplugin;
-    const destFiletype = filetype.replace(/^lua_/, "");
-    if (dest[destFiletype]) {
-      dest[destFiletype] += `\n${plugin}`;
-    } else {
-      dest[destFiletype] = plugin;
+    for (const destFiletype of filetype.replace(/^lua_/, "").split("_")) {
+      if (dest[destFiletype]) {
+        dest[destFiletype] += `\n${plugin}`;
+      } else {
+        dest[destFiletype] = plugin;
+      }
     }
   }
 }

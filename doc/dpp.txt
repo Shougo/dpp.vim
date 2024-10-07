@@ -261,6 +261,8 @@ ftplugin	(Dictionary)
 		"{filetype}" key is executed {filetype} ftplugin.
 		"lua_{filetype}" key is executed {filetype} ftplugin as
 		|:lua|.
+		You can define multiple filetypes by "{filetype1}_{filetype2}"
+		key.  "b:undo_ftplugin" is defined automatically.
 		NOTE: You need to call |dpp#clear_state()| after vimrc is
 		changed.
 		NOTE: It is not executed when the plugin is not installed.
