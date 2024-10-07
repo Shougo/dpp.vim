@@ -33,7 +33,7 @@ export class Loader {
     denops: Denops,
     type: DppExtType,
     name: string,
-  ) {
+  ): Promise<boolean> {
     const runtimepath = await op.runtimepath.getGlobal(denops);
     if (runtimepath !== this.#prevRuntimepath) {
       this.#cachedPaths = await globpath(
@@ -46,10 +46,14 @@ export class Loader {
     const key = `@dpp-${type}s/${name}`;
 
     if (!this.#cachedPaths[key]) {
-      return;
+      return this.#prevRuntimepath === "";
     }
 
     await this.registerPath(type, this.#cachedPaths[key]);
+
+    // NOTE: this.#prevRuntimepath may be true if initialized.
+    // NOTE: If not found, it returns false, .
+    return this.#prevRuntimepath === "" || this.#cachedPaths[key] !== undefined;
   }
 
   async registerPath(type: DppExtType, path: string) {
