@@ -1,6 +1,6 @@
 {
   "name": "dpp.vim",
-  "description": "Dark Powered Plugin manager for Vim/neovim",
+  "description": "Dark Powered Plugin manager for Vim/NeoVim",
   "engines": {
     "nvim": "^0.10.0",
     "vim": "^9.0.1276"
@@ -10,6 +10,6 @@
     "url": "https://github.com/Shougo/dpp.vim"
   },
   "dependencies": {
-    "https://github.com/vim-denops/denops.vim": "5.0.0"
+    "https://github.com/vim-denops/denops.vim": "7.0.0"
   }
 }
