@@ -1,7 +1,7 @@
 import type { Plugin } from "../dpp/types.ts";
 
-import type { Denops } from "jsr:@denops/std@~7.2.0";
-import * as vars from "jsr:@denops/std@~7.2.0/variable";
+import type { Denops } from "jsr:@denops/std@~7.3.0";
+import * as vars from "jsr:@denops/std@~7.3.0/variable";
 
 import type {
   ActionArguments,
