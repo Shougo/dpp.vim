@@ -406,6 +406,9 @@ export class DppImpl implements Dpp {
       await denops.call("dpp#util#_dos2unix", startupFile);
     }
 
+    // checkFiles must be unique
+    checkFiles = [...new Set(checkFiles)];
+
     // Write state file
     const stateFile = `${basePath}/${name}/state.vim`;
     const stateLines = [

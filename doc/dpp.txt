@@ -156,6 +156,7 @@ dpp#check_files([{name}])
 		If it is outdated, |dpp#make_state()| is called
 		automatically.
 		It should be called when |BufWritePost| autocmd.
+		NOTE: "checkFiles" must be set in |dpp#make_state()| script.
 
                                                            *dpp#clear_state()*
 dpp#clear_state([{name}])
@@ -189,7 +190,8 @@ dpp#make_state({base-path}, {config-path}[, {name}])
 		object.
 
 		checkFiles	(string[])	(Optional)
-			Check files when update timestamp.
+			Check file paths when update timestamp.
+			It is used when |dpp#check_files()|.
 			Default: []
 
 		plugins		(Plugin[])	(Required)
