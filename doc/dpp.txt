@@ -536,13 +536,14 @@ hook_post_source (String)
 
 		NOTE: In Vim initializing, you must call the
 		"hook_post_source" hooks manually in |VimEnter| if needed.
+		NOTE: |dpp-plugin-option-rtp| must not be empty string.
 >
 		autocmd VimEnter * call dpp#call_hook('post_source')
 <
                                           *dpp-plugin-option-hook_post_update*
 hook_post_update (String)
 		It is executed after updated and before
-		|dpp-plugin-option-build|.
+		|dpp-ext-installer-action-build|.
 		NOTE: The plugin may not be sourced.
 		NOTE: To use the feature, you need to install
 		"dpp-ext-installer".
@@ -555,6 +556,7 @@ hook_source	(String) or (Function)
 		It is mainly used for plugin configure.
 		NOTE: The "sourced" means after |dpp#min#load_state()| or
 		autoloaded.
+		NOTE: |dpp-plugin-option-rtp| must not be empty string.
 
                                                    *dpp-plugin-option-lua_add*
 lua_add		(String)
@@ -586,6 +588,7 @@ lua_post_sources (String)
 		Lua language string hook instead of Vim script.
 		It is converted to |dpp-plugin-option-hook_post_source| key.
 		NOTE: It works only for NeoVim or |+lua|.
+		NOTE: |dpp-plugin-option-rtp| must not be empty string.
 
                                            *dpp-plugin-option-lua_post_update*
 lua_post_update	(String)
@@ -601,6 +604,7 @@ lua_source	(String)
 		Lua language string hook instead of Vim script.
 		It is converted to |dpp-plugin-option-hook_source| key.
 		NOTE: It works only for NeoVim or |+lua|.
+		NOTE: |dpp-plugin-option-rtp| must not be empty string.
 
 ------------------------------------------------------------------------------
 LUA FUNCTIONS                                              *dpp-lua-functions*
@@ -712,7 +716,7 @@ The following plugins will not be merged to prevent merge problems
 - |dpp-plugin-option-merged| is v:false
 - local plugin (dpp-ext-local)
 - lazy loaded plugin (|dpp-plugin-option-lazy|)
-- uses |dpp-plugin-option-build|
+- uses |dpp-ext-installer-action-build|
 - uses |dpp-plugin-option-hook_post_update|
 - uses |dpp-plugin-option-if|
 
