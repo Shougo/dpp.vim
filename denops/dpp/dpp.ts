@@ -177,7 +177,6 @@ export class DppImpl implements Dpp {
 
       if (
         await isDirectory(plugin.path) &&
-        await isDirectory(plugin.rtp) &&
         await checkIf(plugin)
       ) {
         availablePlugins[plugin.name] = plugin;
@@ -212,7 +211,7 @@ export class DppImpl implements Dpp {
       "dpp#util#_get_runtime_path",
     ) as string;
     const addRtp = async (plugin: Plugin) => {
-      if (!plugin.rtp) {
+      if (!plugin.rtp || plugin.rtp === "") {
         return;
       }
 
@@ -239,7 +238,7 @@ export class DppImpl implements Dpp {
         depends.add(depend);
       }
 
-      if (plugin.hook_source) {
+      if (plugin.rtp !== "" && plugin.hook_source) {
         hookSources.push(plugin.hook_source);
       }
 
@@ -259,7 +258,7 @@ export class DppImpl implements Dpp {
 
       await addRtp(plugin);
 
-      if (plugin.hook_source) {
+      if (plugin.rtp !== "" && plugin.hook_source) {
         hookSources.push(plugin.hook_source);
       }
     }
@@ -565,7 +564,7 @@ function initPlugin(plugin: Plugin, basePath: string, hasLua: boolean): Plugin {
 
   // Set rtp
   // NOTE: !plugin.rtp === true if empty string
-  if (plugin.rtp === undefined || plugin.rtp.length != 0) {
+  if (plugin.rtp === undefined || plugin.rtp !== "") {
     plugin.rtp = !plugin.rtp ? plugin.path : `${plugin.path}/${plugin.rtp}`;
   }
   // Chomp
