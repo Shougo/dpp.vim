@@ -230,7 +230,7 @@ export class DppImpl implements Dpp {
     // Add plugins runtimepath
     const depends = new Set<string>();
     const nonLazyPlugins = Object.values(availablePlugins).filter((plugin) =>
-      !plugin.lazy
+      plugin.rtp !== "" && !plugin.lazy
     );
     const hookSources = [];
     for (const plugin of nonLazyPlugins) {
@@ -238,7 +238,7 @@ export class DppImpl implements Dpp {
         depends.add(depend);
       }
 
-      if (plugin.rtp !== "" && plugin.hook_source) {
+      if (plugin.hook_source) {
         hookSources.push(plugin.hook_source);
       }
 
