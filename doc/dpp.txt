@@ -445,7 +445,8 @@ rtp		(String)
 		subdirectory.
 		For example: https://github.com/rstacruz/sparkup
 		If it is empty string, dpp will not add the path to
-		'runtimepath'.  It is useful to manage non plugin repostories.
+		'runtimepath'.  It is useful to manage non plugin repostories
+		or already added to 'runtimepath' plugin manually.
 		NOTE: If it is empty string, |dpp-plugin-option-hook_source|
 		and |dpp-plugin-option-hook_post_source| hooks are not called.
 
