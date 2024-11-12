@@ -8,68 +8,57 @@ export type OnInitArguments<Params extends BaseParams> = {
   protocolParams: Params;
 };
 
-export type DetectArguments<Params extends BaseParams> = {
+type BaseProtocolArguments<Params extends BaseParams> = {
   denops: Denops;
   plugin: Plugin;
   protocolOptions: ProtocolOptions;
   protocolParams: Params;
 };
 
-export type GetUrlArguments<Params extends BaseParams> = {
-  denops: Denops;
-  plugin: Plugin;
-  protocolOptions: ProtocolOptions;
-  protocolParams: Params;
-};
+export type DetectArguments<Params extends BaseParams> = BaseProtocolArguments<
+  Params
+>;
 
-export type GetSyncCommandsArguments<Params extends BaseParams> = {
-  denops: Denops;
-  plugin: Plugin;
-  protocolOptions: ProtocolOptions;
-  protocolParams: Params;
-};
+export type GetUrlArguments<Params extends BaseParams> = BaseProtocolArguments<
+  Params
+>;
 
-export type GetLogCommandsArguments<Params extends BaseParams> = {
-  denops: Denops;
-  plugin: Plugin;
-  protocolOptions: ProtocolOptions;
-  protocolParams: Params;
-  newRev: string;
-  oldRev: string;
-};
+export type GetSyncCommandsArguments<Params extends BaseParams> =
+  BaseProtocolArguments<Params>;
+
+export type GetLogCommandsArguments<Params extends BaseParams> =
+  & BaseProtocolArguments<Params>
+  & {
+    newRev: string;
+    oldRev: string;
+  };
 
 export type GetRevisionLockCommandsArguments<
   Params extends BaseParams,
-> = {
-  denops: Denops;
-  plugin: Plugin;
-  protocolOptions: ProtocolOptions;
-  protocolParams: Params;
-};
+> = BaseProtocolArguments<Params>;
 
-export type GetRollbackCommandsArguments<Params extends BaseParams> = {
-  denops: Denops;
-  plugin: Plugin;
-  protocolOptions: ProtocolOptions;
-  protocolParams: Params;
-  rev: string;
-};
+export type GetRollbackCommandsArguments<Params extends BaseParams> =
+  & BaseProtocolArguments<Params>
+  & {
+    rev: string;
+  };
 
-export type GetDiffCommandsArguments<Params extends BaseParams> = {
-  denops: Denops;
-  plugin: Plugin;
-  protocolOptions: ProtocolOptions;
-  protocolParams: Params;
-  newRev: string;
-  oldRev: string;
-};
+export type GetDiffCommandsArguments<Params extends BaseParams> =
+  & BaseProtocolArguments<Params>
+  & {
+    newRev: string;
+    oldRev: string;
+  };
 
-export type GetRevisionArguments<Params extends BaseParams> = {
-  denops: Denops;
-  plugin: Plugin;
-  protocolOptions: ProtocolOptions;
-  protocolParams: Params;
-};
+export type GetChangesCountArguments<Params extends BaseParams> =
+  & BaseProtocolArguments<Params>
+  & {
+    newRev: string;
+    oldRev: string;
+  };
+
+export type GetRevisionArguments<Params extends BaseParams> =
+  BaseProtocolArguments<Params>;
 
 export type Command = {
   command: string;
@@ -123,6 +112,11 @@ export abstract class BaseProtocol<Params extends BaseParams> {
   }
   getDiffCommands(
     _args: GetDiffCommandsArguments<Params>,
+  ): Promise<Command[]> | Command[] {
+    return [];
+  }
+  getChangesCountCommands(
+    _args: GetChangesCountArguments<Params>,
   ): Promise<Command[]> | Command[] {
     return [];
   }

@@ -845,6 +845,10 @@ PROTOCOL ATTRIBUTES                                  *dpp-protocol-attributes*
 detect			(function)			(Optional)
 		Called to detect plugin's protocol.
 
+                               *dpp-protocol-attribute-getChangesCountCommand*
+getChangesCountCommand	(function)			(Optional)
+		Called to get changes count command.
+
                                        *dpp-protocol-attribute-getDiffCommand*
 getDiffCommand		(function)			(Optional)
 		Called to get updated diff command.
