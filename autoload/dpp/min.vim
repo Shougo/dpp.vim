@@ -9,7 +9,9 @@ function dpp#min#load_state(path, name=v:progname->fnamemodify(':r')) abort
   const state = printf('%s/%s/state.vim', g:dpp#_base_path, a:name)
   if !startup->filereadable() || !state->filereadable() | return 1 | endif
   try
-    let g:dpp#_state = has('nvim') ? state->readfile()->json_decode()
+    let g:dpp#_state =
+          \   has('nvim')
+          \ ? state->readfile()->json_decode()
           \ : state->readfile()[0]->js_decode()
     execute 'source' startup->fnameescape()
     unlet g:dpp#_state
@@ -21,7 +23,8 @@ function dpp#min#load_state(path, name=v:progname->fnamemodify(':r')) abort
 endfunction
 function dpp#min#_init() abort
   const g:dpp#_state_version = 3
-  const g:dpp#_is_sudo = $SUDO_USER !=# '' && $USER !=# $SUDO_USER
+  const g:dpp#_is_sudo =
+        \    $SUDO_USER !=# '' && $USER !=# $SUDO_USER
         \ && $HOME !=# ('~'.$USER)->expand()
         \ && $HOME ==# ('~'.$SUDO_USER)->expand()
   const g:dpp#_init_runtimepath = &runtimepath
@@ -32,12 +35,10 @@ function dpp#min#_init() abort
         \    b:->get('did_ftplugin', v:false)
         \ || b:->get('did_indent', v:false)
         \ || has('nvim')
-
   let g:dpp#_plugins = {}
   let g:dpp#_options = {}
   let g:dpp#_check_files = []
   let g:dpp#_multiple_hooks = []
-
   augroup dpp
     autocmd!
     autocmd User Dpp:makeStatePost ++nested :

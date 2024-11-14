@@ -37,9 +37,11 @@ function dpp#util#_check_files(name) abort
 endfunction
 
 function dpp#util#_convert2list(expr) abort
-  return a:expr->type() ==# v:t_list ? a:expr->copy() :
-        \ a:expr->type() ==# v:t_string ?
-        \   (a:expr ==# '' ? [] : a:expr->split('\r\?\n', 1))
+  return
+        \   a:expr->type() ==# v:t_list
+        \ ? a:expr->copy()
+        \ : a:expr->type() ==# v:t_string
+        \ ? (a:expr ==# '' ? [] : a:expr->split('\r\?\n', 1))
         \ : [a:expr]
 endfunction
 
@@ -47,8 +49,7 @@ function dpp#util#_split_rtp(runtimepath) abort
   if a:runtimepath->stridx('\,') < 0
     let rtps = a:runtimepath->split(',')
   else
-    const split = a:runtimepath->split('\\\@<!\%(\\\\\)*\zs,')
-    let rtps = split
+    let rtps = a:runtimepath->split('\\\@<!\%(\\\\\)*\zs,')
           \ ->map({ _, val -> val->substitute('\\\([\\,]\)', '\1', 'g') })
   endif
 
@@ -58,7 +59,7 @@ function dpp#util#_split_rtp(runtimepath) abort
 endfunction
 function dpp#util#_join_rtp(list, runtimepath, rtp) abort
   let list = dpp#util#_uniq(a:list)
-  return (a:runtimepath->stridx('\,') < 0 && a:rtp->stridx(',') < 0)
+  return    (a:runtimepath->stridx('\,') < 0 && a:rtp->stridx(',') < 0)
         \ ? list->join(',')
         \ : list->map({ _, val -> s:escape(val) })->join(',')
 endfunction
