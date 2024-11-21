@@ -65,7 +65,7 @@ export class Loader {
           console.warn("*".repeat(80));
           console.warn(`Deno module cache issue is detected.`);
           console.warn(
-            `Execute '!deno cache --reload "${path}"' and restart Vim/NeoVim.`,
+            `Execute '!deno cache --reload "${path}"' and restart Vim/Neovim.`,
           );
           console.warn("*".repeat(80));
         }

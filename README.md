@@ -1,6 +1,6 @@
 # dpp.vim
 
-> Dark Powered Plugin manager for Vim/NeoVim
+> Dark Powered Plugin manager for Vim/Neovim
 
 If you don't want to configure plugins, you don't have to use the plugin
 manager. It does not work with zero configuration. You can use other plugin
@@ -31,7 +31,7 @@ see "FAQ" section in [help](doc/dpp.txt).
 
 ## Install
 
-**Note:** Dpp.vim requires NeoVim (0.10.0+ and of course, **latest** is
+**Note:** Dpp.vim requires Neovim (0.10.0+ and of course, **latest** is
 recommended) or Vim 9.0.1276. See [requirements](#requirements) if you aren't
 sure whether you have this.
 

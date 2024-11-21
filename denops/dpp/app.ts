@@ -99,7 +99,7 @@ export const main: Entrypoint = (denops: Denops) => {
           console.warn("*".repeat(80));
           console.warn(`Deno module cache issue is detected.`);
           console.warn(
-            `Execute '!deno cache --reload "${configPath}"' and restart Vim/NeoVim.`,
+            `Execute '!deno cache --reload "${configPath}"' and restart Vim/Neovim.`,
           );
           console.warn("*".repeat(80));
         }

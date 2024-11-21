@@ -42,7 +42,7 @@ function s:init() abort
   endif
 
   if !has('patch-9.0.1276') && !has('nvim-0.10')
-    call dpp#util#_error('dpp.vim requires Vim 9.0.1276+ or NeoVim 0.10+.')
+    call dpp#util#_error('dpp.vim requires Vim 9.0.1276+ or Neovim 0.10+.')
     return 1
   endif
 

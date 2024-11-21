@@ -1,4 +1,4 @@
-*dpp.txt*	Dark powered plugin manager for Vim/NeoVim
+*dpp.txt*	Dark powered plugin manager for Vim/Neovim
 
 Author: Shougo <Shougo.Matsu at gmail.com>
 License: MIT license
@@ -44,7 +44,7 @@ managers.
 ==============================================================================
 INSTALL                                                          *dpp-install*
 
-NOTE: dpp.vim requires NeoVim (0.10.0+) or Vim 9.0.1276+ (latest is
+NOTE: dpp.vim requires Neovim (0.10.0+) or Vim 9.0.1276+ (latest is
 recommended).
 
 Please install both Deno 1.45+ and "denops.vim" v7.0+.
@@ -94,7 +94,7 @@ inlineVimrcs		(string[])
 		NOTE: It must be set before |dpp#make_state()|.
 		NOTE: The files must not be included "<<" pattern(here
 		document).  It breaks the parser.
-		NOTE: It also supports ".lua" file for NeoVim.
+		NOTE: It also supports ".lua" file for Neovim.
 
 		Defaults: []
 
@@ -369,8 +369,8 @@ on_if		(String)
 on_lua		(List) or (String)
 		If it is matched to the required lua module root, dpp will
 		call |dpp#source()|.
-		NOTE: It is for NeoVim only.
-		NOTE: It does not work for NeoVim standard modules and require
+		NOTE: It is for Neovim only.
+		NOTE: It does not work for Neovim standard modules and require
 		in |vim.loop| modules.
 		NOTE: You cannot require on_lua plugins in
 		|dpp-plugin-option-hook_add|.  Because the plugins are not
@@ -563,14 +563,14 @@ hook_source	(String) or (Function)
 lua_add		(String)
 		Lua language string hook instead of Vim script.
 		It is converted to |dpp-plugin-option-hook_add| key.
-		NOTE: It works only for NeoVim or |+lua|.
+		NOTE: It works only for Neovim or |+lua|.
 
                                         *dpp-plugin-option-lua_depends_update*
 lua_depends_update (String)
 		Lua language string hook instead of Vim script.
 		It is converted to |dpp-plugin-option-hook_depends_update|
 		key.
-		NOTE: It works only for NeoVim or |+lua|.
+		NOTE: It works only for Neovim or |+lua|.
 		NOTE: To use the feature, you need to install
 		"dpp-ext-installer".
 		https://github.com/Shougo/dpp-ext-installer
@@ -579,7 +579,7 @@ lua_depends_update (String)
 lua_done_update	(String)
 		Lua language string hook instead of Vim script.
 		It is converted to |dpp-plugin-option-hook_done_update| key.
-		NOTE: It works only for NeoVim or |+lua|.
+		NOTE: It works only for Neovim or |+lua|.
 		NOTE: To use the feature, you need to install
 		"dpp-ext-installer".
 		https://github.com/Shougo/dpp-ext-installer
@@ -588,14 +588,14 @@ lua_done_update	(String)
 lua_post_sources (String)
 		Lua language string hook instead of Vim script.
 		It is converted to |dpp-plugin-option-hook_post_source| key.
-		NOTE: It works only for NeoVim or |+lua|.
+		NOTE: It works only for Neovim or |+lua|.
 		NOTE: |dpp-plugin-option-rtp| must not be empty string.
 
                                            *dpp-plugin-option-lua_post_update*
 lua_post_update	(String)
 		Lua language string hook instead of Vim script.
 		It is converted to |dpp-plugin-option-hook_post_update| key.
-		NOTE: It works only for NeoVim or |+lua|.
+		NOTE: It works only for Neovim or |+lua|.
 		NOTE: To use the feature, you need to install
 		"dpp-ext-installer".
 		https://github.com/Shougo/dpp-ext-installer
@@ -604,7 +604,7 @@ lua_post_update	(String)
 lua_source	(String)
 		Lua language string hook instead of Vim script.
 		It is converted to |dpp-plugin-option-hook_source| key.
-		NOTE: It works only for NeoVim or |+lua|.
+		NOTE: It works only for Neovim or |+lua|.
 		NOTE: |dpp-plugin-option-rtp| must not be empty string.
 
 ------------------------------------------------------------------------------
@@ -909,7 +909,7 @@ FAQ 8:                                                             |dpp-faq-8|
                                                                    *dpp-faq-1*
 Q: How to donate money to you?
 
-A: I have started github sponsorship to spend more time for Vim/NeoVim
+A: I have started github sponsorship to spend more time for Vim/Neovim
 plugins.  You can donate money to help me!
 
    https://github.com/sponsors/Shougo
@@ -918,7 +918,7 @@ plugins.  You can donate money to help me!
 Q: What means "dark powered"?
 
 A: I think text editor is everything in the world. I want to do everything in
-Vim(NeoVim) like Emacs. It is not allowed by |design-not| in Vim. It is not
+Vim(Neovim) like Emacs. It is not allowed by |design-not| in Vim. It is not
 the light way to use Vim. So I have defined it as the dark way. I am the dark
 Vimmer. My plugins are dark powered.
 
@@ -926,7 +926,7 @@ Vimmer. My plugins are dark powered.
 Q: Why dpp.vim uses Deno?
 
 A: Deno is asynchronous and faster than Vim script and it can be used in both
-Vim and NeoVim.  The features are what I desired.
+Vim and Neovim.  The features are what I desired.
 I have created some plugins by TypeScript.  The development is very fun and
 easy to maintain.
 
@@ -994,7 +994,7 @@ A: You can remove them like below.
                                                                    *dpp-faq-8*
 Q: Why filetype plugin and detection are disabled in default?
 
-A: Because it is Vim's default behavior.  Some plugin managers and NeoVim is
+A: Because it is Vim's default behavior.  Some plugin managers and Neovim is
 default enabled for the features.
 But I don't like to enable the feature by default because it affects the
 editor performance.  You must explicitly enable it if necessary.

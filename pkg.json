@@ -1,6 +1,6 @@
 {
   "name": "dpp.vim",
-  "description": "Dark Powered Plugin manager for Vim/NeoVim",
+  "description": "Dark Powered Plugin manager for Vim/Neovim",
   "engines": {
     "nvim": "^0.10.0",
     "vim": "^9.0.1276"
