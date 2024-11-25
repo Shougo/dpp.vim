@@ -44,7 +44,7 @@ managers.
 ==============================================================================
 INSTALL                                                          *dpp-install*
 
-NOTE: dpp.vim requires Neovim (0.10.0+) or Vim 9.1.0448+ (latest is
+NOTE: dpp.vim requires Vim 9.1.0448+ or Neovim (0.10.0+) (latest is
 recommended).
 
 Please install both Deno 1.45+ and "denops.vim" v7.0+.
@@ -1001,6 +1001,9 @@ editor performance.  You must explicitly enable it if necessary.
 
 ==============================================================================
 COMPATIBILITY                                              *dpp-compatibility*
+
+2024.11.25
+* Vim 9.1.0448+ or Neovim (0.10.0+) is required.
 
 2024.08.07
 * Remove "frozen" and "build".  Please use instead

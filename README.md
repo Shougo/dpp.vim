@@ -31,9 +31,8 @@ see "FAQ" section in [help](doc/dpp.txt).
 
 ## Install
 
-**Note:** Dpp.vim requires Neovim (0.10.0+ and of course, **latest** is
-recommended) or Vim 9.1.0448. See [requirements](#requirements) if you aren't
-sure whether you have this.
+**Note:** Dpp.vim requires Vim 9.1.0448+ or Neovim 0.10.0+. See
+[requirements](#requirements) if you aren't sure whether you have this.
 
 NOTE: To install plugins from remote, you need to install
 [dpp-ext-installer](https://github.com/Shougo/dpp-ext-installer).
