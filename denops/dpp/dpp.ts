@@ -23,9 +23,9 @@ import {
   printError,
 } from "./utils.ts";
 
-import type { Denops } from "jsr:@denops/std@~7.3.0";
-import * as fn from "jsr:@denops/std@~7.3.0/function";
-import * as vars from "jsr:@denops/std@~7.3.0/variable";
+import type { Denops } from "jsr:@denops/std@~7.4.0";
+import * as fn from "jsr:@denops/std@~7.4.0/function";
+import * as vars from "jsr:@denops/std@~7.4.0/variable";
 
 import { dirname } from "jsr:@std/path@~1.0.2/dirname";
 import { extname } from "jsr:@std/path@~1.0.2/extname";

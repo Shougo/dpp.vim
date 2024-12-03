@@ -1,14 +1,14 @@
 import type { Plugin } from "../dpp/types.ts";
 
-import type { Denops } from "jsr:@denops/std@~7.3.0";
-import * as vars from "jsr:@denops/std@~7.3.0/variable";
+import type { Denops } from "jsr:@denops/std@~7.4.0";
+import * as vars from "jsr:@denops/std@~7.4.0/variable";
 
 import type {
   ActionArguments,
   ActionFlags,
   Item,
-} from "jsr:@shougo/ddu-vim@6.4.0/types";
-import { BaseSource } from "jsr:@shougo/ddu-vim@6.4.0/source";
+} from "jsr:@shougo/ddu-vim@9.0.0/types";
+import { BaseSource } from "jsr:@shougo/ddu-vim@9.0.0/source";
 import type { ActionData } from "jsr:@shougo/ddu-kind-file@0.9.0";
 
 type Params = {

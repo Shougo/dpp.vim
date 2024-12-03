@@ -3,24 +3,22 @@ import type { BaseExt } from "./base/ext.ts";
 import type { BaseProtocol } from "./base/protocol.ts";
 import { isDenoCacheIssueError } from "./utils.ts";
 
-import type { Denops } from "jsr:@denops/std@~7.3.0";
-import * as op from "jsr:@denops/std@~7.3.0/option";
-import * as fn from "jsr:@denops/std@~7.3.0/function";
+import type { Denops } from "jsr:@denops/std@~7.4.0";
+import * as op from "jsr:@denops/std@~7.4.0/option";
+import * as fn from "jsr:@denops/std@~7.4.0/function";
 
 import { basename } from "jsr:@std/path@~1.0.2/basename";
 import { parse } from "jsr:@std/path@~1.0.2/parse";
 import { toFileUrl } from "jsr:@std/path@~1.0.2/to-file-url";
 import { Lock } from "jsr:@core/asyncutil@~1.2.0/lock";
 
-type Mod = {
-  // deno-lint-ignore no-explicit-any
-  mod: any;
-  path: string;
+type Ext = {
+  ext: Record<string, BaseExt<BaseParams>>;
+  protocol: Record<string, BaseProtocol<BaseParams>>;
 };
 
 export class Loader {
-  #extension: Extension = new Extension();
-  #mods: Record<DppExtType, Record<string, Mod>> = {
+  #exts: Ext = {
     ext: {},
     protocol: {},
   };
@@ -76,21 +74,32 @@ export class Loader {
     });
   }
 
-  getExt(name: ExtName): BaseExt<BaseParams> | null {
-    const mod = this.#mods.ext[name];
-    if (!mod) {
-      return null;
-    }
+  registerExtension(
+    type: "ext",
+    name: string,
+    ext: BaseExt<BaseParams>,
+  ): void;
+  registerExtension(
+    type: "protocol",
+    name: string,
+    ext: BaseProtocol<BaseParams>,
+  ): void;
+  registerExtension(
+    type: DppExtType,
+    name: string,
+    ext:
+      | BaseExt<BaseParams>
+      | BaseProtocol<BaseParams>,
+  ) {
+    ext.name = name;
+    this.#exts[type][name] = ext;
+  }
 
-    return this.#extension.getExt(mod, name);
+  getExt(name: ExtName): BaseExt<BaseParams> | null {
+    return this.#exts.ext[name];
   }
   getProtocol(name: ProtocolName): BaseProtocol<BaseParams> | null {
-    const mod = this.#mods.protocol[name];
-    if (!mod) {
-      return null;
-    }
-
-    return this.#extension.getProtocol(mod, name);
+    return this.#exts.protocol[name];
   }
 
   async #register(type: DppExtType, path: string) {
@@ -98,43 +107,33 @@ export class Loader {
       return;
     }
 
-    const mods = this.#mods[type];
-
     const name = parse(path).name;
+    const mod = await import(toFileUrl(path).href);
 
-    const mod: Mod = {
-      mod: await import(toFileUrl(path).href),
-      path,
-    };
+    const typeExt = this.#exts[type];
+    let add;
+    switch (type) {
+      case "ext":
+        add = (name: string) => {
+          const ext = new mod.Ext();
+          ext.name = name;
+          ext.path = path;
+          typeExt[name] = ext;
+        };
+        break;
+      case "protocol":
+        add = (name: string) => {
+          const ext = new mod.Protocol();
+          ext.name = name;
+          ext.path = path;
+          typeExt[name] = ext;
+        };
+        break;
+    }
 
-    mods[name] = mod;
+    add(name);
 
     this.#checkPaths[path] = true;
-  }
-}
-
-class Extension {
-  #exts: Record<ExtName, BaseExt<BaseParams>> = {};
-  #protocols: Record<ProtocolName, BaseProtocol<BaseParams>> = {};
-
-  getExt(mod: Mod, name: string): BaseExt<BaseParams> {
-    if (!this.#exts[name]) {
-      const obj = new mod.mod.Ext();
-      obj.name = name;
-      obj.path = mod.path;
-      this.#exts[obj.name] = obj;
-    }
-    return this.#exts[name];
-  }
-
-  getProtocol(mod: Mod, name: string): BaseProtocol<BaseParams> {
-    if (!this.#protocols[name]) {
-      const obj = new mod.mod.Protocol();
-      obj.name = name;
-      obj.path = mod.path;
-      this.#protocols[obj.name] = obj;
-    }
-    return this.#protocols[name];
   }
 }
 

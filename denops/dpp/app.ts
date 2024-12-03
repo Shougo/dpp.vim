@@ -2,18 +2,19 @@ import { ContextBuilderImpl } from "./context.ts";
 import { DppImpl } from "./dpp.ts";
 import type {
   BaseParams,
+  DppExtType,
   DppOptions,
   ExtOptions,
   ProtocolName,
 } from "./types.ts";
 import type { BaseExt } from "./base/ext.ts";
-import type { Protocol } from "./base/protocol.ts";
+import type { BaseProtocol, Protocol } from "./base/protocol.ts";
 import { Loader } from "./loader.ts";
 import { extAction } from "./ext.ts";
 import { isDenoCacheIssueError } from "./utils.ts";
 
-import type { Denops, Entrypoint } from "jsr:@denops/std@~7.3.0";
-import * as vars from "jsr:@denops/std@~7.3.0/variable";
+import type { Denops, Entrypoint } from "jsr:@denops/std@~7.4.0";
+import * as vars from "jsr:@denops/std@~7.4.0/variable";
 
 import { ensure } from "jsr:@core/unknownutil@~4.3.0/ensure";
 import { is } from "jsr:@core/unknownutil@~4.3.0/is";
@@ -25,6 +26,36 @@ export const main: Entrypoint = (denops: Denops) => {
   const contextBuilder = new ContextBuilderImpl();
 
   denops.dispatcher = {
+    async registerPath(arg1: unknown, arg2: unknown): Promise<void> {
+      await loader.registerPath(
+        ensure(arg1, is.String) as DppExtType,
+        ensure(arg2, is.String),
+      );
+      return Promise.resolve();
+    },
+    registerExtension(
+      arg1: unknown,
+      arg2: unknown,
+      arg3: unknown,
+    ): Promise<void> {
+      const type = ensure(arg1, is.String);
+      const extName = ensure(arg2, is.String);
+
+      switch (type) {
+        case "ext":
+          loader.registerExtension(type, extName, arg3 as BaseExt<BaseParams>);
+          break;
+        case "protocol":
+          loader.registerExtension(
+            type,
+            extName,
+            arg3 as BaseProtocol<BaseParams>,
+          );
+          break;
+      }
+
+      return Promise.resolve();
+    },
     async extAction(
       arg1: unknown,
       arg2: unknown,
