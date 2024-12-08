@@ -41,7 +41,8 @@ function dpp#source#_source(plugins, function_prefix) abort
 
   " Reload script files.
   for plugin in sourced
-    for directory in ['ftdetect', 'after/ftdetect', 'plugin', 'after/plugin']
+    for directory in
+          \ ['ftdetect', 'after/ftdetect', 'plugin', 'after/plugin']
           \ ->filter({ _, val -> (plugin.rtp .. '/' .. val)->isdirectory() })
           \ ->map({ _, val -> plugin.rtp .. '/' .. val })
       if directory =~# 'ftdetect'
@@ -49,13 +50,17 @@ function dpp#source#_source(plugins, function_prefix) abort
           execute 'augroup filetypedetect'
         endif
       endif
-      let files = (directory .. '/**/*.vim')->glob(v:true, v:true)
+
+      let files = []
+      let files += (directory .. '/**/*.vim')->glob(v:true, v:true)
       if has('nvim')
         let files += (directory .. '/**/*.lua')->glob(v:true, v:true)
       endif
+
       for file in files
         execute 'source' file->fnameescape()
       endfor
+
       if directory =~# 'ftdetect'
         execute 'augroup END'
       endif
@@ -64,8 +69,10 @@ function dpp#source#_source(plugins, function_prefix) abort
     if !has('vim_starting')
       let augroup = plugin->get('augroup',
             \ plugin->dpp#util#_get_normalized_name())
-      let events = ['VimEnter', 'BufRead', 'BufEnter',
-            \ 'BufWinEnter', 'WinEnter']
+      let events = [
+            \   'VimEnter', 'BufRead', 'BufEnter',
+            \   'BufWinEnter', 'WinEnter',
+            \ ]
       if has('gui_running') && &term ==# 'builtin_gui'
         call add(events, 'GUIEnter')
       endif
