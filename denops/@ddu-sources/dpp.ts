@@ -7,8 +7,8 @@ import type {
   ActionArguments,
   ActionFlags,
   Item,
-} from "jsr:@shougo/ddu-vim@9.1.0/types";
-import { BaseSource } from "jsr:@shougo/ddu-vim@9.1.0/source";
+} from "jsr:@shougo/ddu-vim@9.2.0/types";
+import { BaseSource } from "jsr:@shougo/ddu-vim@9.2.0/source";
 import type { ActionData } from "jsr:@shougo/ddu-kind-file@0.9.0";
 
 type Params = {
@@ -49,6 +49,12 @@ export class Source extends BaseSource<Params> {
               path: plugin.path,
               __name: plugin.name,
             } as Action,
+            info: [
+              {
+                text: plugin.path,
+                hl_group: "Directory",
+              },
+            ],
           };
         });
 
