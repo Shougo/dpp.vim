@@ -51,7 +51,7 @@ export class Source extends BaseSource<Params> {
             } as Action,
             info: [
               {
-                text: plugin.path,
+                text: plugin.path ?? "",
                 hl_group: "Directory",
               },
             ],
