@@ -288,7 +288,7 @@ endfunction
 
 function dpp#util#_check_clean() abort
   const plugins_directories = dpp#get()->values()
-        \ ->map({ _, val -> val.path })
+        \ ->map({ _, val -> dpp#util#_substitute_path(val.path) })
   const path = dpp#util#_substitute_path(
         \ 'repos/*/*/*'->globpath(g:dpp#_base_path, v:true))
   return path->split("\n")->filter( { _, val ->
