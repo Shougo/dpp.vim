@@ -337,8 +337,8 @@ on_event	(String) or (List)
 
                                                    *dpp-plugin-option-on_func*
 on_func		(List) or (String)
-		If it is matched to the called function name, dpp will call
-		|dpp#source()|.
+		If it is matched to the called undefined function name, dpp
+		will call |dpp#source()|.
 		NOTE: It does not work when Vim initialized.
 		NOTE: It does not work for Vim9 script. It is |FuncUndefined|
 		limitation.
