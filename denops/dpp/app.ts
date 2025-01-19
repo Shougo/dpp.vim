@@ -16,6 +16,7 @@ import { isDenoCacheIssueError } from "./utils.ts";
 import type { Denops, Entrypoint } from "jsr:@denops/std@~7.4.0";
 import * as vars from "jsr:@denops/std@~7.4.0/variable";
 
+import { Lock } from "jsr:@core/asyncutil@~1.2.0/lock";
 import { ensure } from "jsr:@core/unknownutil@~4.3.0/ensure";
 import { is } from "jsr:@core/unknownutil@~4.3.0/is";
 import { toFileUrl } from "jsr:@std/path@~1.0.2/to-file-url";
@@ -24,6 +25,7 @@ export const main: Entrypoint = (denops: Denops) => {
   const loader = new Loader();
   const dpp = new DppImpl(loader);
   const contextBuilder = new ContextBuilderImpl();
+  const lock = new Lock(0);
 
   denops.dispatcher = {
     async registerPath(arg1: unknown, arg2: unknown): Promise<void> {
@@ -94,50 +96,52 @@ export const main: Entrypoint = (denops: Denops) => {
       const configPath = ensure(arg2, is.String) as string;
       const name = ensure(arg3, is.String) as string;
 
-      try {
-        // NOTE: Import module with fragment so that reload works properly.
-        // https://github.com/vim-denops/denops.vim/issues/227
-        const mod = await import(
-          `${toFileUrl(configPath).href}#${performance.now()}`
-        );
-
-        const obj = new mod.Config();
-
-        //console.log(`${Date.now() - startTime} ms`);
-        const configReturn = await obj.config({
-          contextBuilder,
-          denops,
-          dpp,
-          basePath,
-          name,
-        });
-        //console.log(`${Date.now() - startTime} ms`);
-
-        const [_, options] = await contextBuilder.get(denops);
-
-        await dpp.makeState(
-          denops,
-          options,
-          basePath,
-          configPath,
-          name,
-          configReturn,
-        );
-
-        //console.log(`${Date.now() - startTime} ms`);
-      } catch (e) {
-        if (isDenoCacheIssueError(e)) {
-          console.warn("*".repeat(80));
-          console.warn(`Deno module cache issue is detected.`);
-          console.warn(
-            `Execute '!deno cache --reload "${configPath}"' and restart Vim/Neovim.`,
+      await lock.lock(async () => {
+        try {
+          // NOTE: Import module with fragment so that reload works properly.
+          // https://github.com/vim-denops/denops.vim/issues/227
+          const mod = await import(
+            `${toFileUrl(configPath).href}#${performance.now()}`
           );
-          console.warn("*".repeat(80));
-        }
 
-        console.error(`Failed to load file '${configPath}': ${e}`);
-        throw e;
-      }
+          const obj = new mod.Config();
+
+          //console.log(`${Date.now() - startTime} ms`);
+          const configReturn = await obj.config({
+            contextBuilder,
+            denops,
+            dpp,
+            basePath,
+            name,
+          });
+          //console.log(`${Date.now() - startTime} ms`);
+
+          const [_, options] = await contextBuilder.get(denops);
+
+          await dpp.makeState(
+            denops,
+            options,
+            basePath,
+            configPath,
+            name,
+            configReturn,
+          );
+
+          //console.log(`${Date.now() - startTime} ms`);
+        } catch (e) {
+          if (isDenoCacheIssueError(e)) {
+            console.warn("*".repeat(80));
+            console.warn(`Deno module cache issue is detected.`);
+            console.warn(
+              `Execute '!deno cache --reload "${configPath}"' and restart Vim/Neovim.`,
+            );
+            console.warn("*".repeat(80));
+          }
+
+          console.error(`Failed to load file '${configPath}': ${e}`);
+          throw e;
+        }
+      });
     },
     async getExt(
       arg1: unknown,
