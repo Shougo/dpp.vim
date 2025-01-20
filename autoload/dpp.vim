@@ -1,6 +1,9 @@
 function dpp#get(name = '') abort
-  return a:name ==# '' ?
-        \ g:dpp#_plugins->copy() : g:dpp#_plugins->get(a:name, {})
+  return !'g:dpp#_plugins'->exists()
+        \ ? {}
+        \ : a:name ==# ''
+        \ ? g:dpp#_plugins->copy()
+        \ : g:dpp#_plugins->get(a:name, {})
 endfunction
 
 function dpp#source(
@@ -13,6 +16,11 @@ function dpp#sync_ext_action(ext_name, action_name, action_params={}) abort
     call dpp#util#_error('dpp.vim is not initialized yet.')
     call dpp#util#_error('Please check dpp#min#load_state() is suceeded.')
     return
+  endif
+
+  if !'g:loaded_denops'->exists() && !dpp#get('denops.vim')->empty()
+    " Load denops.vim
+    call dpp#source('denops.vim')
   endif
 
   if !'g:loaded_denops'->exists()
@@ -30,6 +38,11 @@ function dpp#async_ext_action(ext_name, action_name, action_params={}) abort
     call dpp#util#_error('dpp.vim is not initialized yet.')
     call dpp#util#_error('Please check dpp#min#load_state() is suceeded.')
     return
+  endif
+
+  if !'g:loaded_denops'->exists() && !dpp#get('denops.vim')->empty()
+    " Load denops.vim
+    call dpp#source('denops.vim')
   endif
 
   return dpp#denops#_notify('extAction', [
@@ -54,6 +67,11 @@ function dpp#make_state(
           \ 'dpp#make_state() config_path: "%s" is not found.',
           \ a:config_path))
     return 1
+  endif
+
+  if !'g:loaded_denops'->exists() && !dpp#get('denops.vim')->empty()
+    " Load denops.vim
+    call dpp#source('denops.vim')
   endif
 
   return dpp#denops#_notify('makeState', [base_path, config_path, a:name])
