@@ -117,18 +117,13 @@ export async function getExt(
     BaseParams,
   ]
 > {
-  if (!loader.getExt(name)) {
-    const exists = await loader.autoload(denops, "ext", name);
-    if (!exists) {
-      await printError(
-        denops,
-        `Not found ext: "${name}"`,
-      );
-    }
-  }
-
-  const ext = loader.getExt(name);
+  const ext = await loader.getExt(denops, name);
   if (!ext) {
+    await printError(
+      denops,
+      `Not found ext: "${name}"`,
+    );
+
     return [
       undefined,
       defaultExtOptions(),
@@ -154,18 +149,13 @@ async function getProtocol(
     BaseParams,
   ]
 > {
-  if (!loader.getProtocol(name)) {
-    const exists = await loader.autoload(denops, "protocol", name);
-    if (!exists) {
-      await printError(
-        denops,
-        `Not found protocol: "${name}"`,
-      );
-    }
-  }
-
-  const protocol = loader.getProtocol(name);
+  const protocol = await loader.getProtocol(denops, name);
   if (!protocol) {
+    await printError(
+      denops,
+      `Not found protocol: "${name}"`,
+    );
+
     return [
       undefined,
       defaultProtocolOptions(),

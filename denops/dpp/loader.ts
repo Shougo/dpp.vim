@@ -95,10 +95,24 @@ export class Loader {
     this.#exts[type][name] = ext;
   }
 
-  getExt(name: ExtName): BaseExt<BaseParams> | null {
+  async getExt(
+    denops: Denops,
+    name: ExtName,
+  ): Promise<BaseExt<BaseParams> | null> {
+    if (!this.#exts.ext[name]) {
+      await this.autoload(denops, "ext", name);
+    }
+
     return this.#exts.ext[name];
   }
-  getProtocol(name: ProtocolName): BaseProtocol<BaseParams> | null {
+  async getProtocol(
+    denops: Denops,
+    name: ProtocolName,
+  ): Promise<BaseProtocol<BaseParams> | null> {
+    if (!this.#exts.protocol[name]) {
+      await this.autoload(denops, "protocol", name);
+    }
+
     return this.#exts.protocol[name];
   }
 
