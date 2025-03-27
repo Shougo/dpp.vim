@@ -252,6 +252,9 @@ depends		(List or String)
 		Those specified in the list are NOT installed automatically.
 		NOTE: The loading order is not guaranteed in non lazy plugins.
 
+                                               *dpp-plugin-option-description*
+description	(String)
+		Describe the plugin.
                                                   *dpp-plugin-option-extAttrs*
 extAttrs	(Dictionary)
 		It is a dictionary that exts specific attributes.

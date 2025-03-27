@@ -1,14 +1,14 @@
 import type { Plugin } from "../dpp/types.ts";
 
-import type { Denops } from "jsr:@denops/std@~7.4.0";
-import * as vars from "jsr:@denops/std@~7.4.0/variable";
+import type { Denops } from "jsr:@denops/std@~7.5.0";
+import * as vars from "jsr:@denops/std@~7.5.0/variable";
 
 import type {
   ActionArguments,
   ActionFlags,
   Item,
-} from "jsr:@shougo/ddu-vim@9.5.0/types";
-import { BaseSource } from "jsr:@shougo/ddu-vim@9.5.0/source";
+} from "jsr:@shougo/ddu-vim@10.3.0/types";
+import { BaseSource } from "jsr:@shougo/ddu-vim@10.3.0/source";
 import type { ActionData } from "jsr:@shougo/ddu-kind-file@0.9.0";
 
 type Params = {
@@ -44,7 +44,15 @@ export class Source extends BaseSource<Params> {
 
         const items = plugins.map((plugin) => {
           return {
-            word: plugin.name,
+            word: plugin.description
+              ? `${plugin.name} : ${plugin.description}`
+              : plugin.name,
+            highlights: [{
+              name: "pluginName",
+              hl_group: "Statement",
+              col: 1,
+              width: plugin.name.length,
+            }],
             action: {
               path: plugin.path,
               __name: plugin.name,

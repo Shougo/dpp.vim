@@ -8,7 +8,7 @@ import type {
 } from "../types.ts";
 import type { Protocol } from "./protocol.ts";
 
-import type { Denops } from "jsr:@denops/std@~7.4.0";
+import type { Denops } from "jsr:@denops/std@~7.5.0";
 
 export type OnInitArguments<Params extends BaseParams> = {
   denops: Denops;
