@@ -91,7 +91,7 @@ function s:notify(method, args) abort
   endif
 endfunction
 
-const s:root_dir = '<sfile>'->expand()->fnamemodify(':h:h:h')
+const s:root_dir = '<sfile>:h:h:h'->expand()
 const s:sep = has('win32') ? '\' : '/'
 function s:register() abort
   call denops#plugin#load(
