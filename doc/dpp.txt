@@ -462,6 +462,9 @@ script_type	(String)
 		For example: "indent", "plugin", "ftplugin", ...
 		NOTE: You must not specify it for categorized plugins.
 
+                                                      *dpp-plugin-options-url*
+url	(String)
+		Specify the webpage URL.
 
 ------------------------------------------------------------------------------
 HOOKS                                                              *dpp-hooks*

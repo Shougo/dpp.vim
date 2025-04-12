@@ -3,10 +3,12 @@ import type { Plugin } from "../dpp/types.ts";
 import type { Denops } from "jsr:@denops/std@~7.5.0";
 import * as vars from "jsr:@denops/std@~7.5.0/variable";
 
-import type {
-  ActionArguments,
+import {
+  type ActionArguments,
   ActionFlags,
-  Item,
+  type Actions,
+  type DduItem,
+  type Item,
 } from "jsr:@shougo/ddu-vim@10.3.0/types";
 import { BaseSource } from "jsr:@shougo/ddu-vim@10.3.0/source";
 import type { ActionData } from "jsr:@shougo/ddu-kind-file@0.9.0";
@@ -17,6 +19,7 @@ type Params = {
 
 type Action = {
   path: string;
+  url: string;
   __name: string;
 };
 
@@ -55,6 +58,7 @@ export class Source extends BaseSource<Params> {
             }],
             action: {
               path: plugin.path,
+              url: plugin.url ?? "",
               __name: plugin.name,
             } as Action,
             info: [
@@ -73,10 +77,21 @@ export class Source extends BaseSource<Params> {
     });
   }
 
-  override actions: Record<
-    string,
-    (args: ActionArguments<Params>) => Promise<ActionFlags>
-  > = {};
+  override actions: Actions<Params> = {
+    browse: {
+      description: "Browse the plugin URL.",
+      callback: async (args: { denops: Denops; items: DduItem[] }) => {
+        for (const item of args.items) {
+          const action = item?.action as Action;
+          if (action.url.length > 0) {
+            await args.denops.call("ddu#kind#file#open", action.url, "");
+          }
+        }
+
+        return Promise.resolve(ActionFlags.None);
+      },
+    },
+  };
 
   override params(): Params {
     return {
