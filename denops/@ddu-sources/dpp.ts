@@ -4,7 +4,6 @@ import type { Denops } from "jsr:@denops/std@~7.5.0";
 import * as vars from "jsr:@denops/std@~7.5.0/variable";
 
 import {
-  type ActionArguments,
   ActionFlags,
   type Actions,
   type DduItem,
