@@ -21,6 +21,7 @@ import {
   mergeFtplugins,
   parseHooksFile,
   printError,
+  safeStat,
 } from "./utils.ts";
 
 import type { Denops } from "jsr:@denops/std@~7.5.0";
@@ -515,6 +516,13 @@ export class DppImpl implements Dpp {
       break;
     }
 
+    const tagLines = await generateTaglines(Object.values(recordPlugins));
+    await Deno.writeTextFile(
+      `${dppRuntimepath}/doc/tags`,
+      tagLines.join("\n"),
+      { append: true },
+    );
+
     // Merge plugin files
     for (
       const plugin of Object.values(recordPlugins).filter((plugin) =>
@@ -655,6 +663,82 @@ async function detectPlugin(
   }
 
   return plugin;
+}
+
+type Tag = {
+  title: string;
+  pattern: string;
+};
+
+// Function to detect tags in a Markdown file
+async function detectTagsInMarkdown(filePath: string): Promise<Tag[]> {
+  const tags: Tag[] = [];
+  const lines = await Deno.readTextFile(filePath).then((content) =>
+    content.split("\n")
+  );
+
+  for (const line of lines) {
+    // Match to markdown's (# title) or html's (<h1>title</h1>) pattern.
+    const matches = line.match(
+      /^\s*(#+\s*(.+)\s*$|<h[1-6][^>]*>\s*(.+)\s*<\/h[1-6]>)/,
+    );
+
+    if (!matches || matches.length <= 3) {
+      continue;
+    }
+
+    // matches[2]: markdown subpattern
+    // matches[3]: html subpattern
+    const title = matches[2] !== undefined ? matches[2] : matches[3];
+    const pattern = matches[1];
+
+    tags.push({
+      title: title.replace(/\s+/g, "-"),
+      pattern: `/${
+        pattern
+          .replace(/\s+/g, "\\s\\+")
+          .replace(/\//g, "\\/")
+          .replace(/\./g, "\\.")
+      }`,
+    });
+  }
+
+  return tags;
+}
+
+async function generateTaglines(plugins: Plugin[]): Promise<string[]> {
+  const taglines: string[] = [];
+
+  const filteredPlugins = [];
+  for (const plugin of plugins) {
+    if (!(await isDirectory(`${plugin.rtp}/doc`))) {
+      filteredPlugins.push(plugin);
+    }
+  }
+
+  for (const plugin of filteredPlugins) {
+    const markdownFiles = [];
+    for (const file of ["README.md", "README.mkd"]) {
+      const filePath = `${plugin.rtp}/${file}`;
+      if (await safeStat(filePath)) {
+        markdownFiles.push(filePath);
+      }
+    }
+
+    for (const filePath of markdownFiles) {
+      const tags = await detectTagsInMarkdown(filePath);
+
+      for (const tag of tags) {
+        const title =
+          plugin.name.toLowerCase() === tag.title.toLowerCase()
+            ? plugin.name
+            : `${plugin.name}-${tag.title}`;
+        taglines.push(`${title}\t${filePath}\t${tag.pattern}`);
+      }
+    }
+  }
+
+  return taglines;
 }
 
 Deno.test("initPlugin", () => {
