@@ -729,10 +729,9 @@ async function generateTaglines(plugins: Plugin[]): Promise<string[]> {
       const tags = await detectTagsInMarkdown(filePath);
 
       for (const tag of tags) {
-        const title =
-          plugin.name.toLowerCase() === tag.title.toLowerCase()
-            ? plugin.name
-            : `${plugin.name}-${tag.title}`;
+        const title = plugin.name.toLowerCase() === tag.title.toLowerCase()
+          ? plugin.name
+          : `${plugin.name}-${tag.title}`;
         taglines.push(`${title}\t${filePath}\t${tag.pattern}`);
       }
     }
