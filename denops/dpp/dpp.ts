@@ -28,9 +28,9 @@ import type { Denops } from "jsr:@denops/std@~7.5.0";
 import * as fn from "jsr:@denops/std@~7.5.0/function";
 import * as vars from "jsr:@denops/std@~7.5.0/variable";
 
-import { dirname } from "jsr:@std/path@~1.0.2/dirname";
-import { extname } from "jsr:@std/path@~1.0.2/extname";
-import { join } from "jsr:@std/path@~1.0.2/join";
+import { dirname } from "jsr:@std/path@~1.1.0/dirname";
+import { extname } from "jsr:@std/path@~1.1.0/extname";
+import { join } from "jsr:@std/path@~1.1.0/join";
 import { assertEquals } from "jsr:@std/assert@~1.0.2/equals";
 import { is } from "jsr:@core/unknownutil@~4.3.0/is";
 
