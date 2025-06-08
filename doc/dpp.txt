@@ -149,10 +149,12 @@ dpp#check_clean()
 		NOTE: It must be executed after |dpp#min#load_state()|.
 
                                                            *dpp#check_files()*
-dpp#check_files([{name}])
+dpp#check_files([{name}, {extra-args}])
 		Check dpp.vim cache file is outdated.
 		{name} is plugins profile name.  The default is "vim" or
 		"nvim".
+		{extra-args} is extra arguments dictionary.  It can be used in
+		{config-path} TypeScript.
 		If it is outdated, |dpp#make_state()| is called
 		automatically.
 		It should be called when |BufWritePost| autocmd.
