@@ -40,8 +40,8 @@ export const main: Entrypoint = (denops: Denops) => {
       arg2: unknown,
       arg3: unknown,
     ): Promise<void> {
-      const type = ensure(arg1, is.String);
-      const extName = ensure(arg2, is.String);
+      const type = ensure(arg1, is.String) as string;
+      const extName = ensure(arg2, is.String) as string;
 
       switch (type) {
         case "ext":
@@ -65,7 +65,7 @@ export const main: Entrypoint = (denops: Denops) => {
     ): Promise<unknown | undefined> {
       const extName = ensure(arg1, is.String) as string;
       const actionName = ensure(arg2, is.String) as string;
-      const actionParams = ensure(arg3, is.Record);
+      const actionParams = ensure(arg3, is.Record) as Record<string, unknown>;
 
       // Set current options from dpp#_options
       const currentOptions = await vars.g.get(
