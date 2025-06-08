@@ -53,6 +53,7 @@ function dpp#make_state(
       \   base_path=g:->get('dpp#_base_path', ''),
       \   config_path=g:->get('dpp#_config_path', ''),
       \   name=g:->get('dpp#_name', v:progname->fnamemodify(':r')),
+      \   extra_args={},
       \ ) abort
   const base_path = a:base_path->dpp#util#_expand()
   const config_path = a:config_path->dpp#util#_expand()
@@ -74,7 +75,9 @@ function dpp#make_state(
     call dpp#source('denops.vim')
   endif
 
-  return dpp#denops#_notify('makeState', [base_path, config_path, a:name])
+  return dpp#denops#_notify('makeState', [
+        \   base_path, config_path, a:name, a:extra_args,
+        \ ])
 endfunction
 
 function dpp#clear_state(

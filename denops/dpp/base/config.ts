@@ -10,6 +10,7 @@ export type ConfigArguments = {
   dpp: Dpp;
   basePath: string;
   name: string;
+  extraArgs: Record<string, unknown>;
 };
 
 export type MultipleHook = {

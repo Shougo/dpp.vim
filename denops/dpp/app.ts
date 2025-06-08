@@ -90,11 +90,13 @@ export const main: Entrypoint = (denops: Denops) => {
       arg1: unknown,
       arg2: unknown,
       arg3: unknown,
+      arg4: unknown,
     ): Promise<void> {
       //const startTime = Date.now();
       const basePath = ensure(arg1, is.String) as string;
       const configPath = ensure(arg2, is.String) as string;
       const name = ensure(arg3, is.String) as string;
+      const extraArgs = ensure(arg4, is.Record) as Record<string, unknown>;
 
       await lock.lock(async () => {
         try {
@@ -113,6 +115,7 @@ export const main: Entrypoint = (denops: Denops) => {
             dpp,
             basePath,
             name,
+            extraArgs,
           });
           //console.log(`${Date.now() - startTime} ms`);
 
