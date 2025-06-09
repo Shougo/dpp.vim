@@ -128,6 +128,7 @@ export const main: Entrypoint = (denops: Denops) => {
             configPath,
             name,
             configReturn,
+            extraArgs,
           );
 
           //console.log(`${Date.now() - startTime} ms`);

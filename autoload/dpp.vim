@@ -53,7 +53,7 @@ function dpp#make_state(
       \   base_path=g:->get('dpp#_base_path', ''),
       \   config_path=g:->get('dpp#_config_path', ''),
       \   name=g:->get('dpp#_name', v:progname->fnamemodify(':r')),
-      \   extra_args={},
+      \   extra_args=g:->get('dpp#_extra_args', {}),
       \ ) abort
   const base_path = a:base_path->dpp#util#_expand()
   const config_path = a:config_path->dpp#util#_expand()
@@ -88,9 +88,8 @@ endfunction
 
 function dpp#check_files(
       \   name=g:->get('dpp#_name', v:progname->fnamemodify(':r')),
-      \   extra_args={}
       \ ) abort
-  return dpp#util#_check_files(a:name, a:extra_args)
+  return dpp#util#_check_files(a:name)
 endfunction
 
 function dpp#check_clean() abort

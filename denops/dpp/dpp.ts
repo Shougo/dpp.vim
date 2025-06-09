@@ -93,6 +93,7 @@ export class DppImpl implements Dpp {
     configPath: string,
     name: string,
     configReturn: ConfigReturn,
+    extraArgs: Record<string, unknown>,
   ) {
     const hasWindows = await fn.has(denops, "win32");
     const hasLua = denops.meta.host === "nvim" || await fn.has(denops, "lua");
@@ -283,7 +284,8 @@ export class DppImpl implements Dpp {
       "g:dpp#ftplugin," +
       "g:dpp#_options," +
       "g:dpp#_check_files," +
-      "g:dpp#_multiple_hooks" +
+      "g:dpp#_multiple_hooks," +
+      "g:dpp#_extra_args" +
       "] = g:dpp#_state",
       `let g:dpp#_config_path = '${configPath}'`,
       `let &runtimepath = '${newRuntimepath}'`,
@@ -418,6 +420,7 @@ export class DppImpl implements Dpp {
         options,
         checkFiles,
         multipleHooks,
+        extraArgs,
       ]),
     ];
     await Deno.writeTextFile(stateFile, stateLines.join("\n"));
