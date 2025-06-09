@@ -87,9 +87,10 @@ function dpp#clear_state(
 endfunction
 
 function dpp#check_files(
-      \   name=g:->get('dpp#_name', v:progname->fnamemodify(':r'))
+      \   name=g:->get('dpp#_name', v:progname->fnamemodify(':r')),
+      \   extra_args={}
       \ ) abort
-  return dpp#util#_check_files(a:name)
+  return dpp#util#_check_files(a:name, a:extra_args)
 endfunction
 
 function dpp#check_clean() abort
