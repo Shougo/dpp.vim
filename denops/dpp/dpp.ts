@@ -154,8 +154,8 @@ export class DppImpl implements Dpp {
           }
 
           basePlugin = {
-            ... configReturn.groups[group],
-            ... basePlugin,
+            ...configReturn.groups[group],
+            ...basePlugin,
           };
         }
       }
@@ -171,8 +171,8 @@ export class DppImpl implements Dpp {
           );
 
           basePlugin = {
-            ... basePlugin,
-            ... parseHooksFile(
+            ...basePlugin,
+            ...parseHooksFile(
               options.hooksFileMarker,
               hooksFileLines,
             ),
