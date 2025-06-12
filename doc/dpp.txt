@@ -276,6 +276,11 @@ ftplugin	(Dictionary)
 		changed.
 		NOTE: It is not executed when the plugin is not installed.
 
+                                                    *dpp-plugin-option-groups*
+groups		(Dictionary)
+		The key is group name.
+		The value is default {dpp-plugin-options} dictionary.
+
                                                         *dpp-plugin-option-if*
 if		(Bool) or (String)
 		If set to |v:false|, dpp doesn't load the plugin.
