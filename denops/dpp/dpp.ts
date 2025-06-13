@@ -142,8 +142,8 @@ export class DppImpl implements Dpp {
         basePlugin,
       );
 
-      if (configReturn.groups && basePlugin.groups) {
-        for (const group of basePlugin.groups) {
+      if (configReturn.groups && basePlugin.group) {
+        for (const group of convert2List(basePlugin.group)) {
           if (!configReturn.groups[group]) {
             await printError(
               denops,
