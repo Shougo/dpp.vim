@@ -23,6 +23,7 @@ export type MultipleHook = {
 export type ConfigReturn = {
   checkFiles?: string[];
   ftplugins?: Record<string, string>;
+  groups?: Record<string, Partial<Plugin>>;
   hooksFiles?: string[];
   multipleHooks?: MultipleHook[];
   plugins: Plugin[];

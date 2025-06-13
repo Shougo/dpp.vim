@@ -59,6 +59,7 @@ export type Plugin = {
   hook_source?: string;
   hooks_file?: string | string[];
   if?: boolean | string;
+  group?: string | string[];
   lazy?: boolean;
   local?: boolean;
   lua_add?: string;

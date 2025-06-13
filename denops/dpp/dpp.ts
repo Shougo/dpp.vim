@@ -133,7 +133,7 @@ export class DppImpl implements Dpp {
     const protocols = await getProtocols(denops, this.#loader, options);
     const recordPlugins: Record<string, Plugin> = {};
     const availablePlugins: Record<string, Plugin> = {};
-    for (const basePlugin of configReturn.plugins) {
+    for (let basePlugin of configReturn.plugins) {
       // NOTE: detectPlugin changes "plugin" value
       await detectPlugin(
         denops,
@@ -141,6 +141,24 @@ export class DppImpl implements Dpp {
         protocols,
         basePlugin,
       );
+
+      if (configReturn.groups && basePlugin.group) {
+        for (const group of convert2List(basePlugin.group)) {
+          if (!configReturn.groups[group]) {
+            await printError(
+              denops,
+              `Not available group: "${group}" in ${basePlugin.name}`,
+            );
+
+            continue;
+          }
+
+          basePlugin = {
+            ...configReturn.groups[group],
+            ...basePlugin,
+          };
+        }
+      }
 
       if (basePlugin.hooks_file) {
         for (const hooksFile of convert2List(basePlugin.hooks_file)) {
@@ -152,13 +170,13 @@ export class DppImpl implements Dpp {
             /\r?\n/,
           );
 
-          Object.assign(
-            basePlugin,
-            parseHooksFile(
+          basePlugin = {
+            ...basePlugin,
+            ...parseHooksFile(
               options.hooksFileMarker,
               hooksFileLines,
             ),
-          );
+          };
         }
       }
 
@@ -237,7 +255,15 @@ export class DppImpl implements Dpp {
     const hookSources = [];
     for (const plugin of nonLazyPlugins) {
       for (const depend of convert2List(plugin.depends)) {
-        depends.add(depend);
+        if (!availablePlugins[depend]) {
+          await printError(
+            denops,
+            `Not available dependency: "${depend}" in ${plugin.name}`,
+          );
+          continue;
+        } else {
+          depends.add(depend);
+        }
       }
 
       if (plugin.hook_source) {
@@ -250,13 +276,6 @@ export class DppImpl implements Dpp {
     // Load dependencies
     for (const depend of depends) {
       const plugin = availablePlugins[depend];
-      if (!plugin) {
-        await printError(
-          denops,
-          `Not available dependency: "${depend}"`,
-        );
-        continue;
-      }
 
       await addRtp(plugin);
 
