@@ -1,7 +1,7 @@
 import type { Plugin } from "../dpp/types.ts";
 
-import type { Denops } from "jsr:@denops/std@~7.5.0";
-import * as vars from "jsr:@denops/std@~7.5.0/variable";
+import type { Denops } from "jsr:@denops/std@~7.6.0";
+import * as vars from "jsr:@denops/std@~7.6.0/variable";
 
 import {
   ActionFlags,

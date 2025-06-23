@@ -8,7 +8,7 @@ import type {
 } from "./types.ts";
 import { printError } from "./utils.ts";
 
-import type { Denops } from "jsr:@denops/std@~7.5.0";
+import type { Denops } from "jsr:@denops/std@~7.6.0";
 
 // where
 // T: Object
