@@ -434,6 +434,16 @@ on_post_source	(List) or (String)
 		NOTE: To use the feature, you need to install "dpp-ext-lazy".
 		https://github.com/Shougo/dpp-ext-lazy
 
+                                                   *dpp-plugin-option-on_root*
+on_root		(List) or (String)
+		Load the plugin when current directory has specified root
+		files.
+		It is useful to load project specific plugins.
+		NOTE: It must be file instead of directory.
+
+		NOTE: To use the feature, you need to install "dpp-ext-lazy".
+		https://github.com/Shougo/dpp-ext-lazy
+
                                                  *dpp-plugin-option-on_source*
 on_source	(List) or (String)
 		Load the plugin before the listed plugins are loaded.

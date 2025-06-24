@@ -80,6 +80,7 @@ export type Plugin = {
   on_map?: string | string[] | Record<string, string | string[]>;
   on_path?: string | string[];
   on_post_source?: string | string[];
+  on_root?: string | string[];
   on_source?: string | string[];
   path?: string;
   protocol?: string;
