@@ -13,13 +13,13 @@ import { Loader } from "./loader.ts";
 import { extAction } from "./ext.ts";
 import { isDenoCacheIssueError } from "./utils.ts";
 
-import type { Denops, Entrypoint } from "jsr:@denops/std@~7.6.0";
-import * as vars from "jsr:@denops/std@~7.6.0/variable";
+import type { Denops, Entrypoint } from "@denops/std";
+import * as vars from "@denops/std/variable";
 
-import { Lock } from "jsr:@core/asyncutil@~1.2.0/lock";
-import { ensure } from "jsr:@core/unknownutil@~4.3.0/ensure";
-import { is } from "jsr:@core/unknownutil@~4.3.0/is";
-import { toFileUrl } from "jsr:@std/path@~1.1.0/to-file-url";
+import { Lock } from "@core/asyncutil/lock";
+import { ensure } from "@core/unknownutil/ensure";
+import { is } from "@core/unknownutil/is";
+import { toFileUrl } from "@std/path/to-file-url";
 
 export const main: Entrypoint = (denops: Denops) => {
   const loader = new Loader();

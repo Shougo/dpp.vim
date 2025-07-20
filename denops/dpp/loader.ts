@@ -3,14 +3,14 @@ import type { BaseExt } from "./base/ext.ts";
 import type { BaseProtocol } from "./base/protocol.ts";
 import { isDenoCacheIssueError } from "./utils.ts";
 
-import type { Denops } from "jsr:@denops/std@~7.6.0";
-import * as op from "jsr:@denops/std@~7.6.0/option";
-import * as fn from "jsr:@denops/std@~7.6.0/function";
+import type { Denops } from "@denops/std";
+import * as op from "@denops/std/option";
+import * as fn from "@denops/std/function";
 
-import { basename } from "jsr:@std/path@~1.1.0/basename";
-import { parse } from "jsr:@std/path@~1.1.0/parse";
-import { toFileUrl } from "jsr:@std/path@~1.1.0/to-file-url";
-import { Lock } from "jsr:@core/asyncutil@~1.2.0/lock";
+import { basename } from "@std/path/basename";
+import { parse } from "@std/path/parse";
+import { toFileUrl } from "@std/path/to-file-url";
+import { Lock } from "@core/asyncutil/lock";
 
 type Ext = {
   ext: Record<string, BaseExt<BaseParams>>;
