@@ -11,7 +11,7 @@ import type { BaseExt } from "./base/ext.ts";
 import type { BaseProtocol, Protocol } from "./base/protocol.ts";
 import { Loader } from "./loader.ts";
 import { extAction } from "./ext.ts";
-import { isDenoCacheIssueError } from "./utils.ts";
+import { importPlugin, isDenoCacheIssueError } from "./utils.ts";
 
 import type { Denops, Entrypoint } from "@denops/std";
 import * as vars from "@denops/std/variable";
@@ -19,7 +19,6 @@ import * as vars from "@denops/std/variable";
 import { Lock } from "@core/asyncutil/lock";
 import { ensure } from "@core/unknownutil/ensure";
 import { is } from "@core/unknownutil/is";
-import { toFileUrl } from "@std/path/to-file-url";
 
 export const main: Entrypoint = (denops: Denops) => {
   const loader = new Loader();
@@ -100,13 +99,9 @@ export const main: Entrypoint = (denops: Denops) => {
 
       await lock.lock(async () => {
         try {
-          // NOTE: Import module with fragment so that reload works properly.
-          // https://github.com/vim-denops/denops.vim/issues/227
-          const mod = await import(
-            `${toFileUrl(configPath).href}#${performance.now()}`
-          );
-
-          const obj = new mod.Config();
+          const mod = await importPlugin(configPath);
+          // deno-lint-ignore no-explicit-any
+          const obj = new (mod as any).Config();
 
           //console.log(`${Date.now() - startTime} ms`);
           const configReturn = await obj.config({

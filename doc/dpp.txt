@@ -189,6 +189,8 @@ dpp#make_state({base-path}, {config-path}[, {name}[, {extra-args}]])
 		NOTE: It must be called after |DenopsReady|.
 		NOTE: It saves your 'runtimepath' completely, you must not
 		call it after change 'runtimepath' dynamically.
+		NOTE: The "deno.json[c]" and "import_map.json[c]" files in the
+		same directory will also be loaded.
 
 		The TypeScript configuration script must returns following
 		object.
