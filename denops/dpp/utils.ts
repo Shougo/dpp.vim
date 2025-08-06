@@ -281,6 +281,7 @@ export async function importPlugin(path: string): Promise<unknown> {
     return await import(`${url}#${suffix}`);
   }
 }
+
 Deno.test("parseHooksFile", () => {
   assertEquals(
     parseHooksFile("{{{,}}}", [
