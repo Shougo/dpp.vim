@@ -21,6 +21,7 @@ import {
   mergeFtplugins,
   parseHooksFile,
   printError,
+  readHooksFile,
   safeStat,
 } from "./utils.ts";
 
@@ -316,19 +317,10 @@ export class DppImpl implements Dpp {
 
     // hooksFiles
     if (configReturn.hooksFiles) {
-      for (
-        const hooksFile of await Promise.all(configReturn.hooksFiles.map(
-          async (hooksFile) =>
-            await denops.call("dpp#util#_expand", hooksFile) as string,
-        ))
-      ) {
-        const hooksFileLines = (await Deno.readTextFile(hooksFile)).split(
-          /\r?\n/,
-        );
-
+      for (const hooksFile of configReturn.hooksFiles) {
         const parsedHooksFile = parseHooksFile(
           options.hooksFileMarker,
-          hooksFileLines,
+          await readHooksFile(denops, hooksFile),
         );
 
         // Use ftplugin only
@@ -395,7 +387,17 @@ export class DppImpl implements Dpp {
       plugin.name
     );
     const nonLazyPluginNames = nonLazyPlugins.map((plugin) => plugin.name);
-    for (const hooks of multipleHooks) {
+    for (let hooks of multipleHooks) {
+      if (hooks.hook_file) {
+        hooks = {
+          ...hooks,
+          ...parseHooksFile(
+            options.hooksFileMarker,
+            await readHooksFile(denops, hooks.hook_file),
+          ),
+        };
+      }
+
       if (
         hooks.hook_add &&
         hooks.plugins.every((pluginName) =>

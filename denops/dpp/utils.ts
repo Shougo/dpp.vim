@@ -106,6 +106,17 @@ export async function linkPath(hasWindows: boolean, src: string, dest: string) {
   }
 }
 
+export async function readHooksFile(
+  denops: Denops,
+  hooksFile: string,
+): Promise<string[]> {
+  return (await Deno.readTextFile(
+    await denops.call("dpp#util#_expand", hooksFile) as string,
+  )).split(
+    /\r?\n/,
+  );
+}
+
 export function parseHooksFile(
   marker: string,
   hooksFile: string[],
