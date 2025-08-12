@@ -15,7 +15,7 @@ export type ConfigArguments = {
 
 export type MultipleHook = {
   hook_add?: string;
-  hook_file?: string;
+  hooks_file?: string;
   hook_post_source?: string;
   hook_source?: string;
   plugins: string[];

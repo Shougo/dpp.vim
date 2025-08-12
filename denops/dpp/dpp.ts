@@ -388,12 +388,12 @@ export class DppImpl implements Dpp {
     );
     const nonLazyPluginNames = nonLazyPlugins.map((plugin) => plugin.name);
     for (let hooks of multipleHooks) {
-      if (hooks.hook_file) {
+      if (hooks.hooks_file) {
         hooks = {
           ...hooks,
           ...parseHooksFile(
             options.hooksFileMarker,
-            await readHooksFile(denops, hooks.hook_file),
+            await readHooksFile(denops, hooks.hooks_file),
           ),
         };
       }
