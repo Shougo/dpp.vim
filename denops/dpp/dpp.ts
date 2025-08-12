@@ -25,15 +25,15 @@ import {
   safeStat,
 } from "./utils.ts";
 
-import type { Denops } from "jsr:@denops/std@~7.6.0";
-import * as fn from "jsr:@denops/std@~7.6.0/function";
-import * as vars from "jsr:@denops/std@~7.6.0/variable";
+import type { Denops } from "@denops/std";
+import * as fn from "@denops/std/function";
+import * as vars from "@denops/std/variable";
 
-import { dirname } from "jsr:@std/path@~1.1.0/dirname";
-import { extname } from "jsr:@std/path@~1.1.0/extname";
-import { join } from "jsr:@std/path@~1.1.0/join";
-import { assertEquals } from "jsr:@std/assert@~1.0.2/equals";
-import { is } from "jsr:@core/unknownutil@~4.3.0/is";
+import { dirname } from "@std/path/dirname";
+import { extname } from "@std/path/extname";
+import { join } from "@std/path/join";
+import { assertEquals } from "@std/assert/equals";
+import { is } from "@core/unknownutil/is";
 
 export class DppImpl implements Dpp {
   #loader: Loader;
@@ -163,19 +163,11 @@ export class DppImpl implements Dpp {
 
       if (basePlugin.hooks_file) {
         for (const hooksFile of convert2List(basePlugin.hooks_file)) {
-          const hooksFilePath = await denops.call(
-            "dpp#util#_expand",
-            hooksFile,
-          ) as string;
-          const hooksFileLines = (await Deno.readTextFile(hooksFilePath)).split(
-            /\r?\n/,
-          );
-
           basePlugin = {
             ...basePlugin,
             ...parseHooksFile(
               options.hooksFileMarker,
-              hooksFileLines,
+              await readHooksFile(denops, hooksFile),
             ),
           };
         }
