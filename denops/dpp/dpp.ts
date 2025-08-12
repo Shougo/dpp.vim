@@ -163,19 +163,11 @@ export class DppImpl implements Dpp {
 
       if (basePlugin.hooks_file) {
         for (const hooksFile of convert2List(basePlugin.hooks_file)) {
-          const hooksFilePath = await denops.call(
-            "dpp#util#_expand",
-            hooksFile,
-          ) as string;
-          const hooksFileLines = (await Deno.readTextFile(hooksFilePath)).split(
-            /\r?\n/,
-          );
-
           basePlugin = {
             ...basePlugin,
             ...parseHooksFile(
               options.hooksFileMarker,
-              hooksFileLines,
+              await readHooksFile(denops, hooksFile),
             ),
           };
         }
