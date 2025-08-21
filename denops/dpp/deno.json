@@ -1,4 +1,19 @@
 {
+  "name": "@shougo/dpp-vim",
+  "version": "0.0.0",
+  "exports": {
+    "./config": "./base/config.ts",
+    "./dpp": "./base/dpp.ts",
+    "./ext": "./base/ext.ts",
+    "./protocol": "./base/protocol.ts",
+    "./types": "./types.ts",
+    "./utils": "./utils.ts"
+  },
+  "publish": {
+    "include": [
+      "**/*.ts"
+    ]
+  },
   "imports": {
     "@core/asyncutil": "jsr:@core/asyncutil@~1.2.0",
     "@core/unknownutil": "jsr:@core/unknownutil@~4.3.0",
