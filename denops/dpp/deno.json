@@ -1,6 +1,5 @@
 {
   "name": "@shougo/dpp-vim",
-  "version": "0.0.0",
   "exports": {
     "./config": "./base/config.ts",
     "./dpp": "./base/dpp.ts",
