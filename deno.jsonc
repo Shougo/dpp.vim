@@ -1,28 +1,16 @@
 {
-  "name": "@shougo/dpp-vim",
-  "version": "0.0.0",
-  "exports": {
-    "./config": "./denops/dpp/base/config.ts",
-    "./dpp": "./denops/dpp/base/dpp.ts",
-    "./ext": "./denops/dpp/base/ext.ts",
-    "./protocol": "./denops/dpp/base/protocol.ts",
-    "./types": "./denops/dpp/types.ts",
-    "./utils": "./denops/dpp/utils.ts"
-  },
-  "publish": {
-    "include": [
-      "denops/dpp/**/*.ts"
-    ]
-  },
-  "imports": {
-  },
-  "lock": false,
   "tasks": {
+    "cache": "deno install --reload",
     "check": "deno check denops/**/*.ts",
+    "fmt": "deno fmt denops",
     "lint": "deno lint denops",
     "lint-fix": "deno lint --fix denops",
-    "fmt": "deno fmt denops",
     "test": "deno test -A --doc --parallel --shuffle denops/**/*.ts",
-    "upgrade": "deno run -A jsr:@molt/cli **/*.ts --write"
-  }
+    "test:publish": "deno publish --dry-run --allow-dirty --set-version 0.0.0",
+    "update": "deno outdated --recursive",
+    "upgrade": "deno outdated --recursive --update"
+  },
+  "workspace": [
+    "./denops/dpp"
+  ]
 }
