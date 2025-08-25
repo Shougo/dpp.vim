@@ -31,7 +31,7 @@ see "FAQ" section in [help](doc/dpp.txt).
 
 ## Install
 
-**Note:** Dpp.vim requires Vim 9.1.0448+ or Neovim 0.10.0+. See
+**NOTE:** It requires Vim 9.1.0448+ or Neovim 0.10.0+. See
 [requirements](#requirements) if you aren't sure whether you have this.
 
 NOTE: To install plugins from remote, you need to install
@@ -39,7 +39,7 @@ NOTE: To install plugins from remote, you need to install
 
 ### Requirements
 
-Please install both Deno 1.45+ and "denops.vim" v7.0+.
+Please install both Deno 2.3.0+ and "denops.vim" v8.0+.
 
 - <https://deno.land/>
 - <https://github.com/vim-denops/denops.vim>
