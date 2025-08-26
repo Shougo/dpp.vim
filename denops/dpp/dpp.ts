@@ -540,6 +540,15 @@ export class DppImpl implements Dpp {
     );
 
     // Merge plugin files
+    const defaultSkipFilenames = [
+      ".git",
+      "deno.json",
+      "deno.jsonc",
+      "doc",
+      "ftdetect",
+      "import_map.json",
+      "import_map.jsonc",
+    ];
     for (
       const plugin of Object.values(recordPlugins).filter((plugin) =>
         plugin.merged
@@ -551,7 +560,7 @@ export class DppImpl implements Dpp {
 
       for await (const entry of Deno.readDir(plugin.path)) {
         if (
-          ["doc", "ftdetect", ".git"].indexOf(entry.name) >= 0 ||
+          defaultSkipFilenames.indexOf(entry.name) >= 0 ||
           entry.name.match(skipMergeFilenamePattern)
         ) {
           // Skip
