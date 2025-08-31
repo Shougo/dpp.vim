@@ -412,6 +412,12 @@ export class DppImpl implements Dpp {
           "",
         );
       }
+      if (hooks.hook_post_source) {
+        hooks.hook_post_source = hooks.hook_post_source.replaceAll(
+          /\n\s*\\/g,
+          "",
+        );
+      }
     }
 
     // Merge non lazy plugins hook_source
