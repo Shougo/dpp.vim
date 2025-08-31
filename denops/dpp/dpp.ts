@@ -99,7 +99,7 @@ export class DppImpl implements Dpp {
     const hasWindows = await fn.has(denops, "win32");
     const hasLua = denops.meta.host === "nvim" || await fn.has(denops, "lua");
 
-    const multipleHooks = configReturn.multipleHooks ?? [];
+    let multipleHooks = configReturn.multipleHooks ?? [];
     // Convert head backslashes
     for (const hooks of multipleHooks) {
       if (hooks.hook_add) {
@@ -379,7 +379,7 @@ export class DppImpl implements Dpp {
       plugin.name
     );
     const nonLazyPluginNames = nonLazyPlugins.map((plugin) => plugin.name);
-    for (let hooks of multipleHooks) {
+    multipleHooks = await Promise.all(multipleHooks.map(async (hooks) => {
       if (hooks.hooks_file) {
         hooks = {
           ...hooks,
@@ -409,7 +409,9 @@ export class DppImpl implements Dpp {
         hookSources.push(hooks.hook_source);
         hooks.hook_source = "";
       }
-    }
+
+      return hooks;
+    }));
 
     // Merge non lazy plugins hook_source
     startupLines = startupLines.concat(hookSources);
