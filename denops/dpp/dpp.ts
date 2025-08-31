@@ -100,21 +100,6 @@ export class DppImpl implements Dpp {
     const hasLua = denops.meta.host === "nvim" || await fn.has(denops, "lua");
 
     let multipleHooks = configReturn.multipleHooks ?? [];
-    // Convert head backslashes
-    for (const hooks of multipleHooks) {
-      if (hooks.hook_add) {
-        hooks.hook_add = hooks.hook_add.replaceAll(
-          /\n\s*\\/g,
-          "",
-        );
-      }
-      if (hooks.hook_source) {
-        hooks.hook_source = hooks.hook_source.replaceAll(
-          /\n\s*\\/g,
-          "",
-        );
-      }
-    }
 
     // Check plugin-option-if is enabled
     const checkIf = async (plugin: Plugin) => {
@@ -412,6 +397,22 @@ export class DppImpl implements Dpp {
 
       return hooks;
     }));
+
+    // Convert head backslashes
+    for (const hooks of multipleHooks) {
+      if (hooks.hook_add) {
+        hooks.hook_add = hooks.hook_add.replaceAll(
+          /\n\s*\\/g,
+          "",
+        );
+      }
+      if (hooks.hook_source) {
+        hooks.hook_source = hooks.hook_source.replaceAll(
+          /\n\s*\\/g,
+          "",
+        );
+      }
+    }
 
     // Merge non lazy plugins hook_source
     startupLines = startupLines.concat(hookSources);
