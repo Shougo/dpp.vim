@@ -1042,6 +1042,10 @@ editor performance.  You must explicitly enable it if necessary.
 ==============================================================================
 COMPATIBILITY                                              *dpp-compatibility*
 
+2025.08.26
+* Vim 9.1.1646+ or Neovim (0.11.0+) is required.
+* Deno 2.3.0+ and "denops.vim" v8.0+ are required.
+
 2024.11.25
 * Vim 9.1.0448+ or Neovim (0.10.0+) is required.
 
