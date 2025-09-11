@@ -96,7 +96,8 @@ function dpp#source#_source(plugins, function_prefix) abort
                   \ )
           endif
 
-          if plugin->get('denops_wait', v:true)
+          if denops#server#status() !=# 'stopped'
+                \ && plugin->get('denops_wait', v:true)
             call denops#plugin#wait(name)
             redraw
           endif
