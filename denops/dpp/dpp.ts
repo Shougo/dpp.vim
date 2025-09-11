@@ -309,7 +309,7 @@ export class DppImpl implements Dpp {
 
     let checkFiles = configReturn.checkFiles ?? [];
     if (configReturn.hooksFiles) {
-      checkFiles = checkFiles.concat(configReturn.hooksFiles);
+      checkFiles = [...checkFiles, ...configReturn.hooksFiles];
     }
 
     if (await vars.g.get(denops, "dpp#_did_load_filetypes", false)) {
@@ -319,7 +319,7 @@ export class DppImpl implements Dpp {
       startupLines.push("filetype plugin indent off");
     }
     if (configReturn.stateLines) {
-      startupLines = startupLines.concat(configReturn.stateLines);
+      startupLines = [...startupLines, ...configReturn.stateLines];
     }
 
     // NOTE: inlineVimrcs must be before plugins hook_add.
@@ -330,16 +330,18 @@ export class DppImpl implements Dpp {
       const vimrcLines = (await Deno.readTextFile(vimrc)).split(/\r?\n/);
       if (extname(vimrc) == ".lua") {
         if (hasLua) {
-          startupLines = startupLines.concat(
-            ["lua <<EOF"],
-            vimrcLines.filter((line) => !line.match(/^\s*$|^\s*--/)),
-            ["EOF"],
-          );
+          startupLines = [
+            ...startupLines,
+            "lua <<EOF",
+            ...vimrcLines.filter((line) => !line.match(/^\s*$|^\s*--/)),
+            "EOF",
+          ];
         }
       } else {
-        startupLines = startupLines.concat(
-          vimrcLines.filter((line) => !line.match(/^\s*$|^\s*"/)),
-        );
+        startupLines = [
+          ...startupLines,
+          ...vimrcLines.filter((line) => !line.match(/^\s*$|^\s*"/)),
+        ];
       }
     }
 
@@ -421,7 +423,7 @@ export class DppImpl implements Dpp {
     }
 
     // Merge non lazy plugins hook_source
-    startupLines = startupLines.concat(hookSources);
+    startupLines = [...startupLines, ...hookSources];
 
     // Write startup script
     const startupFile = `${basePath}/${name}/startup.vim`;
