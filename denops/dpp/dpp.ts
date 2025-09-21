@@ -773,7 +773,8 @@ async function generateTaglines(plugins: Plugin[]): Promise<string[]> {
     }
   }
 
-  return taglines;
+  // NOTE: taglines must be sorted.
+  return taglines.sort();
 }
 
 Deno.test("initPlugin", () => {
