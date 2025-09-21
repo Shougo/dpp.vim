@@ -543,11 +543,23 @@ export class DppImpl implements Dpp {
       break;
     }
 
-    const tagLines = await generateTaglines(Object.values(recordPlugins));
+    const tagsPath = `${dppRuntimepath}/doc/tags`;
+    let tagLines: string[] = [];
+    if (await safeStat(tagsPath)) {
+      const content = await Deno.readTextFile(`${dppRuntimepath}/doc/tags`);
+      tagLines = content.split("\n").filter(Boolean);
+    }
+
+    // NOTE: taglines must be sorted.
     await Deno.writeTextFile(
       `${dppRuntimepath}/doc/tags`,
-      tagLines.join("\n"),
-      { append: true },
+      Array.from(
+        new Set(
+          tagLines.concat(
+            await generateTaglines(Object.values(recordPlugins)),
+          ),
+        ),
+      ).sort().join("\n"),
     );
 
     // Merge plugin files
@@ -773,8 +785,7 @@ async function generateTaglines(plugins: Plugin[]): Promise<string[]> {
     }
   }
 
-  // NOTE: taglines must be sorted.
-  return taglines.sort();
+  return taglines;
 }
 
 Deno.test("initPlugin", () => {
