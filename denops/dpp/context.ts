@@ -29,8 +29,7 @@ function overwrite<T>(a: T, b: Partial<T>): T {
 export const mergeExtOptions: Merge<ExtOptions> = overwrite;
 export const mergeProtocolOptions: Merge<ProtocolOptions> = overwrite;
 
-export const mergeExtParams: Merge<BaseParams> = overwrite;
-export const mergeProtocolParams: Merge<BaseParams> = overwrite;
+export const mergeParams: Merge<BaseParams> = overwrite;
 
 export function foldMerge<T>(
   merge: Merge<T>,

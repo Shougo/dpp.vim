@@ -12,9 +12,8 @@ import {
   defaultDummy,
   foldMerge,
   mergeExtOptions,
-  mergeExtParams,
+  mergeParams,
   mergeProtocolOptions,
-  mergeProtocolParams,
 } from "./context.ts";
 import type { Loader } from "./loader.ts";
 import { type BaseExt, defaultExtOptions } from "./base/ext.ts";
@@ -215,7 +214,7 @@ function extArgs<
       options.extOptions[ext.name],
     ],
   );
-  const p = foldMerge(mergeExtParams, defaultDummy, [
+  const p = foldMerge(mergeParams, defaultDummy, [
     ext.params(),
     options.extParams["_"],
     options.extParams[ext.name],
@@ -264,7 +263,7 @@ function protocolArgs<
       options.protocolOptions[protocol.name],
     ],
   );
-  const p = foldMerge(mergeProtocolParams, defaultDummy, [
+  const p = foldMerge(mergeParams, defaultDummy, [
     protocol.params(),
     options.protocolParams["_"],
     options.protocolParams[protocol.name],
