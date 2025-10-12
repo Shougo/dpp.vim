@@ -39,8 +39,8 @@ export const main: Entrypoint = (denops: Denops) => {
       arg2: unknown,
       arg3: unknown,
     ): Promise<void> {
-      const type = ensure(arg1, is.String) as string;
-      const extName = ensure(arg2, is.String) as string;
+      const type = ensure(arg1, is.String);
+      const extName = ensure(arg2, is.String);
 
       switch (type) {
         case "ext":
@@ -62,8 +62,8 @@ export const main: Entrypoint = (denops: Denops) => {
       arg2: unknown,
       arg3: unknown,
     ): Promise<unknown | undefined> {
-      const extName = ensure(arg1, is.String) as string;
-      const actionName = ensure(arg2, is.String) as string;
+      const extName = ensure(arg1, is.String);
+      const actionName = ensure(arg2, is.String);
       const actionParams = ensure(arg3, is.Record) as Record<string, unknown>;
 
       // Set current options from dpp#_options
@@ -92,9 +92,9 @@ export const main: Entrypoint = (denops: Denops) => {
       arg4: unknown,
     ): Promise<void> {
       //const startTime = Date.now();
-      const basePath = ensure(arg1, is.String) as string;
-      const configPath = ensure(arg2, is.String) as string;
-      const name = ensure(arg3, is.String) as string;
+      const basePath = ensure(arg1, is.String);
+      const configPath = ensure(arg2, is.String);
+      const name = ensure(arg3, is.String);
       const extraArgs = ensure(arg4, is.Record) as Record<string, unknown>;
 
       await lock.lock(async () => {
@@ -151,7 +151,7 @@ export const main: Entrypoint = (denops: Denops) => {
         BaseParams,
       ]
     > {
-      const extName = ensure(arg1, is.String) as string;
+      const extName = ensure(arg1, is.String);
       const [_, options] = await contextBuilder.get(denops);
 
       return await dpp.getExt(
