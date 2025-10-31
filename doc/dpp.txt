@@ -975,8 +975,8 @@ easy to maintain.
                                                                    *dpp-faq-4*
 Q: I want to update cache file automatically when the config is updated.
 
-A: You need to set checkFiles when |dpp#make_state()| and you need to call
-|dpp#check_files()| like this.
+A: You need to set "checkFiles" key in |dpp#make_state()| script file and you
+need to call |dpp#check_files()| like this.
 >vim
 	autocmd BufWritePost *.lua,*.vim,*.toml,*.ts,vimrc,.vimrc
 	        \ call dpp#check_files()

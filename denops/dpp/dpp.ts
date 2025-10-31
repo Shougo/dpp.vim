@@ -308,6 +308,7 @@ export class DppImpl implements Dpp {
     }
 
     let checkFiles = configReturn.checkFiles ?? [];
+    checkFiles.push(configPath);
     if (configReturn.hooksFiles) {
       checkFiles = [...checkFiles, ...configReturn.hooksFiles];
     }
@@ -343,6 +344,8 @@ export class DppImpl implements Dpp {
           ...vimrcLines.filter((line) => !line.match(/^\s*$|^\s*"/)),
         ];
       }
+
+      checkFiles.push(vimrc);
     }
 
     for (const plugin of Object.values(availablePlugins)) {
