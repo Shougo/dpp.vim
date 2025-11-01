@@ -75,6 +75,9 @@ function dpp#make_state(
     call dpp#source('denops.vim')
   endif
 
+  " Remove old state files
+  call dpp#util#_clear_state(a:name)
+
   return dpp#denops#_notify('makeState', [
         \   base_path, config_path, a:name, a:extra_args,
         \ ])
