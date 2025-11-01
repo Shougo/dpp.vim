@@ -33,7 +33,7 @@ function dpp#util#_check_files(base_path, config_path, name, extra_args) abort
         \   || time < val->dpp#util#_expand()->getftime()
         \ })
   if !updated->empty()
-    call dpp#make_state(a:base_path, a:config_path, a:name, extra_args)
+    call dpp#make_state(a:base_path, a:config_path, a:name, a:extra_args)
   endif
 
   return updated
