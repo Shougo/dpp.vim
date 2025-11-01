@@ -999,7 +999,12 @@ need to call |dpp#check_files()| like this.
 	autocmd BufWritePost *.lua,*.vim,*.toml,*.ts,vimrc,.vimrc
 	        \ call dpp#check_files()
 <
-
+NOTE: If you want to change |dpp#make_state()| arguments dynamically,
+|dpp#clear_state()| is better.
+>vim
+	autocmd BufWritePost *.lua,*.vim,*.toml,*.ts,vimrc,.vimrc
+	        \ call dpp#clear_state()
+<
                                                                    *dpp-faq-5*
 Q: I want to use dpp functions in lua.
 
