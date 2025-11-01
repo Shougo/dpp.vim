@@ -435,6 +435,10 @@ export class DppImpl implements Dpp {
       await denops.call("dpp#util#_dos2unix", startupFile);
     }
 
+    // checkFiles must be exists
+    checkFiles = checkFiles.filter(async (path) =>
+      await safeStat(await denops.call("dpp#util#_expand", path) as string)
+    );
     // checkFiles must be unique
     checkFiles = [...new Set(checkFiles)];
 

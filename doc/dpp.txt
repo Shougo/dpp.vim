@@ -152,7 +152,7 @@ dpp#check_files([{name}])
 		Check dpp.vim cache file is outdated.
 		{name} is plugins profile name.  The default is "vim" or
 		"nvim".
-		If it is outdated, |dpp#make_state()| is called
+		If it is outdated or not found, |dpp#make_state()| is called
 		automatically.
 		It should be called when |BufWritePost| autocmd.
 		NOTE: "checkFiles" must be set in |dpp#make_state()| script.
@@ -197,6 +197,7 @@ dpp#make_state({base-path}, {config-path}[, {name}[, {extra-args}]])
 		checkFiles	(string[])	(Optional)
 			Check file paths when update timestamp.
 			It is used when |dpp#check_files()|.
+			NOTE: The files must be exists.
 			Default: []
 
 		ftplugins	(Record<string, string>) (Optional)
