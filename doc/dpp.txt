@@ -159,6 +159,11 @@ dpp#check_files([{base-path}[, {config-path}[, {name}[, {extra-args}]]]])
 		{extra-args} is extra arguments dictionary.  It can be used in
 		{config-path} TypeScript.
 
+		NOTE: If the arguments are omitted, the previous
+		|dpp#make_state()| value is used.
+		If you want to change |dpp#make_state()| arguments, you must
+		set arguments manually.
+
 		If it is outdated or not found, |dpp#make_state()| is called
 		automatically.
 		It should be called when |BufWritePost| autocmd.
@@ -189,6 +194,11 @@ dpp#make_state({base-path}, {config-path}[, {name}[, {extra-args}]])
 		"nvim".
 		{extra-args} is extra arguments dictionary.  It can be used in
 		{config-path} TypeScript.
+
+		NOTE: If the arguments are omitted, the previous
+		|dpp#make_state()| value is used.
+		If you want to change |dpp#make_state()| arguments, you must
+		set arguments manually.
 
 		When the state file is created,
 		|dpp-autocmd-Dpp:makeStatePost| event is fired.
