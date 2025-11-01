@@ -25,17 +25,15 @@ endfunction
 function dpp#util#_get_runtime_path() abort
   return dpp#util#_substitute_path($VIMRUNTIME)
 endfunction
-function dpp#util#_check_files(name) abort
-  const time = printf('%s/%s/state.vim', g:dpp#_base_path, a:name)->getftime()
+function dpp#util#_check_files(base_path, config_path, name, extra_args) abort
+  const time = printf('%s/%s/state.vim', a:base_path, a:name)->getftime()
   const updated = g:dpp#_check_files->copy()
         \ ->filter({ _, val ->
         \      val->dpp#util#_expand()->getftime() < 0
         \   || time < val->dpp#util#_expand()->getftime()
         \ })
-  if !updated->empty() && 'g:dpp#_config_path'->exists()
-    call dpp#make_state(
-          \   g:dpp#_base_path, g:dpp#_config_path, a:name, g:dpp#_extra_args
-          \ )
+  if !updated->empty()
+    call dpp#make_state(a:base_path, a:config_path, a:name, extra_args)
   endif
 
   return updated
