@@ -91,13 +91,9 @@ endfunction
 
 function dpp#check_files(
       \   base_path=g:->get('dpp#_base_path', ''),
-      \   config_path=g:->get('dpp#_config_path', ''),
       \   name=g:->get('dpp#_name', v:progname->fnamemodify(':r')),
-      \   extra_args=g:->get('dpp#_extra_args', {}),
       \ ) abort
-  return dpp#util#_check_files(
-        \   a:base_path, a:config_path, a:name, a:extra_args
-        \ )
+  return dpp#util#_check_files(a:base_path, a:name)
 endfunction
 
 function dpp#check_clean() abort

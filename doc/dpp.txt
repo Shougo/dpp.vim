@@ -148,26 +148,22 @@ dpp#check_clean()
 		NOTE: It must be executed after |dpp#min#load_state()|.
 
                                                            *dpp#check_files()*
-dpp#check_files([{base-path}[, {config-path}[, {name}[, {extra-args}]]]])
+dpp#check_files([{base-path}[, {name}]])
 		Check dpp.vim cache file is outdated.
-		If it is outdated or not found, |dpp#make_state()| is called
-		automatically.
+		If it is outdated or not found, it retuns plugin names.
 		It should be called when |BufWritePost| autocmd.
 
 		{base-path} is where your downloaded plugins will be placed.
-		{config-path} is TypeScript configuration file path to make
-		state.  It must be full path.
 		{name} is plugins profile name.  The default is "vim" or
 		"nvim".
-		{extra-args} is extra arguments dictionary.  It can be used in
-		{config-path} TypeScript.
 
 		NOTE: If the arguments are omitted, the previous
 		|dpp#make_state()| value is used.
 		If you want to change |dpp#make_state()| arguments, you must
 		set arguments manually.
 
-		NOTE: "checkFiles" must be set in |dpp#make_state()| script.
+		NOTE: "checkFiles" key must be set in |dpp#make_state()|
+		script.
 
                                                            *dpp#clear_state()*
 dpp#clear_state([{name}])
@@ -679,7 +675,7 @@ dpp.check_clean()
 		Same as |dpp#check_clean()|.
 
                                                            *dpp.check_files()*
-dpp.check_files([{base-path}[, {config-path}[, {name}[, {extra-args}]]]])
+dpp.check_files([{base-path}[, {name}]])
 		Same as |dpp#check_files()|.
 
                                                            *dpp.clear_state()*
@@ -997,7 +993,9 @@ A: You need to set "checkFiles" key in |dpp#make_state()| script file and you
 need to call |dpp#check_files()| like this.
 >vim
 	autocmd BufWritePost *.lua,*.vim,*.toml,*.ts,vimrc,.vimrc
-	        \ call dpp#check_files()
+	        \ : if !dpp#check_files()->empty()
+	        \ |   call dpp#make_state()
+	        \ | endif
 <
 NOTE: If you want to change |dpp#make_state()| arguments dynamically,
 |dpp#clear_state()| is better.
@@ -1064,6 +1062,10 @@ editor performance.  You must explicitly enable it if necessary.
 
 ==============================================================================
 COMPATIBILITY                                              *dpp-compatibility*
+
+2025.11.02
+* |dpp#check_files()| arguments are changed.
+* |dpp#check_files()| does not execute |dpp#make_state()| automatically.
 
 2025.11.01
 * |dpp#check_files()| arguments are changed.
