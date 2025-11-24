@@ -37,6 +37,9 @@ see "FAQ" section in [help](doc/dpp.txt).
 NOTE: To install plugins from remote, you need to install
 [dpp-ext-installer](https://github.com/Shougo/dpp-ext-installer).
 
+NOTE: To install plugins from git, you need to install
+[dpp-protocol-git](https://github.com/Shougo/dpp-protocol-git).
+
 ### Requirements
 
 Please install both Deno 2.3.0+ and "denops.vim" v8.0+.

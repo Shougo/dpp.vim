@@ -55,6 +55,10 @@ NOTE: To install plugins from remote, you need to install "dpp-ext-installer".
 
 https://github.com/Shougo/dpp-ext-installer
 
+NOTE: To install plugins from git, you need to install "dpp-protocol-git".
+
+https://github.com/Shougo/dpp-protocol-git
+
 NOTE: dpp.vim does not include any extensions.
 You must install them you want manually.
 You can search dpp.vim plugins from https://github.com/topics/dpp-vim.
@@ -845,7 +849,7 @@ Dpp:extActionPost:{ext-name}:{action-name}
                                                *dpp-autocmd-Dpp:makeStatePost*
 Dpp:makeStatePost
 		Called after |dpp#make_state()| is finished.
->
+>vim
 	" Auto exit after dpp#make_state()
 	autocmd User Dpp:makeStatePost quit!
 <
