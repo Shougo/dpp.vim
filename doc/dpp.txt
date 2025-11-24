@@ -965,6 +965,9 @@ FAQ 7:                                                             |dpp-faq-7|
 FAQ 8:                                                             |dpp-faq-8|
 	Why filetype plugin and detection are disabled in default?
 
+FAQ 9:                                                             |dpp-faq-9|
+	I want to download plugin via http, not git.
+
 ------------------------------------------------------------------------------
                                                                    *dpp-faq-1*
 Q: How to donate money to you?
@@ -1065,6 +1068,12 @@ A: Because it is Vim's default behavior.  Some plugin managers and Neovim is
 default enabled for the features.
 But I don't like to enable the feature by default because it affects the
 editor performance.  You must explicitly enable it if necessary.
+
+                                                                   *dpp-faq-9*
+Q: I want to download plugin via http, not git.
+
+A: You can use |dpp-protocol-http| instead.
+https://github.com/Shougo/dpp-protocol-http
 
 ==============================================================================
 COMPATIBILITY                                              *dpp-compatibility*
