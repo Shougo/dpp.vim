@@ -609,6 +609,14 @@ hook_post_update (String)
 		"dpp-ext-installer".
 		https://github.com/Shougo/dpp-ext-installer
 
+                                           *dpp-plugin-option-hook_pre_update*
+hook_pre_update (String)
+		It is executed before updated.
+		NOTE: The plugin may not be sourced.
+		NOTE: To use the feature, you need to install
+		"dpp-ext-installer".
+		https://github.com/Shougo/dpp-ext-installer
+
                                                *dpp-plugin-option-hook_source*
 hook_source	(String) or (Function)
 		It is executed after plugin runtimepath is added and before
@@ -655,6 +663,15 @@ lua_post_sources (String)
 lua_post_update	(String)
 		Lua language string hook instead of Vim script.
 		It is converted to |dpp-plugin-option-hook_post_update| key.
+		NOTE: It works only for Neovim or |+lua|.
+		NOTE: To use the feature, you need to install
+		"dpp-ext-installer".
+		https://github.com/Shougo/dpp-ext-installer
+
+                                            *dpp-plugin-option-lua_pre_update*
+lua_pre_update	(String)
+		Lua language string hook instead of Vim script.
+		It is converted to |dpp-plugin-option-hook_pre_update| key.
 		NOTE: It works only for Neovim or |+lua|.
 		NOTE: To use the feature, you need to install
 		"dpp-ext-installer".

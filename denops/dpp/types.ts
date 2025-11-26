@@ -56,6 +56,7 @@ export type Plugin = {
   hook_done_update?: string;
   hook_post_source?: string;
   hook_post_update?: string;
+  hook_pre_update?: string;
   hook_source?: string;
   hooks_file?: string | string[];
   if?: boolean | string;
@@ -67,6 +68,7 @@ export type Plugin = {
   lua_done_update?: string;
   lua_post_source?: string;
   lua_post_update?: string;
+  lua_pre_update?: string;
   lua_source?: string;
   merge_ftdetect?: string;
   merged?: boolean;
