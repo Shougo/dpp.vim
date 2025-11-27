@@ -692,15 +692,13 @@ async function detectPlugin(
   plugin: Plugin,
 ) {
   // Detect protocol
-  if ("protocol" in plugin) {
-    return plugin;
-  }
+  const detectProtocols = plugin.protocol
+    ? [protocols[plugin.protocol]]
+    : options.protocols.filter((protocolName) => protocols[protocolName]).map((
+      protocolName,
+    ) => protocols[protocolName]);
 
-  for (
-    const protocol of options.protocols.filter((protocolName) =>
-      protocols[protocolName]
-    ).map((protocolName) => protocols[protocolName])
-  ) {
+  for (const protocol of detectProtocols) {
     const detect = await protocol.protocol.detect({
       denops: denops,
       plugin,
@@ -714,10 +712,10 @@ async function detectPlugin(
         ...detect,
         protocol: protocol.protocol.name,
       });
+
+      break;
     }
   }
-
-  return plugin;
 }
 
 type Tag = {

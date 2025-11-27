@@ -477,6 +477,10 @@ path		(String)
 		Default:
 		"{base-path}/repos/{site-name}/{user-name}/{plugin-name}"
 
+                                                  *dpp-plugin-option-protocol*
+protocol	(String)
+		User specified protocol.
+
                                              *dpp-plugin-option-protocolAttrs*
 protocolAttrs	(Dictionary)
 		It is a dictionary that protocols specific attributes.
