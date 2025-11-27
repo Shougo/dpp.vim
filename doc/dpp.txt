@@ -923,8 +923,9 @@ NOTE: If you call Vim functions, it is not asynchronous.
 PROTOCOL ATTRIBUTES                                  *dpp-protocol-attributes*
 
                                                *dpp-protocol-attribute-detect*
-detect			(function)			(Optional)
+detect			(function)			(Required)
 		Called to detect plugin's protocol.
+		It detect protocol and initialize plugin.
 
                                *dpp-protocol-attribute-getChangesCountCommand*
 getChangesCountCommand	(function)			(Optional)
