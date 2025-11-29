@@ -473,9 +473,12 @@ on_source	(List) or (String)
                                                       *dpp-plugin-option-path*
 path		(String)
 		Specify the plugin downloaded path.
+		If it is not absolute path, it is converted to under the
+		plugin "base-path".
+		NOTE: It is set by protocol.
 
 		Default:
-		"{base-path}/repos/{site-name}/{user-name}/{plugin-name}"
+		If it is not set, it will be error.
 
                                                   *dpp-plugin-option-protocol*
 protocol	(String)
@@ -521,6 +524,7 @@ script_type	(String)
                                                       *dpp-plugin-options-url*
 url	(String)
 		Specify the webpage URL.
+		NOTE: It is set by protocol.
 
 ------------------------------------------------------------------------------
 HOOKS                                                              *dpp-hooks*
@@ -1099,6 +1103,9 @@ https://github.com/Shougo/dpp-protocol-http
 
 ==============================================================================
 COMPATIBILITY                                              *dpp-compatibility*
+
+2025.11.29
+* |dpp-plugin-option-path| must be set.
 
 2025.11.02
 * |dpp#check_files()| arguments are changed.

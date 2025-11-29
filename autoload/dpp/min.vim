@@ -41,6 +41,5 @@ function dpp#min#_init() abort
   let g:dpp#_multiple_hooks = []
   augroup dpp
     autocmd!
-    autocmd User Dpp:makeStatePost ++nested :
   augroup END
 endfunction

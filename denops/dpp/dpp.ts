@@ -34,6 +34,7 @@ import { extname } from "@std/path/extname";
 import { join } from "@std/path/join";
 import { assertEquals } from "@std/assert/equals";
 import { is } from "@core/unknownutil/is";
+import { isAbsolute } from "@std/path/is-absolute";
 
 export class DppImpl implements Dpp {
   #loader: Loader;
@@ -158,11 +159,21 @@ export class DppImpl implements Dpp {
         }
       }
 
+      if (!basePlugin.path) {
+        await printError(
+          denops,
+          `"path" must be set: "${basePlugin.name}"`,
+        );
+      }
+
       const plugin = initPlugin(
         basePlugin,
         basePath,
         hasLua,
       );
+      if (!plugin) {
+        continue;
+      }
 
       if (recordPlugins[plugin.name]) {
         await printError(
@@ -495,8 +506,8 @@ export class DppImpl implements Dpp {
       await denops.cmd("lua vim.loader.reset()");
     }
 
-    if (await fn.exists(denops, '#User#Dpp:makeStatePost')) {
-        await denops.cmd("doautocmd <nomodeline> User Dpp:makeStatePost");
+    if (await fn.exists(denops, "#User#Dpp:makeStatePost")) {
+      await denops.cmd("doautocmd <nomodeline> User Dpp:makeStatePost");
     }
   }
 
@@ -610,11 +621,15 @@ export class DppImpl implements Dpp {
 }
 
 function initPlugin(plugin: Plugin, basePath: string, hasLua: boolean): Plugin {
+  if (!plugin.path) {
+    return plugin;
+  }
+
   plugin.sourced = false;
 
-  if (!plugin.path) {
-    // Set default path from basePath
-    plugin.path = `${basePath}/repos/${plugin.repo ?? plugin.name}`;
+  if (!isAbsolute(plugin.path)) {
+    // "path" must be absolute path.
+    plugin.path = `${basePath}/${plugin.path}`;
   }
 
   if (plugin.rev && plugin.rev.length > 0) {
@@ -623,7 +638,7 @@ function initPlugin(plugin: Plugin, basePath: string, hasLua: boolean): Plugin {
   }
 
   if (plugin.script_type && plugin.script_type.length > 0) {
-    // Add script_type path
+    // Add script_type path.
     plugin.path += `/${plugin.script_type}`;
   }
 
@@ -710,14 +725,28 @@ async function detectPlugin(
 
     if (detect) {
       // Overwrite by detect()
-      Object.assign(plugin, {
-        ...detect,
-        protocol: protocol.protocol.name,
-      });
+      mergeDetectIntoPlugin(plugin, detect, protocol.protocol.name);
 
       break;
     }
   }
+}
+
+function mergeDetectIntoPlugin(
+  plugin: Plugin,
+  detect: Partial<Plugin>,
+  protocolName: string,
+): void {
+  const p = plugin as Record<string, unknown>;
+  const d = detect as Record<string, unknown>;
+
+  for (const key of Object.keys(detect)) {
+    if (!Object.prototype.hasOwnProperty.call(plugin, key)) {
+      p[key] = d[key];
+    }
+  }
+
+  p["protocol"] = protocolName;
 }
 
 type Tag = {
