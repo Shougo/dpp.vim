@@ -830,6 +830,7 @@ Deno.test("initPlugin", () => {
       {
         name: "foo",
         rev: "[hoge]",
+        path: "repos/foo",
         script_type: "foo",
         rtp: "autoload",
       },
@@ -853,6 +854,7 @@ Deno.test("initPlugin", () => {
     initPlugin(
       {
         name: "foo",
+        path: "repos/foo",
         on_ft: "foo",
       },
       "base",
@@ -874,6 +876,7 @@ Deno.test("initPlugin", () => {
     initPlugin(
       {
         name: "foo",
+        path: "repos/foo",
         lua_add: "foo",
       },
       "base",
