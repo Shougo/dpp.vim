@@ -495,7 +495,9 @@ export class DppImpl implements Dpp {
       await denops.cmd("lua vim.loader.reset()");
     }
 
-    await denops.cmd("doautocmd <nomodeline> User Dpp:makeStatePost");
+    if (await fn.exists(denops, '#User#Dpp:makeStatePost')) {
+        await denops.cmd("doautocmd <nomodeline> User Dpp:makeStatePost");
+    }
   }
 
   async #mergePlugins(
