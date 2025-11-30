@@ -170,7 +170,7 @@ function s:source_plugin(rtps, index, plugin, sourced) abort
     endif
   endfor
 
-  let a:plugin.sourced = 1
+  let a:plugin.sourced = v:true
 
   if a:plugin->has_key('dummy_commands')
     for command in a:plugin.dummy_commands

@@ -170,7 +170,7 @@ function s:tsort_impl(target, mark, sorted) abort
     return
   endif
 
-  let a:mark[a:target.name] = 1
+  let a:mark[a:target.name] = v:true
   if a:target->has_key('depends')
     for depend in a:target.depends
       call s:tsort_impl(depend->dpp#get(), a:mark, a:sorted)
@@ -308,7 +308,7 @@ function dpp#util#_uniq(list) abort
       call remove(list, i)
     else
       if key !=# ''
-        let seen[key] = 1
+        let seen[key] = v:true
       endif
       let i += 1
     endif
