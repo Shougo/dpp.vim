@@ -49,12 +49,6 @@ export class Source extends BaseSource<Params> {
             word: plugin.description
               ? `${plugin.name} : ${plugin.description}`
               : plugin.name,
-            highlights: [{
-              name: "pluginName",
-              hl_group: "Statement",
-              col: 1,
-              width: plugin.name.length,
-            }],
             action: {
               path: plugin.path,
               url: plugin.url ?? "",
@@ -86,6 +80,18 @@ export class Source extends BaseSource<Params> {
             await args.denops.call("ddu#kind#file#open", action.url, "");
           }
         }
+
+        return Promise.resolve(ActionFlags.None);
+      },
+    },
+    update: {
+      description: "Update the plugins.",
+      callback: async (args: { denops: Denops; items: DduItem[] }) => {
+        const names = args.items.map((item) => (item.action as Action).__name);
+
+        await args.denops.call("dpp#async_ext_action", "installer", "update", {
+          names,
+        });
 
         return Promise.resolve(ActionFlags.None);
       },
