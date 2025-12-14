@@ -57,10 +57,13 @@ export type GetChangesCountArguments<Params extends BaseParams> =
     oldRev: string;
   };
 
+export type GetCheckRemoteArguments<Params extends BaseParams> =
+  BaseProtocolArguments<Params>;
+
 export type GetRevisionArguments<Params extends BaseParams> =
   BaseProtocolArguments<Params>;
 
-export type GetCheckRemoteArguments<Params extends BaseParams> =
+export type GetRemoteRevisionArguments<Params extends BaseParams> =
   BaseProtocolArguments<Params>;
 
 export type Command = {
@@ -130,6 +133,11 @@ export abstract class BaseProtocol<Params extends BaseParams> {
   }
 
   getRevision(_args: GetRevisionArguments<Params>): Promise<string> | string {
+    return "";
+  }
+  getRemoteRevision(
+    _args: GetRevisionArguments<Params>,
+  ): Promise<string> | string {
     return "";
   }
 
