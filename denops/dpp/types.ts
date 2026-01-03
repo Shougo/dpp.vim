@@ -85,6 +85,7 @@ export type Plugin = {
   on_root?: string | string[];
   on_source?: string | string[];
   path?: string;
+  priority?: number;
   protocol?: string;
   protocolAttrs?: unknown;
   repo?: string;

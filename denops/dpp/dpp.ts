@@ -238,9 +238,9 @@ export class DppImpl implements Dpp {
 
     // Add plugins runtimepath
     const depends = new Set<string>();
-    const nonLazyPlugins = Object.values(availablePlugins).filter((plugin) =>
-      plugin.rtp !== "" && !plugin.lazy
-    );
+    const nonLazyPlugins = Object.values(availablePlugins)
+      .filter((plugin) => plugin.rtp !== "" && !plugin.lazy)
+      .sort((a, b) => (b.priority ?? 0) - (a.priority ?? 0));
     const hookSources = [];
     for (const plugin of nonLazyPlugins) {
       for (const depend of convert2List(plugin.depends)) {

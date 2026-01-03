@@ -16,10 +16,12 @@ function dpp#util#_get_plugins(plugins) abort
         \ a:plugins->dpp#util#_convert2list()
         \ ->map({ _, val -> val->type() == v:t_dict ? val : val->dpp#get() })
         \ ->filter({ _, val -> !val->empty() })
+        \ ->sort({ a, b -> b->get('priority', 0) - a->get('priority', 0) })
 endfunction
 function dpp#util#_get_lazy_plugins() abort
   return g:dpp#_plugins->values()
         \ ->filter({ _, val -> !val.sourced && val.rtp !=# '' })
+        \ ->sort({ a, b -> b->get('priority', 0) - a->get('priority', 0) })
 endfunction
 
 function dpp#util#_get_runtime_path() abort

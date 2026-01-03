@@ -480,6 +480,10 @@ path		(String)
 		Default:
 		If it is not set, it will be error.
 
+                                                  *dpp-plugin-option-priority*
+priority	(Number)
+		Plugin load priority.
+
                                                   *dpp-plugin-option-protocol*
 protocol	(String)
 		User specified protocol.
