@@ -1,13 +1,30 @@
 const s:is_windows = has('win32') || has('win64')
 
+function! s:is_headless_mode() abort
+  return (has('nvim') && nvim_list_uis()->empty())
+          \ || (!has('nvim') && mode(v:true) ==# 'ce')
+endfunction
+
 function dpp#util#_error(string, name = 'dpp') abort
+  const detect_shell = s:is_headless_mode()
+
   echohl Error
   for line in
         \ (a:string->type() ==# v:t_string ? a:string : a:string->string())
         \ ->split("\n")->filter({ _, val -> val != ''})
     echomsg printf('[%s] %s', a:name, line)
+
+    if s:is_headless_mode()
+      " When it is executed from shell, new line is not added in ":echomsg".
+      echo "\n"
+    endif
   endfor
   echohl None
+
+  if !has('nvim') && detect_shell
+    " When it is executed from shell, new line is not added in ":echomsg".
+    echo ""
+  endif
 endfunction
 
 function dpp#util#_get_plugins(plugins) abort
