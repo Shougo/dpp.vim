@@ -1,5 +1,4 @@
 {
-  "lock": false,
   "name": "@shougo/dpp-vim",
   "exports": {
     "./config": "./base/config.ts",
