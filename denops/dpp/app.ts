@@ -66,10 +66,10 @@ export const main: Entrypoint = (denops: Denops) => {
       const actionName = ensure(arg2, is.String);
       const actionParams = ensure(arg3, is.Record) as Record<string, unknown>;
 
-      // Set current options from dpp#_options
+      // Set current options
       const currentOptions = await vars.g.get(
         denops,
-        "dpp#_options",
+        "g:dpp.state.options",
       ) as DppOptions;
       contextBuilder.setGlobal(currentOptions);
 

@@ -34,7 +34,7 @@ export class Source extends BaseSource<Params> {
         let plugins = Object.values(
           await vars.g.get(
             args.denops,
-            "dpp#_plugins",
+            "dpp.state.plugins",
           ),
         ) as Plugin[];
 

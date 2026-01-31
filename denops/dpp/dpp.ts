@@ -204,7 +204,7 @@ export class DppImpl implements Dpp {
     // Because "makeState" may be called after VimEnter.
     const currentRuntimepath = await vars.g.get(
       denops,
-      "dpp#_init_runtimepath",
+      "dpp._init_runtimepath",
     );
 
     const rtps = await denops.call(
@@ -296,13 +296,6 @@ export class DppImpl implements Dpp {
       "g:dpp.settings.extra_args" +
       "] = g:dpp.cache._state",
       `let g:dpp.settings.config_path = '${configPath}'`,
-      // Backward compatibility aliases
-      "let g:dpp#_plugins = g:dpp.state.plugins",
-      "let g:dpp#_options = g:dpp.state.options",
-      "let g:dpp#_check_files = g:dpp.state.check_files",
-      "let g:dpp#_multiple_hooks = g:dpp.state.multiple_hooks",
-      "let g:dpp#_extra_args = g:dpp.settings.extra_args",
-      "let g:dpp#_config_path = g:dpp.settings.config_path",
       `let &runtimepath = '${newRuntimepath}'`,
     ];
 
@@ -331,10 +324,10 @@ export class DppImpl implements Dpp {
       checkFiles = [...checkFiles, ...configReturn.hooksFiles];
     }
 
-    if (await vars.g.get(denops, "dpp#_did_load_filetypes", false)) {
+    if (await vars.g.get(denops, "dpp._did_load_filetypes", false)) {
       startupLines.push("filetype off");
     }
-    if (await vars.g.get(denops, "dpp#_did_load_ftplugin", false)) {
+    if (await vars.g.get(denops, "dpp._did_load_ftplugin", false)) {
       startupLines.push("filetype plugin indent off");
     }
     if (configReturn.stateLines) {
