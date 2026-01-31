@@ -15,7 +15,8 @@ function dpp#source(
 endfunction
 
 function dpp#sync_ext_action(ext_name, action_name, action_params={}) abort
-  if !'g:dpp'->exists() || !g:dpp.settings->has_key('base_path') 
+  if !'g:dpp'->exists()
+        \ || !g:dpp.settings->has_key('base_path')
         \ || !g:dpp.settings->has_key('config_path')
     call dpp#util#_error('dpp.vim is not initialized yet.')
     call dpp#util#_error('Please check dpp#min#load_state() succeeded.')
@@ -38,7 +39,8 @@ function dpp#sync_ext_action(ext_name, action_name, action_params={}) abort
 endfunction
 
 function dpp#async_ext_action(ext_name, action_name, action_params={}) abort
-  if !'g:dpp'->exists() || !g:dpp.settings->has_key('base_path') 
+  if !'g:dpp'->exists()
+        \ || !g:dpp.settings->has_key('base_path')
         \ || !g:dpp.settings->has_key('config_path')
     call dpp#util#_error('dpp.vim is not initialized yet.')
     call dpp#util#_error('Please check dpp#min#load_state() succeeded.')
@@ -60,20 +62,23 @@ function dpp#make_state(
       \   name='',
       \   extra_args={},
       \ ) abort
+  const has_dpp = 'g:dpp'->exists()
+
   " Get defaults from g:dpp.settings if available
   const base_path = a:base_path ==# ''
-        \ ? ('g:dpp'->exists() ? g:dpp.settings->get('base_path', '') : '')
+        \ ? (has_dpp ? g:dpp.settings->get('base_path', '') : '')
         \ : a:base_path
   const config_path = a:config_path ==# ''
-        \ ? ('g:dpp'->exists() ? g:dpp.settings->get('config_path', '') : '')
+        \ ? (has_dpp ? g:dpp.settings->get('config_path', '') : '')
         \ : a:config_path
-  const name = a:name ==# ''
-        \ ? ('g:dpp'->exists() ? g:dpp.settings->get('name', v:progname->fnamemodify(':r')) : v:progname->fnamemodify(':r'))
-        \ : a:name
+  const default_name = has_dpp
+        \ ? g:dpp.settings->get('name', v:progname->fnamemodify(':r'))
+        \ : v:progname->fnamemodify(':r')
+  const name = a:name ==# '' ? default_name : a:name
   const extra_args = a:extra_args->empty()
-        \ ? ('g:dpp'->exists() ? g:dpp.settings->get('extra_args', {}) : {})
+        \ ? (has_dpp ? g:dpp.settings->get('extra_args', {}) : {})
         \ : a:extra_args
-  
+
   const base_path_expanded = base_path->dpp#util#_expand()
   const config_path_expanded = config_path->dpp#util#_expand()
 
@@ -98,16 +103,21 @@ function dpp#make_state(
   call dpp#util#_clear_state(name)
 
   return dpp#denops#_notify('makeState', [
-        \   base_path_expanded, config_path_expanded, name, extra_args,
+        \   base_path_expanded,
+        \   config_path_expanded,
+        \   name,
+        \   extra_args,
         \ ])
 endfunction
 
 function dpp#clear_state(
       \   name=''
       \ ) abort
-  const name_val = a:name ==# ''
-        \ ? ('g:dpp'->exists() ? g:dpp.settings->get('name', v:progname->fnamemodify(':r')) : v:progname->fnamemodify(':r'))
-        \ : a:name
+  const default_name =
+        \   'g:dpp'->exists()
+        \ ? g:dpp.settings->get('name', v:progname->fnamemodify(':r'))
+        \ : v:progname->fnamemodify(':r')
+  const name_val = a:name ==# '' ? default_name : a:name
   call dpp#util#_clear_state(name_val)
 endfunction
 
@@ -115,12 +125,14 @@ function dpp#check_files(
       \   base_path='',
       \   name='',
       \ ) abort
+  const has_dpp = 'g:dpp'->exists()
   const base_path_val = a:base_path ==# ''
-        \ ? ('g:dpp'->exists() ? g:dpp.settings->get('base_path', '') : '')
+        \ ? (has_dpp ? g:dpp.settings->get('base_path', '') : '')
         \ : a:base_path
-  const name_val = a:name ==# ''
-        \ ? ('g:dpp'->exists() ? g:dpp.settings->get('name', v:progname->fnamemodify(':r')) : v:progname->fnamemodify(':r'))
-        \ : a:name
+  const default_name = has_dpp
+        \ ? g:dpp.settings->get('name', v:progname->fnamemodify(':r'))
+        \ : v:progname->fnamemodify(':r')
+  const name_val = a:name ==# '' ? default_name : a:name
   return dpp#util#_check_files(base_path_val, name_val)
 endfunction
 

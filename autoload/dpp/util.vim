@@ -166,6 +166,7 @@ function dpp#util#_execute_hook(plugin, hook_name, plugin_name, hook) abort
           \ printf('Error occurred while executing %s: %s',
           \        a:hook_name,
           \        a:plugin_name))
+    call dpp#util#_error('<stack>'->expand())
     call dpp#util#_error(v:exception)
   endtry
 
@@ -200,7 +201,9 @@ function s:tsort_impl(target, mark, sorted) abort
 endfunction
 
 function dpp#util#_clear_state(name) abort
-  const startup = printf('%s/%s/startup.vim', g:dpp.settings.base_path, a:name)
+  const startup = printf(
+        \ '%s/%s/startup.vim',
+        \ g:dpp.settings.base_path, a:name)
   if startup->filereadable()
     call delete(startup)
   endif

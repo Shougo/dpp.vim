@@ -11,8 +11,9 @@ function dpp#denops#_request(method, args) abort
 
   if denops#server#status() !=# 'running'
     " Lazy call request
-    execute printf('autocmd User DenopsPluginPost:dpp call '
-          \ .. 's:notify("%s", %s)', a:method, a:args->string())
+    execute printf(
+          \ 'autocmd User DenopsPluginPost:dpp call s:notify("%s", %s)',
+          \ a:method, a:args->string())
     return {}
   endif
 

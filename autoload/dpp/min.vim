@@ -8,8 +8,10 @@ function dpp#min#load_state(path, name=v:progname->fnamemodify(':r')) abort
   " Backward compatibility
   let g:dpp#_base_path = g:dpp.settings.base_path
   let g:dpp#_name = g:dpp.settings.name
-  const startup = printf('%s/%s/startup.vim', g:dpp.settings.base_path, a:name)
-  const state = printf('%s/%s/state.vim', g:dpp.settings.base_path, a:name)
+  const startup = printf('%s/%s/startup.vim',
+        \ g:dpp.settings.base_path, a:name)
+  const state = printf('%s/%s/state.vim',
+        \ g:dpp.settings.base_path, a:name)
   if !startup->filereadable() || !state->filereadable() | return 1 | endif
   try
     let g:dpp.cache._state =
@@ -35,24 +37,24 @@ function dpp#min#_init() abort
   if exists('g:dpp') && has_key(g:dpp, '_state_version')
     return
   endif
-  
+
   let g:dpp = {}
-  
+
   " Settings: Configuration options
   let g:dpp.settings = {}
-  
+
   " State: Dynamic plugin states
   let g:dpp.state = {}
   let g:dpp.state.plugins = {}
   let g:dpp.state.options = {}
   let g:dpp.state.check_files = []
   let g:dpp.state.multiple_hooks = []
-  
+
   " Cache: Temporary cache data
   let g:dpp.cache = {}
-  
+
   " Version and initialization flags (at root level)
-  let g:dpp._state_version = 4
+  let g:dpp._state_version = 5
   let g:dpp._is_sudo =
         \    $SUDO_USER !=# '' && $USER !=# $SUDO_USER
         \ && $HOME !=# ('~'.$USER)->expand()
@@ -65,7 +67,7 @@ function dpp#min#_init() abort
         \    b:->get('did_ftplugin', v:false)
         \ || b:->get('did_indent', v:false)
         \ || has('nvim')
-  
+
   " Backward compatibility: Create aliases for old variable names
   let g:dpp#_state_version = g:dpp._state_version
   let g:dpp#_is_sudo = g:dpp._is_sudo
@@ -76,7 +78,7 @@ function dpp#min#_init() abort
   let g:dpp#_options = g:dpp.state.options
   let g:dpp#_check_files = g:dpp.state.check_files
   let g:dpp#_multiple_hooks = g:dpp.state.multiple_hooks
-  
+
   augroup dpp
     autocmd!
   augroup END
