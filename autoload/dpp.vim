@@ -18,7 +18,7 @@ function dpp#sync_ext_action(ext_name, action_name, action_params={}) abort
   if !'g:dpp'->exists() || !g:dpp.settings->has_key('base_path') 
         \ || !g:dpp.settings->has_key('config_path')
     call dpp#util#_error('dpp.vim is not initialized yet.')
-    call dpp#util#_error('Please check dpp#min#load_state() is suceeded.')
+    call dpp#util#_error('Please check dpp#min#load_state() succeeded.')
     return
   endif
 
@@ -41,7 +41,7 @@ function dpp#async_ext_action(ext_name, action_name, action_params={}) abort
   if !'g:dpp'->exists() || !g:dpp.settings->has_key('base_path') 
         \ || !g:dpp.settings->has_key('config_path')
     call dpp#util#_error('dpp.vim is not initialized yet.')
-    call dpp#util#_error('Please check dpp#min#load_state() is suceeded.')
+    call dpp#util#_error('Please check dpp#min#load_state() succeeded.')
     return
   endif
 

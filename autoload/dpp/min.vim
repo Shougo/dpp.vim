@@ -31,6 +31,11 @@ function dpp#min#load_state(path, name=v:progname->fnamemodify(':r')) abort
 endfunction
 function dpp#min#_init() abort
   " Initialize the unified g:dpp namespace with structured sections
+  " Skip if already initialized
+  if exists('g:dpp') && has_key(g:dpp, '_state_version')
+    return
+  endif
+  
   let g:dpp = {}
   
   " Settings: Configuration options
