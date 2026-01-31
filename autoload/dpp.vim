@@ -1,18 +1,19 @@
 function dpp#get(name = '') abort
-  return !'g:dpp#_plugins'->exists()
+  return !'g:dpp'->exists()
         \ ? {}
         \ : a:name ==# ''
-        \ ? g:dpp#_plugins->copy()
-        \ : g:dpp#_plugins->get(a:name, {})
+        \ ? g:dpp.state.plugins->copy()
+        \ : g:dpp.state.plugins->get(a:name, {})
 endfunction
 
 function dpp#source(
-      \ plugins = g:dpp#_plugins->values(), function_prefix = '') abort
+      \ plugins = g:dpp.state.plugins->values(), function_prefix = '') abort
   return dpp#source#_source(a:plugins, a:function_prefix)
 endfunction
 
 function dpp#sync_ext_action(ext_name, action_name, action_params={}) abort
-  if !'g:dpp#_base_path'->exists() || !'g:dpp#_config_path'->exists()
+  if !'g:dpp'->exists() || !g:dpp.settings->has_key('base_path') 
+        \ || !g:dpp.settings->has_key('config_path')
     call dpp#util#_error('dpp.vim is not initialized yet.')
     call dpp#util#_error('Please check dpp#min#load_state() is suceeded.')
     return
@@ -34,7 +35,8 @@ function dpp#sync_ext_action(ext_name, action_name, action_params={}) abort
 endfunction
 
 function dpp#async_ext_action(ext_name, action_name, action_params={}) abort
-  if !'g:dpp#_base_path'->exists() || !'g:dpp#_config_path'->exists()
+  if !'g:dpp'->exists() || !g:dpp.settings->has_key('base_path') 
+        \ || !g:dpp.settings->has_key('config_path')
     call dpp#util#_error('dpp.vim is not initialized yet.')
     call dpp#util#_error('Please check dpp#min#load_state() is suceeded.')
     return
@@ -50,10 +52,10 @@ function dpp#async_ext_action(ext_name, action_name, action_params={}) abort
 endfunction
 
 function dpp#make_state(
-      \   base_path=g:->get('dpp#_base_path', ''),
-      \   config_path=g:->get('dpp#_config_path', ''),
-      \   name=g:->get('dpp#_name', v:progname->fnamemodify(':r')),
-      \   extra_args=g:->get('dpp#_extra_args', {}),
+      \   base_path=g:dpp.settings->get('base_path', ''),
+      \   config_path=g:dpp.settings->get('config_path', ''),
+      \   name=g:dpp.settings->get('name', v:progname->fnamemodify(':r')),
+      \   extra_args=g:dpp.settings->get('extra_args', {}),
       \ ) abort
   const base_path = a:base_path->dpp#util#_expand()
   const config_path = a:config_path->dpp#util#_expand()
@@ -84,14 +86,14 @@ function dpp#make_state(
 endfunction
 
 function dpp#clear_state(
-      \   name=g:->get('dpp#_name', v:progname->fnamemodify(':r'))
+      \   name=g:dpp.settings->get('name', v:progname->fnamemodify(':r'))
       \ ) abort
   call dpp#util#_clear_state(a:name)
 endfunction
 
 function dpp#check_files(
-      \   base_path=g:->get('dpp#_base_path', ''),
-      \   name=g:->get('dpp#_name', v:progname->fnamemodify(':r')),
+      \   base_path=g:dpp.settings->get('base_path', ''),
+      \   name=g:dpp.settings->get('name', v:progname->fnamemodify(':r')),
       \ ) abort
   return dpp#util#_check_files(a:base_path, a:name)
 endfunction

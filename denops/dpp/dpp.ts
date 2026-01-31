@@ -283,19 +283,26 @@ export class DppImpl implements Dpp {
       dppRuntimepath,
     );
 
-    const stateVersion = await vars.g.get(denops, "dpp#_state_version");
+    const stateVersion = await vars.g.get(denops, "dpp._state_version");
     let startupLines = [
-      `if g:dpp#_state_version !=# ${stateVersion}` +
+      `if g:dpp._state_version !=# ${stateVersion}` +
       `| throw "State version error" | endif`,
       "let [" +
-      "g:dpp#_plugins," +
-      "g:dpp#ftplugin," +
-      "g:dpp#_options," +
-      "g:dpp#_check_files," +
-      "g:dpp#_multiple_hooks," +
-      "g:dpp#_extra_args" +
-      "] = g:dpp#_state",
-      `let g:dpp#_config_path = '${configPath}'`,
+      "g:dpp.state.plugins," +
+      "g:dpp.ftplugin," +
+      "g:dpp.state.options," +
+      "g:dpp.state.check_files," +
+      "g:dpp.state.multiple_hooks," +
+      "g:dpp.settings.extra_args" +
+      "] = g:dpp.cache._state",
+      `let g:dpp.settings.config_path = '${configPath}'`,
+      // Backward compatibility aliases
+      "let g:dpp#_plugins = g:dpp.state.plugins",
+      "let g:dpp#_options = g:dpp.state.options",
+      "let g:dpp#_check_files = g:dpp.state.check_files",
+      "let g:dpp#_multiple_hooks = g:dpp.state.multiple_hooks",
+      "let g:dpp#_extra_args = g:dpp.settings.extra_args",
+      "let g:dpp#_config_path = g:dpp.settings.config_path",
       `let &runtimepath = '${newRuntimepath}'`,
     ];
 
