@@ -47,16 +47,16 @@ function dpp#min#_init() abort
   let g:dpp.cache = {}
   
   " Version and initialization flags (at root level)
-  const g:dpp._state_version = 4
-  const g:dpp._is_sudo =
+  let g:dpp._state_version = 4
+  let g:dpp._is_sudo =
         \    $SUDO_USER !=# '' && $USER !=# $SUDO_USER
         \ && $HOME !=# ('~'.$USER)->expand()
         \ && $HOME ==# ('~'.$SUDO_USER)->expand()
-  const g:dpp._init_runtimepath = &runtimepath
-  const g:dpp._did_load_filetypes =
+  let g:dpp._init_runtimepath = &runtimepath
+  let g:dpp._did_load_filetypes =
         \    g:->get('did_load_filetypes', v:false)
         \ || has('nvim')
-  const g:dpp._did_load_ftplugin =
+  let g:dpp._did_load_ftplugin =
         \    b:->get('did_ftplugin', v:false)
         \ || b:->get('did_indent', v:false)
         \ || has('nvim')
