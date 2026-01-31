@@ -69,7 +69,7 @@ export const main: Entrypoint = (denops: Denops) => {
       // Set current options
       const currentOptions = await vars.g.get(
         denops,
-        "g:dpp.state.options",
+        "dpp.state.options",
       ) as DppOptions;
       contextBuilder.setGlobal(currentOptions);
 

@@ -71,10 +71,7 @@ function dpp#make_state(
   const config_path = a:config_path ==# ''
         \ ? (has_dpp ? g:dpp.settings->get('config_path', '') : '')
         \ : a:config_path
-  const default_name = has_dpp
-        \ ? g:dpp.settings->get('name', v:progname->fnamemodify(':r'))
-        \ : v:progname->fnamemodify(':r')
-  const name = a:name ==# '' ? default_name : a:name
+  const name = a:name ==# '' ? dpp#util#_get_name() : a:name
   const extra_args = a:extra_args->empty()
         \ ? (has_dpp ? g:dpp.settings->get('extra_args', {}) : {})
         \ : a:extra_args
@@ -113,11 +110,7 @@ endfunction
 function dpp#clear_state(
       \   name=''
       \ ) abort
-  const default_name =
-        \   'g:dpp'->exists()
-        \ ? g:dpp.settings->get('name', v:progname->fnamemodify(':r'))
-        \ : v:progname->fnamemodify(':r')
-  const name_val = a:name ==# '' ? default_name : a:name
+  const name_val = a:name ==# '' ? dpp#util#_get_name() : a:name
   call dpp#util#_clear_state(name_val)
 endfunction
 
@@ -129,10 +122,7 @@ function dpp#check_files(
   const base_path_val = a:base_path ==# ''
         \ ? (has_dpp ? g:dpp.settings->get('base_path', '') : '')
         \ : a:base_path
-  const default_name = has_dpp
-        \ ? g:dpp.settings->get('name', v:progname->fnamemodify(':r'))
-        \ : v:progname->fnamemodify(':r')
-  const name_val = a:name ==# '' ? default_name : a:name
+  const name_val = a:name ==# '' ? dpp#util#_get_name() : a:name
   return dpp#util#_check_files(base_path_val, name_val)
 endfunction
 

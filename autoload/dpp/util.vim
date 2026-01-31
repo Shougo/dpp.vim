@@ -27,7 +27,7 @@ function dpp#util#_error(string, name = 'dpp') abort
   endif
 endfunction
 
-function dpp#util#_get_plugins(plugins) abort
+function dpp#util#_get_plugins(plugins=[]) abort
   return a:plugins->empty() ?
         \ g:dpp.state.plugins->values() :
         \ a:plugins->dpp#util#_convert2list()
@@ -43,6 +43,14 @@ endfunction
 
 function dpp#util#_get_runtime_path() abort
   return dpp#util#_substitute_path($VIMRUNTIME)
+endfunction
+function dpp#util#_get_base_path() abort
+  return 'g:dpp'->exists() ? g:dpp.settings->get('base_path', '') : ''
+endfunction
+function dpp#util#_get_name() abort
+  return 'g:dpp'->exists()
+        \ ? g:dpp.settings->get('name', v:progname->fnamemodify(':r'))
+        \ : v:progname->fnamemodify(':r')
 endfunction
 function dpp#util#_check_files(base_path, name) abort
   const time = printf('%s/%s/state.vim', a:base_path, a:name)->getftime()
