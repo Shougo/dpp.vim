@@ -7,7 +7,7 @@ function dpp#source#_source(plugins, function_prefix) abort
 
   if plugins[0]->type() != v:t_dict
     let plugins = a:plugins->dpp#util#_convert2list()
-          \ ->map({ _, val -> g:dpp#_plugins->get(val, {}) })
+          \ ->map({ _, val -> g:dpp.state.plugins->get(val, {}) })
   endif
 
   let rtps = &runtimepath->dpp#util#_split_rtp()
@@ -151,21 +151,21 @@ function s:source_plugin(rtps, index, plugin, sourced) abort
 
   " Load dependencies
   for name in a:plugin->get('depends', [])
-    if !g:dpp#_plugins->has_key(name)
+    if !g:dpp.state.plugins->has_key(name)
       call dpp#util#_error(printf(
             \ 'Plugin "%s" depends "%s" but it is not found.',
             \ a:plugin.name, name))
       continue
     endif
 
-    if !a:plugin.lazy && g:dpp#_plugins[name].lazy
+    if !a:plugin.lazy && g:dpp.state.plugins[name].lazy
       call dpp#util#_error(printf(
             \ 'Not lazy plugin "%s" depends lazy "%s" plugin.',
             \ a:plugin.name, name))
       continue
     endif
 
-    if s:source_plugin(a:rtps, index, g:dpp#_plugins[name], a:sourced)
+    if s:source_plugin(a:rtps, index, g:dpp.state.plugins[name], a:sourced)
       let index += 1
     endif
   endfor

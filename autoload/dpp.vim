@@ -1,20 +1,25 @@
 function dpp#get(name = '') abort
-  return !'g:dpp#_plugins'->exists()
+  return !'g:dpp'->exists()
         \ ? {}
         \ : a:name ==# ''
-        \ ? g:dpp#_plugins->copy()
-        \ : g:dpp#_plugins->get(a:name, {})
+        \ ? g:dpp.state.plugins->copy()
+        \ : g:dpp.state.plugins->get(a:name, {})
 endfunction
 
 function dpp#source(
-      \ plugins = g:dpp#_plugins->values(), function_prefix = '') abort
-  return dpp#source#_source(a:plugins, a:function_prefix)
+      \ plugins = [], function_prefix = '') abort
+  const plugins_val = a:plugins->empty() && 'g:dpp'->exists()
+        \ ? g:dpp.state.plugins->values()
+        \ : a:plugins
+  return dpp#source#_source(plugins_val, a:function_prefix)
 endfunction
 
 function dpp#sync_ext_action(ext_name, action_name, action_params={}) abort
-  if !'g:dpp#_base_path'->exists() || !'g:dpp#_config_path'->exists()
+  if !'g:dpp'->exists()
+        \ || !g:dpp.settings->has_key('base_path')
+        \ || !g:dpp.settings->has_key('config_path')
     call dpp#util#_error('dpp.vim is not initialized yet.')
-    call dpp#util#_error('Please check dpp#min#load_state() is suceeded.')
+    call dpp#util#_error('Please check dpp#min#load_state() succeeded.')
     return
   endif
 
@@ -34,9 +39,11 @@ function dpp#sync_ext_action(ext_name, action_name, action_params={}) abort
 endfunction
 
 function dpp#async_ext_action(ext_name, action_name, action_params={}) abort
-  if !'g:dpp#_base_path'->exists() || !'g:dpp#_config_path'->exists()
+  if !'g:dpp'->exists()
+        \ || !g:dpp.settings->has_key('base_path')
+        \ || !g:dpp.settings->has_key('config_path')
     call dpp#util#_error('dpp.vim is not initialized yet.')
-    call dpp#util#_error('Please check dpp#min#load_state() is suceeded.')
+    call dpp#util#_error('Please check dpp#min#load_state() succeeded.')
     return
   endif
 
@@ -50,23 +57,37 @@ function dpp#async_ext_action(ext_name, action_name, action_params={}) abort
 endfunction
 
 function dpp#make_state(
-      \   base_path=g:->get('dpp#_base_path', ''),
-      \   config_path=g:->get('dpp#_config_path', ''),
-      \   name=g:->get('dpp#_name', v:progname->fnamemodify(':r')),
-      \   extra_args=g:->get('dpp#_extra_args', {}),
+      \   base_path='',
+      \   config_path='',
+      \   name='',
+      \   extra_args={},
       \ ) abort
-  const base_path = a:base_path->dpp#util#_expand()
-  const config_path = a:config_path->dpp#util#_expand()
+  const has_dpp = 'g:dpp'->exists()
 
-  if base_path ==# ''
+  " Get defaults from g:dpp.settings if available
+  const base_path = a:base_path ==# ''
+        \ ? (has_dpp ? g:dpp.settings->get('base_path', '') : '')
+        \ : a:base_path
+  const config_path = a:config_path ==# ''
+        \ ? (has_dpp ? g:dpp.settings->get('config_path', '') : '')
+        \ : a:config_path
+  const name = a:name ==# '' ? dpp#util#_get_name() : a:name
+  const extra_args = a:extra_args->empty()
+        \ ? (has_dpp ? g:dpp.settings->get('extra_args', {}) : {})
+        \ : a:extra_args
+
+  const base_path_expanded = base_path->dpp#util#_expand()
+  const config_path_expanded = config_path->dpp#util#_expand()
+
+  if base_path_expanded ==# ''
     call dpp#util#_error('dpp#make_state() base_path is empty.')
     return 1
   endif
 
-  if !config_path->filereadable()
+  if !config_path_expanded->filereadable()
     call dpp#util#_error(printf(
           \ 'dpp#make_state() config_path: "%s" is not found.',
-          \ a:config_path))
+          \ config_path))
     return 1
   endif
 
@@ -76,24 +97,33 @@ function dpp#make_state(
   endif
 
   " Remove old state files
-  call dpp#util#_clear_state(a:name)
+  call dpp#util#_clear_state(name)
 
   return dpp#denops#_notify('makeState', [
-        \   base_path, config_path, a:name, a:extra_args,
+        \   base_path_expanded,
+        \   config_path_expanded,
+        \   name,
+        \   extra_args,
         \ ])
 endfunction
 
 function dpp#clear_state(
-      \   name=g:->get('dpp#_name', v:progname->fnamemodify(':r'))
+      \   name=''
       \ ) abort
-  call dpp#util#_clear_state(a:name)
+  const name_val = a:name ==# '' ? dpp#util#_get_name() : a:name
+  call dpp#util#_clear_state(name_val)
 endfunction
 
 function dpp#check_files(
-      \   base_path=g:->get('dpp#_base_path', ''),
-      \   name=g:->get('dpp#_name', v:progname->fnamemodify(':r')),
+      \   base_path='',
+      \   name='',
       \ ) abort
-  return dpp#util#_check_files(a:base_path, a:name)
+  const has_dpp = 'g:dpp'->exists()
+  const base_path_val = a:base_path ==# ''
+        \ ? (has_dpp ? g:dpp.settings->get('base_path', '') : '')
+        \ : a:base_path
+  const name_val = a:name ==# '' ? dpp#util#_get_name() : a:name
+  return dpp#util#_check_files(base_path_val, name_val)
 endfunction
 
 function dpp#check_clean() abort

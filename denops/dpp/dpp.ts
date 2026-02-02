@@ -204,7 +204,7 @@ export class DppImpl implements Dpp {
     // Because "makeState" may be called after VimEnter.
     const currentRuntimepath = await vars.g.get(
       denops,
-      "dpp#_init_runtimepath",
+      "dpp._init_runtimepath",
     );
 
     const rtps = await denops.call(
@@ -283,19 +283,19 @@ export class DppImpl implements Dpp {
       dppRuntimepath,
     );
 
-    const stateVersion = await vars.g.get(denops, "dpp#_state_version");
+    const stateVersion = await vars.g.get(denops, "dpp._state_version");
     let startupLines = [
-      `if g:dpp#_state_version !=# ${stateVersion}` +
+      `if g:dpp._state_version !=# ${stateVersion}` +
       `| throw "State version error" | endif`,
       "let [" +
-      "g:dpp#_plugins," +
-      "g:dpp#ftplugin," +
-      "g:dpp#_options," +
-      "g:dpp#_check_files," +
-      "g:dpp#_multiple_hooks," +
-      "g:dpp#_extra_args" +
-      "] = g:dpp#_state",
-      `let g:dpp#_config_path = '${configPath}'`,
+      "g:dpp.state.plugins," +
+      "g:dpp.ftplugin," +
+      "g:dpp.state.options," +
+      "g:dpp.state.check_files," +
+      "g:dpp.state.multiple_hooks," +
+      "g:dpp.settings.extra_args" +
+      "] = g:dpp.cache._state",
+      `let g:dpp.settings.config_path = '${configPath}'`,
       `let &runtimepath = '${newRuntimepath}'`,
     ];
 
@@ -324,10 +324,10 @@ export class DppImpl implements Dpp {
       checkFiles = [...checkFiles, ...configReturn.hooksFiles];
     }
 
-    if (await vars.g.get(denops, "dpp#_did_load_filetypes", false)) {
+    if (await vars.g.get(denops, "dpp._did_load_filetypes", false)) {
       startupLines.push("filetype off");
     }
-    if (await vars.g.get(denops, "dpp#_did_load_ftplugin", false)) {
+    if (await vars.g.get(denops, "dpp._did_load_ftplugin", false)) {
       startupLines.push("filetype plugin indent off");
     }
     if (configReturn.stateLines) {

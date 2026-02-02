@@ -11,8 +11,9 @@ function dpp#denops#_request(method, args) abort
 
   if denops#server#status() !=# 'running'
     " Lazy call request
-    execute printf('autocmd User DenopsPluginPost:dpp call '
-          \ .. 's:notify("%s", %s)', a:method, a:args->string())
+    execute printf(
+          \ 'autocmd User DenopsPluginPost:dpp call s:notify("%s", %s)',
+          \ a:method, a:args->string())
     return {}
   endif
 
@@ -51,7 +52,7 @@ function s:init() abort
   endif
 
   " Check sudo
-  if g:dpp#_is_sudo
+  if g:dpp._is_sudo
     return 1
   endif
 
@@ -60,7 +61,7 @@ function s:init() abort
     autocmd User DenopsPluginPost:dpp ++nested let s:initialized = v:true
   augroup END
 
-  let g:dpp#_started = reltime()
+  let g:dpp.cache._started = reltime()
 
   " NOTE: denops load may be started
   if 'g:loaded_denops'->exists()

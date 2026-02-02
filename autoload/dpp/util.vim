@@ -27,16 +27,16 @@ function dpp#util#_error(string, name = 'dpp') abort
   endif
 endfunction
 
-function dpp#util#_get_plugins(plugins) abort
+function dpp#util#_get_plugins(plugins=[]) abort
   return a:plugins->empty() ?
-        \ g:dpp#_plugins->values() :
+        \ g:dpp.state.plugins->values() :
         \ a:plugins->dpp#util#_convert2list()
         \ ->map({ _, val -> val->type() == v:t_dict ? val : val->dpp#get() })
         \ ->filter({ _, val -> !val->empty() })
         \ ->sort({ a, b -> b->get('priority', 0) - a->get('priority', 0) })
 endfunction
 function dpp#util#_get_lazy_plugins() abort
-  return g:dpp#_plugins->values()
+  return g:dpp.state.plugins->values()
         \ ->filter({ _, val -> !val.sourced && val.rtp !=# '' })
         \ ->sort({ a, b -> b->get('priority', 0) - a->get('priority', 0) })
 endfunction
@@ -44,10 +44,18 @@ endfunction
 function dpp#util#_get_runtime_path() abort
   return dpp#util#_substitute_path($VIMRUNTIME)
 endfunction
+function dpp#util#_get_base_path() abort
+  return 'g:dpp'->exists() ? g:dpp.settings->get('base_path', '') : ''
+endfunction
+function dpp#util#_get_name() abort
+  return 'g:dpp'->exists()
+        \ ? g:dpp.settings->get('name', v:progname->fnamemodify(':r'))
+        \ : v:progname->fnamemodify(':r')
+endfunction
 function dpp#util#_check_files(base_path, name) abort
   const time = printf('%s/%s/state.vim', a:base_path, a:name)->getftime()
 
-  const updated = g:dpp#_check_files->copy()
+  const updated = g:dpp.state.check_files->copy()
         \ ->filter({ _, val ->
         \      val->dpp#util#_expand()->getftime() < 0
         \   || time < val->dpp#util#_expand()->getftime()
@@ -122,7 +130,7 @@ function dpp#util#_call_hook(hook_name, plugins = []) abort
 
   if a:hook_name ==# 'source' || a:hook_name ==# 'post_source'
     " Check multiple_hooks
-    for hooks in g:dpp#_multiple_hooks
+    for hooks in g:dpp.state.multiple_hooks
       if hooks->get(hook, '') ==# ''
         continue
       endif
@@ -166,6 +174,7 @@ function dpp#util#_execute_hook(plugin, hook_name, plugin_name, hook) abort
           \ printf('Error occurred while executing %s: %s',
           \        a:hook_name,
           \        a:plugin_name))
+    call dpp#util#_error('<stack>'->expand())
     call dpp#util#_error(v:exception)
   endtry
 
@@ -200,11 +209,13 @@ function s:tsort_impl(target, mark, sorted) abort
 endfunction
 
 function dpp#util#_clear_state(name) abort
-  const startup = printf('%s/%s/startup.vim', g:dpp#_base_path, a:name)
+  const startup = printf(
+        \ '%s/%s/startup.vim',
+        \ g:dpp.settings.base_path, a:name)
   if startup->filereadable()
     call delete(startup)
   endif
-  const state = printf('%s/%s/state.vim', g:dpp#_base_path, a:name)
+  const state = printf('%s/%s/state.vim', g:dpp.settings.base_path, a:name)
   if state->filereadable()
     call delete(state)
   endif
@@ -312,7 +323,7 @@ function dpp#util#_check_clean() abort
   const plugins_directories = dpp#get()->values()
         \ ->map({ _, val -> dpp#util#_substitute_path(val.path) })
   const path = dpp#util#_substitute_path(
-        \ 'repos/*/*/*'->globpath(g:dpp#_base_path, v:true))
+        \ 'repos/*/*/*'->globpath(g:dpp.settings.base_path, v:true))
   return path->split("\n")->filter( { _, val ->
         \  val->isdirectory() && val->fnamemodify(':t') !=# 'dpp.vim'
         \  && plugins_directories->index(val) < 0
