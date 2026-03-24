@@ -43,7 +43,7 @@ export class DppImpl implements Dpp {
     this.#loader = loader;
   }
 
-  async extAction(
+  extAction(
     denops: Denops,
     context: Context,
     options: DppOptions,
@@ -62,7 +62,7 @@ export class DppImpl implements Dpp {
     );
   }
 
-  async getExt(
+  getExt(
     denops: Denops,
     options: DppOptions,
     extName: ExtName,
@@ -81,7 +81,7 @@ export class DppImpl implements Dpp {
     );
   }
 
-  async getProtocols(
+  getProtocols(
     denops: Denops,
     options: DppOptions,
   ): Promise<Record<ProtocolName, Protocol>> {
@@ -103,7 +103,7 @@ export class DppImpl implements Dpp {
     let multipleHooks = configReturn.multipleHooks ?? [];
 
     // Check plugin-option-if is enabled
-    const checkIf = async (plugin: Plugin) => {
+    const checkIf = (plugin: Plugin) => {
       if (!("if" in plugin)) {
         return true;
       }
