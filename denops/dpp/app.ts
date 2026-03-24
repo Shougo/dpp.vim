@@ -75,7 +75,7 @@ export const main: Entrypoint = (denops: Denops) => {
 
       const [context, options] = await contextBuilder.get(denops);
 
-      return await extAction(
+      return extAction(
         denops,
         loader,
         context,
@@ -154,7 +154,7 @@ export const main: Entrypoint = (denops: Denops) => {
       const extName = ensure(arg1, is.String);
       const [_, options] = await contextBuilder.get(denops);
 
-      return await dpp.getExt(
+      return dpp.getExt(
         denops,
         options,
         extName,
@@ -163,7 +163,7 @@ export const main: Entrypoint = (denops: Denops) => {
     async getProtocols(): Promise<Record<ProtocolName, Protocol>> {
       const [_, options] = await contextBuilder.get(denops);
 
-      return await dpp.getProtocols(
+      return dpp.getProtocols(
         denops,
         options,
       );
