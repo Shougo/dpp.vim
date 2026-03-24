@@ -380,3 +380,20 @@ Deno.test("parseHooksFile", () => {
     },
   );
 });
+
+Deno.test("convert2List: undefined -> empty, single -> list, array -> same", () => {
+  assertEquals(convert2List(undefined), []);
+  assertEquals(convert2List(1 as unknown as number), [1]);
+  assertEquals(convert2List([1, 2] as unknown as number[]), [1, 2]);
+});
+
+Deno.test("isDenoCacheIssueError: detects known messages", () => {
+  const e1 = new TypeError(
+    "Could not find constraint in the list of versions: something",
+  );
+  const e2 = new TypeError("Could not find version of something");
+  const e3 = new TypeError("Some other error");
+  assertEquals(isDenoCacheIssueError(e1), true);
+  assertEquals(isDenoCacheIssueError(e2), true);
+  assertEquals(isDenoCacheIssueError(e3), false);
+});

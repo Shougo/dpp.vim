@@ -9,6 +9,7 @@ import type {
 import { printError } from "./utils.ts";
 
 import type { Denops } from "@denops/std";
+import { assertEquals } from "@std/assert/equals";
 
 // where
 // T: Object
@@ -216,3 +217,23 @@ export class ContextBuilderImpl implements ContextBuilder {
     }
   }
 }
+
+Deno.test("foldMerge: merges partials with provided merge and default", () => {
+  const merge = (
+    a: Record<string, unknown>,
+    b: Partial<Record<string, unknown>>,
+  ) => ({ ...a, ...b });
+  const def = () => ({ a: 1, b: 2 });
+  const result = foldMerge(merge, def, [null, { b: 3 }, { c: 4 }]);
+  assertEquals(result, { a: 1, b: 3, c: 4 });
+});
+
+Deno.test("defaultDppOptions and mergeDppOptions: basic merge behavior", () => {
+  const base = defaultDppOptions();
+  const patch = { inlineVimrcs: ["init.vim"], protocols: ["git"] } as Partial<
+    typeof base
+  >;
+  const merged = mergeDppOptions(base, patch);
+  assertEquals(merged.inlineVimrcs, ["init.vim"]);
+  assertEquals(merged.protocols, ["git"]);
+});
