@@ -43,7 +43,7 @@ export class DppImpl implements Dpp {
     this.#loader = loader;
   }
 
-  async extAction(
+  extAction(
     denops: Denops,
     context: Context,
     options: DppOptions,
@@ -51,7 +51,7 @@ export class DppImpl implements Dpp {
     actionName: ActionName,
     actionParams: BaseParams = {},
   ): Promise<unknown | undefined> {
-    return await extAction(
+    return extAction(
       denops,
       this.#loader,
       context,
@@ -62,7 +62,7 @@ export class DppImpl implements Dpp {
     );
   }
 
-  async getExt(
+  getExt(
     denops: Denops,
     options: DppOptions,
     extName: ExtName,
@@ -73,7 +73,7 @@ export class DppImpl implements Dpp {
       BaseParams,
     ]
   > {
-    return await getExt(
+    return getExt(
       denops,
       this.#loader,
       options,
@@ -81,11 +81,11 @@ export class DppImpl implements Dpp {
     );
   }
 
-  async getProtocols(
+  getProtocols(
     denops: Denops,
     options: DppOptions,
   ): Promise<Record<ProtocolName, Protocol>> {
-    return await getProtocols(denops, this.#loader, options);
+    return getProtocols(denops, this.#loader, options);
   }
 
   async makeState(
@@ -103,7 +103,7 @@ export class DppImpl implements Dpp {
     let multipleHooks = configReturn.multipleHooks ?? [];
 
     // Check plugin-option-if is enabled
-    const checkIf = async (plugin: Plugin) => {
+    const checkIf = (plugin: Plugin) => {
       if (!("if" in plugin)) {
         return true;
       }
@@ -113,7 +113,7 @@ export class DppImpl implements Dpp {
       }
 
       // Eval plugin-option-if string.
-      return await denops.call("eval", plugin.if) as boolean;
+      return denops.call("eval", plugin.if) as Promise<boolean>;
     };
 
     // Initialize plugins
