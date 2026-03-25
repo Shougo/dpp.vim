@@ -24,11 +24,20 @@ import { printError } from "./utils.ts";
 import type { Denops } from "@denops/std";
 import * as fn from "@denops/std/function";
 
+const protocolsCache = new WeakMap<
+  DppOptions,
+  Record<ProtocolName, Protocol>
+>();
+
 export async function getProtocols(
   denops: Denops,
   loader: Loader,
   options: DppOptions,
 ) {
+  if (protocolsCache.has(options)) {
+    return protocolsCache.get(options)!;
+  }
+
   const protocols: Record<ProtocolName, Protocol> = {};
 
   for (const procotolName of options.protocols) {
@@ -49,6 +58,7 @@ export async function getProtocols(
     };
   }
 
+  protocolsCache.set(options, protocols);
   return protocols;
 }
 
