@@ -939,13 +939,25 @@ detect			(function)			(Required)
 getChangesCountCommand	(function)			(Optional)
 		Called to get changes count command.
 
+                                  *dpp-protocol-attribute-getDateFromRevision*
+getDateFromRevision	(function)			(Optional)
+		Called to get date from revision.
+
                                        *dpp-protocol-attribute-getDiffCommand*
 getDiffCommand		(function)			(Optional)
 		Called to get updated diff command.
 
-                                       *dpp-protocol-attribute-getLogCommand*
+                                        *dpp-protocol-attribute-getLogCommand*
 getLogCommand		(function)			(Optional)
 		Called to get repository synchronous command.
+
+                                    *dpp-protocol-attribute-getRemoteRevision*
+getRemoteRevision	(function)			(Optional)
+		Called to get remote revision.
+
+                                          *dpp-protocol-attribute-getRevision*
+getRevision		(function)			(Optional)
+		Called to get revision.
 
                                           *dpp-protocol-attribute-getRevision*
 getRevisionLockCommand	(function)			(Optional)
@@ -955,9 +967,17 @@ getRevisionLockCommand	(function)			(Optional)
 getRevisionLockCommand	(function)			(Optional)
 		Called to get revision lock command.
 
+                                  *dpp-protocol-attribute-getRollbackCommands*
+getRollbackCommands	(function)			(Optional)
+		Called to get rollback command.
+
                                        *dpp-protocol-attribute-getSyncCommand*
 getSyncCommand		(function)			(Optional)
 		Called to get repository synchronous command.
+
+                                               *dpp-protocol-attribute-getUrl*
+getUrl		(function)			(Optional)
+		Called to get repository url.
 
                                                *dpp-protocol-attribute-onInit*
 onInit			(function)			(Optional)

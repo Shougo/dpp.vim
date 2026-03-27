@@ -57,9 +57,6 @@ export type GetChangesCountArguments<Params extends BaseParams> =
     oldRev: string;
   };
 
-export type GetCheckRemoteArguments<Params extends BaseParams> =
-  BaseProtocolArguments<Params>;
-
 export type GetRevisionArguments<Params extends BaseParams> =
   BaseProtocolArguments<Params>;
 
@@ -129,11 +126,6 @@ export abstract class BaseProtocol<Params extends BaseParams> {
   }
   getChangesCountCommands(
     _args: GetChangesCountArguments<Params>,
-  ): Promise<Command[]> | Command[] {
-    return [];
-  }
-  getCheckRemoteCommands(
-    _args: GetCheckRemoteArguments<Params>,
   ): Promise<Command[]> | Command[] {
     return [];
   }
