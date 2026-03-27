@@ -951,6 +951,10 @@ getDiffCommand		(function)			(Optional)
 getLogCommand		(function)			(Optional)
 		Called to get repository synchronous command.
 
+                               *dpp-protocol-attribute-getCheckRemoteCommands*
+getCheckRemoteCommands	(function)			(Optional)
+		Called to get check remote revision command.
+
                                     *dpp-protocol-attribute-getRemoteRevision*
 getRemoteRevision	(function)			(Optional)
 		Called to get remote revision.
@@ -958,10 +962,6 @@ getRemoteRevision	(function)			(Optional)
                                           *dpp-protocol-attribute-getRevision*
 getRevision		(function)			(Optional)
 		Called to get revision.
-
-                                          *dpp-protocol-attribute-getRevision*
-getRevisionLockCommand	(function)			(Optional)
-		Called to get current revision.
 
                                *dpp-protocol-attribute-getRevisionLockCommand*
 getRevisionLockCommand	(function)			(Optional)
