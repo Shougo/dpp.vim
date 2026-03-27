@@ -66,6 +66,12 @@ export type GetRevisionArguments<Params extends BaseParams> =
 export type GetRemoteRevisionArguments<Params extends BaseParams> =
   BaseProtocolArguments<Params>;
 
+export type GetDateFromRevisionArguments<Params extends BaseParams> =
+  & BaseProtocolArguments<Params>
+  & {
+    rev: string;
+  };
+
 export type Command = {
   command: string;
   args: string[];
@@ -139,6 +145,12 @@ export abstract class BaseProtocol<Params extends BaseParams> {
     _args: GetRevisionArguments<Params>,
   ): Promise<string> | string {
     return "";
+  }
+
+  getDateFromRevision(
+    _args: GetDateFromRevisionArguments<Params>,
+  ): Promise<Date> | null {
+    return null;
   }
 
   abstract params(): Params;
