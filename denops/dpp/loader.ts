@@ -179,10 +179,6 @@ export class Loader {
 
     return this.#exts.protocol[name];
   }
-
-  async #register(type: DppExtType, path: string): Promise<void> {
-    await this.registerPath(type, path);
-  }
 }
 
 async function createPathCache(
