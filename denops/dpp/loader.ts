@@ -13,12 +13,6 @@ import { join } from "@std/path/join";
 import { parse } from "@std/path/parse";
 import { Lock } from "@core/asyncutil/lock";
 
-type Mod = {
-  // deno-lint-ignore no-explicit-any
-  mod: any;
-  path: string;
-};
-
 type Ext = {
   ext: Record<string, BaseExt<BaseParams>>;
   protocol: Record<string, BaseProtocol<BaseParams>>;
@@ -70,23 +64,78 @@ export class Loader {
   }
 
   async registerPath(type: DppExtType, path: string): Promise<void> {
-    await this.#registerLock.lock(async () => {
-      try {
-        await this.#register(type, path);
-      } catch (e) {
-        if (isDenoCacheIssueError(e)) {
-          console.warn("*".repeat(80));
-          console.warn(`Deno module cache issue is detected.`);
-          console.warn(
-            `Execute '!deno cache --reload "${path}"' and restart Vim/Neovim.`,
-          );
-          console.warn("*".repeat(80));
-        }
+    // Fast-path: skip I/O if already registered.
+    if (path in this.#checkPaths) {
+      return;
+    }
 
-        console.error(`Failed to load file '${path}': ${e}`);
-        throw e;
+    const name = parse(path).name;
+
+    // Perform I/O outside the lock so concurrent calls run in parallel.
+    // NOTE: We intentionally use Deno.stat instead of safeStat here. We expect
+    // errors to be thrown when paths don't exist or are inaccessible.
+    // deno-lint-ignore no-explicit-any
+    let importedMod: any;
+    try {
+      const fileInfo = await Deno.stat(path);
+      const entryPoint = fileInfo.isDirectory
+        ? join(path, EXT_ENTRY_POINT_FILE)
+        : path;
+      importedMod = await importPlugin(entryPoint);
+    } catch (e) {
+      if (isDenoCacheIssueError(e)) {
+        console.warn("*".repeat(80));
+        console.warn(`Deno module cache issue is detected.`);
+        console.warn(
+          `Execute '!deno cache --reload "${path}"' and restart Vim/Neovim.`,
+        );
+        console.warn("*".repeat(80));
       }
+
+      console.error(`Failed to load file '${path}': ${e}`);
+      throw e;
+    }
+
+    // Update shared state under lock; re-check to avoid duplicate registration
+    // by concurrent calls that passed the fast-path check simultaneously.
+    await this.#registerLock.lock(() => {
+      if (path in this.#checkPaths) {
+        return;
+      }
+
+      const typeExt = this.#exts[type];
+      switch (type) {
+        case "ext": {
+          const ext = new importedMod.Ext();
+          ext.name = name;
+          ext.path = path;
+          typeExt[name] = ext;
+          break;
+        }
+        case "protocol": {
+          const ext = new importedMod.Protocol();
+          ext.name = name;
+          ext.path = path;
+          typeExt[name] = ext;
+          break;
+        }
+      }
+
+      this.#checkPaths[path] = true;
     });
+  }
+
+  async registerPaths(type: DppExtType, paths: string[]): Promise<void> {
+    const results = await Promise.allSettled(
+      paths.map((path) => this.registerPath(type, path)),
+    );
+    for (const result of results) {
+      if (result.status === "rejected") {
+        console.error(
+          `registerPaths: failed to register a path: ${result.reason}`,
+        );
+      }
+    }
   }
 
   registerExtension(
@@ -129,56 +178,6 @@ export class Loader {
     }
 
     return this.#exts.protocol[name];
-  }
-
-  async #register(type: DppExtType, path: string) {
-    if (path in this.#checkPaths) {
-      return;
-    }
-
-    const name = parse(path).name;
-    const mod: Mod = {
-      mod: undefined,
-      path,
-    };
-
-    // NOTE: We intentionally use Deno.stat instead of safeStat here. We expect
-    // errors to be thrown when paths don't exist or are inaccessible.
-    const fileInfo = await Deno.stat(path);
-
-    if (fileInfo.isDirectory) {
-      // Load structured extension module
-      const entryPoint = join(path, EXT_ENTRY_POINT_FILE);
-      mod.mod = await importPlugin(entryPoint);
-    } else {
-      // Load single-file extension module
-      mod.mod = await importPlugin(path);
-    }
-
-    const typeExt = this.#exts[type];
-    let add;
-    switch (type) {
-      case "ext":
-        add = (name: string) => {
-          const ext = new mod.mod.Ext();
-          ext.name = name;
-          ext.path = path;
-          typeExt[name] = ext;
-        };
-        break;
-      case "protocol":
-        add = (name: string) => {
-          const ext = new mod.mod.Protocol();
-          ext.name = name;
-          ext.path = path;
-          typeExt[name] = ext;
-        };
-        break;
-    }
-
-    add(name);
-
-    this.#checkPaths[path] = true;
   }
 }
 
