@@ -83,8 +83,23 @@ export async function safeStat(path: string): Promise<Deno.FileInfo | null> {
   return null;
 }
 
+const LINK_BATCH_SIZE = 32;
+
 export async function linkPath(hasWindows: boolean, src: string, dest: string) {
-  if (await isDirectory(src)) {
+  await linkPathInternal(hasWindows, src, dest);
+}
+
+async function linkPathInternal(
+  hasWindows: boolean,
+  src: string,
+  dest: string,
+) {
+  const srcStat = await safeStat(src);
+  if (!srcStat) {
+    return;
+  }
+
+  if (srcStat.isDirectory) {
     if (!await safeStat(dest)) {
       // Not exists directory
       await Deno.mkdir(dest, { recursive: true });
@@ -95,9 +110,19 @@ export async function linkPath(hasWindows: boolean, src: string, dest: string) {
       return;
     }
 
-    // Recursive
+    // Collect all entries first, then process in parallel batches.
+    const entries: string[] = [];
     for await (const entry of Deno.readDir(src)) {
-      await linkPath(hasWindows, join(src, entry.name), join(dest, entry.name));
+      entries.push(entry.name);
+    }
+
+    for (let i = 0; i < entries.length; i += LINK_BATCH_SIZE) {
+      const batch = entries.slice(i, i + LINK_BATCH_SIZE);
+      await Promise.allSettled(
+        batch.map((name) =>
+          linkPathInternal(hasWindows, join(src, name), join(dest, name))
+        ),
+      );
     }
   } else {
     if (await safeStat(dest)) {
