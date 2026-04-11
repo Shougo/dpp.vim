@@ -50,6 +50,7 @@ export type Plugin = {
   dummy_commands?: string[];
   dummy_mappings?: [string, string][];
   extAttrs?: unknown;
+  external_commands?: string | string[];
   ftplugin?: Record<string, string>;
   hook_add?: string;
   hook_depends_update?: string;

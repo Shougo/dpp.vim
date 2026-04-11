@@ -298,6 +298,11 @@ extAttrs	(Dictionary)
 		It is a dictionary that exts specific attributes.
 		See also |dpp-ext-attrs|.
 
+                                         *dpp-plugin-option-external_commands*
+external_commands (List) or (String)
+		It is external commands dependency.
+		If they are not |executable()|, the source is ignored.
+
                                                   *dpp-plugin-option-ftplugin*
 ftplugin	(Dictionary)
 		"_" key is executed after all ftplugin.

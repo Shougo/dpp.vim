@@ -20,8 +20,6 @@ function dpp#source#_source(plugins, function_prefix) abort
   for plugin in plugins
         \ ->filter({ _, val ->
         \  !val->empty() && !val.sourced && val.rtp !=# ''
-        \  && (!v:val->has_key('if') || v:val.if->eval())
-        \  && v:val.path->isdirectory()
         \ })
     call s:source_plugin(rtps, index, plugin, sourced)
   endfor
@@ -128,10 +126,22 @@ function dpp#source#_source(plugins, function_prefix) abort
 endfunction
 
 function s:source_plugin(rtps, index, plugin, sourced) abort
-  if a:plugin.sourced || a:sourced->index(a:plugin) >= 0
-    \ || (a:plugin->has_key('if') && !a:plugin.if->eval())
+  if a:plugin.sourced
+        \ || a:sourced->index(a:plugin) >= 0
+        \ || (a:plugin->has_key('if') && !a:plugin.if->eval())
+        \ || !a:plugin.path->isdirectory()
     return
   endif
+
+  " External commands check
+  for cmd in plugin->get('external_commands', [])
+        \ ->dpp#util#_convert2list()
+        \ ->filter({ _, val ->
+        \   !val->executable()
+        \ })
+    call dpp#util#_error($'{a:plugin.name} requires "{cmd}".')
+    return
+  endfor
 
   call insert(a:sourced, a:plugin)
 
