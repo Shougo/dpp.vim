@@ -134,7 +134,7 @@ function s:source_plugin(rtps, index, plugin, sourced) abort
   endif
 
   " External commands check
-  for cmd in plugin->get('external_commands', [])
+  for cmd in a:plugin->get('external_commands', [])
         \ ->dpp#util#_convert2list()
         \ ->filter({ _, val ->
         \   !val->executable()
