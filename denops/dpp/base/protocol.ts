@@ -149,8 +149,8 @@ export abstract class BaseProtocol<Params extends BaseParams> {
 
   getDateFromRevision(
     _args: GetDateFromRevisionArguments<Params>,
-  ): Promise<Date> | null {
-    return null;
+  ): Promise<Date | null> {
+    return Promise.resolve(null);
   }
 
   abstract params(): Params;
