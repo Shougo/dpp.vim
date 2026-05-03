@@ -28,7 +28,9 @@ function dpp#source#_source(plugins, function_prefix) abort
 
   let &runtimepath = rtps->dpp#util#_join_rtp(&runtimepath, '')
 
-  call dpp#util#_call_hook('source', sourced)
+  if !sourced->empty()
+    call dpp#util#_call_hook('source', sourced)
+  endif
 
   if a:function_prefix->stridx('#') > 0
     " NOTE: Reload autoload script
@@ -118,7 +120,7 @@ function dpp#source#_source(plugins, function_prefix) abort
     silent! let &l:filetype = &l:filetype
   endif
 
-  if !has('vim_starting')
+  if !has('vim_starting') && !sourced->empty()
     call dpp#util#_call_hook('post_source', sourced)
   endif
 
