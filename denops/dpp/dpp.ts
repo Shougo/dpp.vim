@@ -501,11 +501,6 @@ export class DppImpl implements Dpp {
       }
     }
 
-    // Reset loader cache.
-    if (denops.meta.host === "nvim") {
-      await denops.cmd("lua vim.loader.reset()");
-    }
-
     if (await fn.exists(denops, "#User#Dpp:makeStatePost")) {
       await denops.cmd("doautocmd <nomodeline> User Dpp:makeStatePost");
     }
