@@ -952,6 +952,10 @@ getDateFromRevision	(function)			(Optional)
 getDiffCommand		(function)			(Optional)
 		Called to get updated diff command.
 
+                                         *dpp-protocol-attribute-getHistories*
+getHistories		(function)			(Optional)
+		Called to get histories.
+
                                         *dpp-protocol-attribute-getLogCommand*
 getLogCommand		(function)			(Optional)
 		Called to get repository synchronous command.
