@@ -742,6 +742,9 @@ function mergeDetectIntoPlugin(
   }
 
   p["protocol"] = protocolName;
+  if (detect.name) {
+    p["name"] = detect.name;
+  }
 }
 
 type Tag = {
