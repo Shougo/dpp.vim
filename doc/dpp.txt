@@ -12,6 +12,7 @@ Interface		|dpp-interface|
   Functions		  |dpp-functions|
   Plugin options	  |dpp-plugin-options|
   Lua functions.	  |dpp-lua-functions|
+Variables		|dpp-variables|
 Dpp Sources		|dpp-ddu-sources|
 Examples		|dpp-examples|
 Plugins merged feature	|dpp-merge|
@@ -553,6 +554,14 @@ HOOKS                                                              *dpp-hooks*
 		NOTE: |Vim9| script syntax is very strict and it is hard to
 		debug.  It is experimental feature.
 
+		To return a value from a hook, assign it to |g:dpp#hook_result|.
+		The variable is reset to |v:null| before each hook execution.
+>vim
+		hook_source = '''
+		  let g:dpp#hook_result = s:configure()
+		'''
+<
+
                                                 *dpp-plugin-option-hooks_file*
 hooks_file	(String) or (List)
 		Hooks file path.  It must be valid path.
@@ -738,6 +747,29 @@ dpp.source([{name}])
                                                        *dpp.sync_ext_action()*
 dpp.sync_ext_action({ext-name}, {action-name}[, {action-params}])
 		Same as |dpp#sync_ext_action()|.
+
+==============================================================================
+VARIABLES                                                      *dpp-variables*
+
+                                                         *g:dpp#hook_result*
+g:dpp#hook_result
+		The variable is set to |v:null| before each hook is executed.
+		Inside a hook string you can assign any value to it in order to
+		communicate a result back to the caller.
+>vim
+		hook_source = '''
+		  " Compute something and store the result
+		  let g:dpp#hook_result = s:my_function()
+		'''
+<
+		After |dpp#util#_execute_hook()| returns, the variable holds
+		whatever the hook last assigned, or |v:null| if the hook did
+		not assign anything.
+
+		NOTE: Because hooks may be executed sequentially in a loop
+		(e.g. by |dpp#call_hook()|), read the value immediately after
+		the hook you are interested in, before the next hook overwrites
+		it.
 
 ==============================================================================
 DDU SOURCES                                                  *dpp-ddu-sources*

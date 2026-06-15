@@ -160,6 +160,8 @@ function dpp#util#_execute_hook(plugin, hook_name, plugin_name, hook) abort
     endif
   endif
 
+  let g:dpp#hook_result = v:null
+
   try
     " NOTE: hook may contain \r in Windows
     const cmds = a:hook->split('\r\?\n')
