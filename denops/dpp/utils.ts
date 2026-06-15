@@ -188,11 +188,7 @@ export function parseHooksFile(
       hookName = match.groups.hookName;
       if (
         hookName.startsWith("hook_") ||
-        hookName === "lua_add" ||
-        hookName === "lua_source" ||
-        hookName === "lua_depends_update" ||
-        hookName.startsWith("lua_done_") ||
-        hookName.startsWith("lua_post_")
+        hookName.startsWith("lua_")
       ) {
         dest = options;
       } else {
@@ -415,9 +411,8 @@ Deno.test("parseHooksFile", () => {
       "-- }}}",
     ]),
     {
-      ftplugin: {
-        lua_hoge: "piyo",
-      },
+      lua_hoge: "piyo",
+      ftplugin: {},
     },
   );
 });

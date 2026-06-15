@@ -65,11 +65,6 @@ export type Plugin = {
   lazy?: boolean;
   local?: boolean;
   lua_add?: string;
-  lua_depends_update?: string;
-  lua_done_update?: string;
-  lua_post_source?: string;
-  lua_post_update?: string;
-  lua_pre_update?: string;
   lua_source?: string;
   merge_ftdetect?: string;
   merged?: boolean;
