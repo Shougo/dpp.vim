@@ -94,12 +94,11 @@ function dpp#source#_source(plugins, function_prefix) abort
                   \   name,
                   \   [plugin.rtp, 'denops', name, 'main.ts']->join(s:sep),
                   \ )
-          endif
 
-          if denops#server#status() !=# 'stopped'
-                \ && plugin->get('denops_wait', v:true)
-            call denops#plugin#wait(name)
-            redraw
+            if plugin->get('denops_wait', v:true)
+              call denops#plugin#wait(name)
+              redraw
+            endif
           endif
         endfor
       endif
