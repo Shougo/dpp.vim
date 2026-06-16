@@ -751,11 +751,11 @@ dpp.sync_ext_action({ext-name}, {action-name}[, {action-params}])
 ==============================================================================
 VARIABLES                                                      *dpp-variables*
 
-                                                         *g:dpp#hook_result*
+                                                           *g:dpp#hook_result*
 g:dpp#hook_result
 		The variable is set to |v:null| before each hook is executed.
-		Inside a hook string you can assign any value to it in order to
-		communicate a result back to the caller.
+		Inside a hook string you can assign any value to it in order
+		to communicate a result back to the caller.
 >vim
 		hook_source = '''
 		  " Compute something and store the result
@@ -768,8 +768,8 @@ g:dpp#hook_result
 
 		NOTE: Because hooks may be executed sequentially in a loop
 		(e.g. by |dpp#call_hook()|), read the value immediately after
-		the hook you are interested in, before the next hook overwrites
-		it.
+		the hook you are interested in, before the next hook
+		overwrites it.
 
 ==============================================================================
 DDU SOURCES                                                  *dpp-ddu-sources*
