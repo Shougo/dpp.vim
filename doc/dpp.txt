@@ -673,62 +673,10 @@ hook_source	(String) or (Function)
 		autoloaded.
 		NOTE: |dpp-plugin-option-rtp| must not be empty string.
 
-                                                   *dpp-plugin-option-lua_add*
-lua_add		(String)
+                                                   *dpp-plugin-option-lua_xxx*
+lua_xxx		(String)
 		Lua language string hook instead of Vim script.
-		It is converted to |dpp-plugin-option-hook_add| key.
-		NOTE: It works only for Neovim or |+lua|.
-
-                                        *dpp-plugin-option-lua_depends_update*
-lua_depends_update (String)
-		Lua language string hook instead of Vim script.
-		It is converted to |dpp-plugin-option-hook_depends_update|
-		key.
-		NOTE: It works only for Neovim or |+lua|.
-		NOTE: To use the feature, you need to install
-		"dpp-ext-installer".
-		https://github.com/Shougo/dpp-ext-installer
-
-                                           *dpp-plugin-option-lua_done_update*
-lua_done_update	(String)
-		Lua language string hook instead of Vim script.
-		It is converted to |dpp-plugin-option-hook_done_update| key.
-		NOTE: It works only for Neovim or |+lua|.
-		NOTE: To use the feature, you need to install
-		"dpp-ext-installer".
-		https://github.com/Shougo/dpp-ext-installer
-
-                                           *dpp-plugin-option-lua_post_source*
-lua_post_sources (String)
-		Lua language string hook instead of Vim script.
-		It is converted to |dpp-plugin-option-hook_post_source| key.
-		NOTE: It works only for Neovim or |+lua|.
-		NOTE: |dpp-plugin-option-rtp| must not be empty string.
-
-                                           *dpp-plugin-option-lua_post_update*
-lua_post_update	(String)
-		Lua language string hook instead of Vim script.
-		It is converted to |dpp-plugin-option-hook_post_update| key.
-		NOTE: It works only for Neovim or |+lua|.
-		NOTE: To use the feature, you need to install
-		"dpp-ext-installer".
-		https://github.com/Shougo/dpp-ext-installer
-
-                                            *dpp-plugin-option-lua_pre_update*
-lua_pre_update	(String)
-		Lua language string hook instead of Vim script.
-		It is converted to |dpp-plugin-option-hook_pre_update| key.
-		NOTE: It works only for Neovim or |+lua|.
-		NOTE: To use the feature, you need to install
-		"dpp-ext-installer".
-		https://github.com/Shougo/dpp-ext-installer
-
-                                                *dpp-plugin-option-lua_source*
-lua_source	(String)
-		Lua language string hook instead of Vim script.
-		It is converted to |dpp-plugin-option-hook_source| key.
-		NOTE: It works only for Neovim or |+lua|.
-		NOTE: |dpp-plugin-option-rtp| must not be empty string.
+		It is converted to "hook_xxx" key.
 
 ------------------------------------------------------------------------------
 LUA FUNCTIONS                                              *dpp-lua-functions*
