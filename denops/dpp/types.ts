@@ -58,6 +58,7 @@ export type Plugin = {
   hook_post_source?: string;
   hook_post_update?: string;
   hook_pre_update?: string;
+  hook_post_check_update?: string;
   hook_source?: string;
   hooks_file?: string | string[];
   if?: boolean | string;

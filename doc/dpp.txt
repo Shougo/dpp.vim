@@ -626,6 +626,26 @@ hook_post_source (String)
 >
 		autocmd VimEnter * call dpp#call_hook('post_source')
 <
+                                    *dpp-plugin-option-hook_post_check_update*
+hook_post_check_update (String)
+		It is executed after check updated.
+		If it set |g:dpp#hook_result| to |v:true|, the update will be
+		skipped.
+		It is useful to check updated result.
+
+
+		args:
+			{oldRev}: Current revision.
+
+			{newRev}: Updated revision.
+
+			{plugin}: Plugin dictionary.
+
+		NOTE: The plugin may not be sourced.
+		NOTE: To use the feature, you need to install
+		"dpp-ext-installer".
+		https://github.com/Shougo/dpp-ext-installer
+
                                           *dpp-plugin-option-hook_post_update*
 hook_post_update (String)
 		It is executed after updated and before
@@ -750,6 +770,12 @@ dpp.sync_ext_action({ext-name}, {action-name}[, {action-params}])
 
 ==============================================================================
 VARIABLES                                                      *dpp-variables*
+
+                                                             *g:dpp#hook_args*
+g:dpp#hook_args
+		The variable is set to hook arguments before each hook is
+		executed.
+		Some hooks supports the args.
 
                                                            *g:dpp#hook_result*
 g:dpp#hook_result

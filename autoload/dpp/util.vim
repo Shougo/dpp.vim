@@ -115,7 +115,7 @@ function dpp#util#_substitute_path(path) abort
         \ a:path->tr('\', '/') : a:path
 endfunction
 
-function dpp#util#_call_hook(hook_name, plugins = []) abort
+function dpp#util#_call_hook(hook_name, plugins = [], args = {}) abort
   const hook = 'hook_' .. a:hook_name
   let plugins = a:plugins->dpp#util#_get_plugins()->dpp#util#_tsort()
         \ ->filter({ _, val ->
@@ -141,7 +141,7 @@ function dpp#util#_call_hook(hook_name, plugins = []) abort
         " All plugins are sourced
 
         call dpp#util#_execute_hook(
-              \ {}, hook, string(hooks.plugins), hooks[hook])
+              \ {}, hook, string(hooks.plugins), hooks[hook], a:args)
 
         " Skip twice call
         let hooks[hook] = ''
@@ -149,7 +149,8 @@ function dpp#util#_call_hook(hook_name, plugins = []) abort
     endfor
   endif
 endfunction
-function dpp#util#_execute_hook(plugin, hook_name, plugin_name, hook) abort
+function dpp#util#_execute_hook(
+      \ plugin, hook_name, plugin_name, hook, args = {}) abort
   " Skip twice call
   if !a:plugin->empty()
     if !a:plugin->has_key('called')
@@ -161,6 +162,7 @@ function dpp#util#_execute_hook(plugin, hook_name, plugin_name, hook) abort
   endif
 
   let g:dpp#hook_result = v:null
+  let g:dpp#hook_args = a:args
 
   try
     " NOTE: hook may contain \r in Windows
@@ -179,6 +181,8 @@ function dpp#util#_execute_hook(plugin, hook_name, plugin_name, hook) abort
     call dpp#util#_error('<stack>'->expand())
     call dpp#util#_error(v:exception)
   endtry
+
+  let g:dpp#hook_args = v:null
 
   if !a:plugin->empty()
     let a:plugin.called[string(a:hook)] = v:true
