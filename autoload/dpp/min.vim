@@ -60,6 +60,9 @@ function dpp#min#_init() abort
         \ || b:->get('did_indent', v:false)
         \ || has('nvim')
 
+  let g:dpp#hook_result = v:null
+  let g:dpp#hook_args = v:null
+
   augroup dpp
     autocmd!
   augroup END

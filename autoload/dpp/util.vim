@@ -125,7 +125,8 @@ function dpp#util#_call_hook(hook_name, plugins = [], args = {}) abort
         \    && (!val->has_key('if') || val.if->eval())
         \ })
   for plugin in plugins
-    call dpp#util#_execute_hook(plugin, hook, plugin.name, plugin[hook])
+    call dpp#util#_execute_hook(
+          \ plugin, hook, plugin.name, plugin[hook], a:args)
   endfor
 
   if a:hook_name ==# 'source' || a:hook_name ==# 'post_source'
