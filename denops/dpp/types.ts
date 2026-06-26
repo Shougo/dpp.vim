@@ -52,17 +52,17 @@ export type Plugin = {
   extAttrs?: unknown;
   external_commands?: string | string[];
   ftplugin?: Record<string, string>;
+  group?: string | string[];
   hook_add?: string;
   hook_depends_update?: string;
   hook_done_update?: string;
+  hook_post_check_update?: string;
   hook_post_source?: string;
   hook_post_update?: string;
   hook_pre_update?: string;
-  hook_post_check_update?: string;
   hook_source?: string;
   hooks_file?: string | string[];
   if?: boolean | string;
-  group?: string | string[];
   lazy?: boolean;
   local?: boolean;
   lua_add?: string;
@@ -92,3 +92,14 @@ export type Plugin = {
   sourced?: boolean;
   url?: string;
 };
+
+export const Hooks: Set<string> = new Set([
+  "add",
+  "depends_update",
+  "done_update",
+  "post_check_update",
+  "post_source",
+  "post_update",
+  "pre_update",
+  "source",
+]);

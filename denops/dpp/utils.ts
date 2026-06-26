@@ -1,4 +1,4 @@
-import type { Plugin } from "./types.ts";
+import { Hooks, type Plugin } from "./types.ts";
 
 import type { Denops } from "@denops/std";
 
@@ -186,12 +186,15 @@ export function parseHooksFile(
       nestedCount++;
 
       hookName = match.groups.hookName;
-      if (
-        hookName.startsWith("hook_") ||
-        hookName.startsWith("lua_")
-      ) {
-        dest = options;
-      } else {
+      if (hookName.startsWith("hook_") || hookName.startsWith("lua_")) {
+        // Check Hooks.
+        const checkHook = hookName.replace(/^hook_|^lua_/, "");
+        if (Hooks.has(checkHook)) {
+          dest = options;
+        }
+      }
+
+      if (!dest) {
         // Use ftplugin
         dest = ftplugin;
       }
@@ -411,8 +414,9 @@ Deno.test("parseHooksFile", () => {
       "-- }}}",
     ]),
     {
-      lua_hoge: "piyo",
-      ftplugin: {},
+      ftplugin: {
+        lua_hoge: "piyo",
+      },
     },
   );
 });
