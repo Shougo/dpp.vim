@@ -477,7 +477,7 @@ export class DppImpl implements Dpp {
       denops,
       dppRuntimepath,
       options.skipMergeFilenamePattern,
-      recordPlugins,
+      availablePlugins,
     );
 
     // Generate ftplugin files
