@@ -11,7 +11,11 @@ local M = setmetatable({}, {
       local ret = vim.call('dpp#' .. key, ...)
 
       -- NOTE: For boolean functions
-      if type(ret) ~= 'table' and (vim.startswith(key, 'check_') or vim.startswith(key, 'is_')) or key == 'min#load_state' then
+      if type(ret) ~= 'table' and (
+        vim.startswith(key, 'check_')
+        or vim.startswith(key, 'is_')
+        or key == 'min#load_state'
+      ) then
         ret = ret ~= 0
       end
 
