@@ -53,15 +53,21 @@ function dpp#util#_get_name() abort
         \ : v:progname->fnamemodify(':r')
 endfunction
 function dpp#util#_check_files(base_path, name) abort
-  const time = printf('%s/%s/state.vim', a:base_path, a:name)->getftime()
+  const state_path = printf('%s/%s/state.vim', a:base_path, a:name)
+  const state_mtime = state_path->getftime()
 
-  const updated = g:dpp.state.check_files->copy()
+  if state_mtime < 0
+    return g:dpp.state.check_files->copy()
+  endif
+
+  const missing_or_newer = g:dpp.state.check_files->copy()
         \ ->filter({ _, val ->
-        \      val->dpp#util#_expand()->getftime() < 0
-        \   || time < val->dpp#util#_expand()->getftime()
+        \   const file = val->dpp#util#_expand()
+        \   const file_mtime = file->getftime()
+        \   file_mtime < 0 || state_mtime < file_mtime
         \ })
 
-  return updated
+  return missing_or_newer
 endfunction
 
 function dpp#util#_convert2list(expr) abort
@@ -87,9 +93,15 @@ function dpp#util#_split_rtp(runtimepath) abort
 endfunction
 function dpp#util#_join_rtp(list, runtimepath, rtp) abort
   let list = dpp#util#_uniq(a:list)
-  return    (a:runtimepath->stridx('\,') < 0 && a:rtp->stridx(',') < 0)
-        \ ? list->join(',')
-        \ : list->map({ _, val -> s:escape(val) })->join(',')
+  const needs_escape =
+        \ a:runtimepath->stridx('\,') >= 0 || a:current_rtp->stridx(',') >= 0
+  return needs_escape
+        \ ? list->map({ _, val -> s:escape(val) })->join(',')
+        \ : list->join(',')
+endfunction
+function! s:escape(path) abort
+  " Escape a path for runtimepath.
+  return a:path->substitute(',\|\\,\@=', '\\\0', 'g')
 endfunction
 
 function dpp#util#_add_after(rtps, path) abort
