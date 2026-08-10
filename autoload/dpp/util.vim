@@ -91,7 +91,7 @@ function dpp#util#_split_rtp(runtimepath) abort
         \   val->dpp#util#_substitute_path()
         \ })->filter({ _, val -> val->dpp#util#_expand()->isdirectory() })
 endfunction
-function dpp#util#_join_rtp(list, runtimepath, rtp) abort
+function dpp#util#_join_rtp(list, runtimepath, current_rtp) abort
   let list = dpp#util#_uniq(a:list)
   const needs_escape =
         \ a:runtimepath->stridx('\,') >= 0 || a:current_rtp->stridx(',') >= 0
