@@ -87,7 +87,7 @@ function dpp#make_state(
   if !config_path_expanded->filereadable()
     call dpp#util#_error(printf(
           \ 'dpp#make_state() config_path: "%s" is not found.',
-          \ config_path))
+          \ config_path_expanded))
     return 1
   endif
 

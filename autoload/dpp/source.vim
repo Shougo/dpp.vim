@@ -107,7 +107,7 @@ function dpp#source#_source(plugins, function_prefix) abort
 
   const filetype_after = 'autocmd FileType'->execute()
 
-  const is_reset = sourced->s:is_reset_ftplugin()
+  const is_reset = s:is_reset_ftplugin(sourced)
   if is_reset
     " NOTE: filetype plugins must be reset to load new ftplugins
     call s:reset_ftplugin()
