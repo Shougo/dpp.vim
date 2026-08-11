@@ -93,7 +93,7 @@ export type Plugin = {
   url?: string;
 };
 
-export const Hooks: Set<string> = new Set([
+export const Hooks: ReadonlySet<string> = new Set([
   "add",
   "depends_update",
   "done_update",
