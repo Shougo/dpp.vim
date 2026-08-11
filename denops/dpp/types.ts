@@ -67,7 +67,7 @@ export type Plugin = {
   local?: boolean;
   lua_add?: string;
   lua_source?: string;
-  merge_ftdetect?: string;
+  merge_ftdetect?: boolean;
   merged?: boolean;
   name: string;
   on_cmd?: string | string[];
