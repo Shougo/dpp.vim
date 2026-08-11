@@ -23,7 +23,7 @@ export type DppOptions = {
   extParams: Record<ExtName, Partial<BaseParams>>;
   hooksFileMarker: string;
   inlineVimrcs: string[];
-  protocolOptions: Record<ProtocolName, Partial<ExtOptions>>;
+  protocolOptions: Record<ProtocolName, Partial<ProtocolOptions>>;
   protocolParams: Record<ProtocolName, Partial<BaseParams>>;
   protocols: ProtocolName[];
   skipMergeFilenamePattern: string;

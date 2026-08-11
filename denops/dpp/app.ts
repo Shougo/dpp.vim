@@ -53,6 +53,8 @@ export const main: Entrypoint = (denops: Denops) => {
             arg3 as BaseProtocol<BaseParams>,
           );
           break;
+        default:
+          throw new Error(`Invalid extension type: ${type}`);
       }
 
       return Promise.resolve();

@@ -162,6 +162,7 @@ function s:source_plugin(rtps, index, plugin, sourced) abort
 
   " Load dependencies
   for name in a:plugin->get('depends', [])
+        \ ->dpp#util#_convert2list()
     if !g:dpp.state.plugins->has_key(name)
       call dpp#util#_error(printf(
             \ 'Plugin "%s" depends "%s" but it is not found.',
