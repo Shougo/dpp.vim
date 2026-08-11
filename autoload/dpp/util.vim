@@ -64,7 +64,7 @@ function dpp#util#_check_files(base_path, name) abort
         \ ->filter({ _, val ->
         \   const file = val->dpp#util#_expand()
         \   const file_mtime = file->getftime()
-        \   file_mtime < 0 || state_mtime < file_mtime
+        \   return file_mtime < 0 || state_mtime < file_mtime
         \ })
 
   return missing_or_newer
