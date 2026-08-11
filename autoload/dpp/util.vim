@@ -62,9 +62,8 @@ function dpp#util#_check_files(base_path, name) abort
 
   const missing_or_newer = g:dpp.state.check_files->copy()
         \ ->filter({ _, val ->
-        \   const file = val->dpp#util#_expand()
-        \   const file_mtime = file->getftime()
-        \   return file_mtime < 0 || state_mtime < file_mtime
+        \   val->dpp#util#_expand()->getftime() < 0
+        \   || state_mtime < val->dpp#util#_expand()->getftime()
         \ })
 
   return missing_or_newer
