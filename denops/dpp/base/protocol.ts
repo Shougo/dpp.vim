@@ -149,7 +149,7 @@ export abstract class BaseProtocol<Params extends BaseParams> {
     return "";
   }
   getRemoteRevision(
-    _args: GetRevisionArguments<Params>,
+    _args: GetRemoteRevisionArguments<Params>,
   ): Promise<string> | string {
     return "";
   }
