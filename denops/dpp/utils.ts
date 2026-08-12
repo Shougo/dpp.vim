@@ -51,7 +51,11 @@ export function isDenoCacheIssueError(e: unknown): boolean {
 }
 
 export function convert2List<T>(expr: T | T[] | undefined): T[] {
-  return !expr ? [] : Array.isArray(expr) ? expr : [expr];
+  return expr === undefined
+    ? []
+    : Array.isArray(expr)
+    ? expr
+    : [expr];
 }
 
 export async function isDirectory(path: string | undefined): Promise<boolean> {
@@ -233,6 +237,10 @@ export function parseHooksFile(
         dest[hookName] = line;
       }
     }
+  }
+
+  if (hookName.length > 0) {
+    throw new Error(`Unterminated hooks block: ${hookName}`);
   }
 
   options["ftplugin"] = ftplugin;
