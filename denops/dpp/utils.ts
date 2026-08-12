@@ -51,11 +51,7 @@ export function isDenoCacheIssueError(e: unknown): boolean {
 }
 
 export function convert2List<T>(expr: T | T[] | undefined): T[] {
-  return expr === undefined
-    ? []
-    : Array.isArray(expr)
-    ? expr
-    : [expr];
+  return expr === undefined ? [] : Array.isArray(expr) ? expr : [expr];
 }
 
 export async function isDirectory(path: string | undefined): Promise<boolean> {

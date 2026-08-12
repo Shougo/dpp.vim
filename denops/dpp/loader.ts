@@ -45,11 +45,8 @@ export class Loader {
     if (runtimepath !== this.#prevRuntimepath) {
       const cachedPaths = await createPathCache(denops, runtimepath);
 
-      // NOTE: glob may be invalid.
-      if (cachedPaths.size > 0) {
-        this.#cachedPaths = cachedPaths;
-        this.#prevRuntimepath = runtimepath;
-      }
+      this.#cachedPaths = cachedPaths;
+      this.#prevRuntimepath = runtimepath;
     }
 
     const key = `${PLUGIN_PREFIX}-${type}s/${name}`;
@@ -129,12 +126,18 @@ export class Loader {
     const results = await Promise.allSettled(
       paths.map((path) => this.registerPath(type, path)),
     );
-    for (const result of results) {
-      if (result.status === "rejected") {
-        console.error(
-          `registerPaths: failed to register a path: ${result.reason}`,
-        );
-      }
+
+    const failures = results.flatMap((result, index) =>
+      result.status === "rejected"
+        ? [{ path: paths[index], reason: result.reason }]
+        : []
+    );
+
+    for (const failure of failures) {
+      console.error(
+        `registerPaths: failed to register "${failure.path}":`,
+        failure.reason,
+      );
     }
   }
 
