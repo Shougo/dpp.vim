@@ -215,6 +215,9 @@ export class DppImpl implements Dpp {
     const runtimeIndex = rtps.indexOf(
       await denops.call("dpp#util#_get_runtime_path") as string,
     );
+    if (runtimeIndex < 0) {
+      throw new Error("Vim runtime path is not found in runtimepath.");
+    }
 
     const runtimePath = await denops.call(
       "dpp#util#_get_runtime_path",
@@ -281,7 +284,11 @@ export class DppImpl implements Dpp {
       rtps,
       currentRuntimepath,
       dppRuntimepath,
-    );
+    ) as string;
+
+    function escapeVimSingleQuoted(value: string): string {
+      return value.replaceAll("'", "''");
+    }
 
     const stateVersion = await vars.g.get(denops, "dpp._state_version");
     let startupLines = [
@@ -295,8 +302,12 @@ export class DppImpl implements Dpp {
       "g:dpp.state.multiple_hooks," +
       "g:dpp.settings.extra_args" +
       "] = g:dpp.cache._state",
-      `let g:dpp.settings.config_path = '${configPath}'`,
-      `let &runtimepath = '${newRuntimepath}'`,
+      `let g:dpp.settings.config_path = '${
+        escapeVimSingleQuoted(configPath)
+      }'`,
+      `let &runtimepath = '${
+        escapeVimSingleQuoted(newRuntimepath)
+      }'`,
     ];
 
     if (!configReturn.ftplugins) {
@@ -713,10 +724,20 @@ async function detectPlugin(
 ) {
   // Detect protocol
   const detectProtocols = plugin.protocol
-    ? [protocols[plugin.protocol]]
+    ? protocols[plugin.protocol]
+      ? [protocols[plugin.protocol]]
+      : []
     : options.protocols.filter((protocolName) => protocols[protocolName]).map((
       protocolName,
     ) => protocols[protocolName]);
+
+  if (plugin.protocol && detectProtocols.length === 0) {
+    await printError(
+      denops,
+      `Not available protocol: "${plugin.protocol}" in ${plugin.name}`,
+    );
+    return;
+  }
 
   for (const protocol of detectProtocols) {
     const detect = await protocol.protocol.detect({
