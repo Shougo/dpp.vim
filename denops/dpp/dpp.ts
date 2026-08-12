@@ -446,12 +446,20 @@ export class DppImpl implements Dpp {
       await denops.call("dpp#util#_dos2unix", startupFile);
     }
 
-    // checkFiles must be exists
-    checkFiles = checkFiles.filter(async (path) =>
-      await safeStat(await denops.call("dpp#util#_expand", path) as string)
-    );
+    // Keep existing files only.
+    const existingFiles: string[] = [];
+    for (const path of checkFiles) {
+      const expandedPath = await denops.call(
+        "dpp#util#_expand",
+        path,
+      ) as string;
+
+      if (await safeStat(expandedPath)) {
+        existingFiles.push(path);
+      }
+    }
     // checkFiles must be unique
-    checkFiles = [...new Set(checkFiles)];
+    checkFiles = [...new Set(existingFiles)];
 
     // Write state file
     const stateFile = `${basePath}/${name}/state.vim`;
