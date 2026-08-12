@@ -264,7 +264,7 @@ function protocolArgs<
 >(
   options: DppOptions,
   protocol: BaseProtocol<Params>,
-): [ExtOptions, BaseParams] {
+): [ProtocolOptions, BaseParams] {
   const o = foldMerge(
     mergeProtocolOptions,
     defaultProtocolOptions,
