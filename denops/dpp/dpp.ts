@@ -302,12 +302,8 @@ export class DppImpl implements Dpp {
       "g:dpp.state.multiple_hooks," +
       "g:dpp.settings.extra_args" +
       "] = g:dpp.cache._state",
-      `let g:dpp.settings.config_path = '${
-        escapeVimSingleQuoted(configPath)
-      }'`,
-      `let &runtimepath = '${
-        escapeVimSingleQuoted(newRuntimepath)
-      }'`,
+      `let g:dpp.settings.config_path = '${escapeVimSingleQuoted(configPath)}'`,
+      `let &runtimepath = '${escapeVimSingleQuoted(newRuntimepath)}'`,
     ];
 
     if (!configReturn.ftplugins) {
@@ -724,9 +720,7 @@ async function detectPlugin(
 ) {
   // Detect protocol
   const detectProtocols = plugin.protocol
-    ? protocols[plugin.protocol]
-      ? [protocols[plugin.protocol]]
-      : []
+    ? protocols[plugin.protocol] ? [protocols[plugin.protocol]] : []
     : options.protocols.filter((protocolName) => protocols[protocolName]).map((
       protocolName,
     ) => protocols[protocolName]);
