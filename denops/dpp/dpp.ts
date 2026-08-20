@@ -154,6 +154,7 @@ export class DppImpl implements Dpp {
             ...parseHooksFile(
               options.hooksFileMarker,
               await readHooksFile(denops, hooksFile),
+              hooksFile,
             ),
           };
         }
@@ -316,6 +317,7 @@ export class DppImpl implements Dpp {
         const parsedHooksFile = parseHooksFile(
           options.hooksFileMarker,
           await readHooksFile(denops, hooksFile),
+          hooksFile,
         );
 
         // Use ftplugin only
@@ -394,6 +396,7 @@ export class DppImpl implements Dpp {
           ...parseHooksFile(
             options.hooksFileMarker,
             await readHooksFile(denops, hooks.hooks_file),
+            hooks.hooks_file,
           ),
         };
       }
