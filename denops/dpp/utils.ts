@@ -17,25 +17,43 @@ export async function printError(
   denops: Denops,
   ...messages: unknown[]
 ) {
-  const message = messages.map((v) => {
-    if (v instanceof Error) {
-      // NOTE: In Deno, Prefer `Error.stack` because it contains
-      // `Error.message`.
-      return `${v.stack ?? v}`;
-    }
-
-    if (typeof v === "object" && v !== null) {
-      try {
-        return JSON.stringify(v);
-      } catch (_e: unknown) {
-        return String(v);
-      }
-    }
-
-    return String(v);
-  }).join("\n");
+  const message = messages.map((v) => stringifyError(v)).join("\n");
 
   await denops.call("dpp#util#_error", message);
+}
+
+export function stringifyError(error: unknown): string {
+  if (error instanceof Error) {
+    // NOTE: In Deno, Prefer `Error.stack` because it contains
+    // `Error.message`.
+    return error.stack ?? error.message;
+  }
+
+  if (typeof error === "string") {
+    return error;
+  }
+
+  if (error === null) {
+    return "null";
+  }
+
+  if (error === undefined) {
+    return "undefined";
+  }
+
+  if (typeof error === "object") {
+    try {
+      const serialized = JSON.stringify(error);
+      if (serialized !== undefined) {
+        return serialized;
+      }
+      return String(error);
+    } catch (_e: unknown) {
+      return String(error);
+    }
+  }
+
+  return String(error);
 }
 
 // See https://github.com/vim-denops/denops.vim/issues/358 for details
@@ -161,6 +179,7 @@ export async function readHooksFile(
 export function parseHooksFile(
   marker: string,
   hooksFile: string[],
+  hooksFilePath?: string,
 ): Record<string, string | Record<string, string>> {
   const startMarker = marker.split(",")[0];
   const endMarker = marker.split(",")[1];
@@ -172,8 +191,10 @@ export function parseHooksFile(
     | null = null;
   let hookName = "";
   let nestedCount = 0;
+  let hookStartLine = 0;
 
-  for (const line of hooksFile) {
+  for (const [index, line] of hooksFile.entries()) {
+    const lineNumber = index + 1;
     if (hookName.length === 0) {
       const markerPos = line.lastIndexOf(startMarker);
       if (markerPos < 0) {
@@ -192,6 +213,7 @@ export function parseHooksFile(
       }
 
       nestedCount++;
+      hookStartLine = lineNumber;
 
       hookName = match.groups.hookName;
       if (hookName.startsWith("hook_") || hookName.startsWith("lua_")) {
@@ -236,7 +258,11 @@ export function parseHooksFile(
   }
 
   if (hookName.length > 0) {
-    throw new Error(`Unterminated hooks block: ${hookName}`);
+    const location = hooksFilePath ? ` in '${hooksFilePath}'` : "";
+    throw new Error(
+      `Unterminated hooks block: ${hookName}${location} ` +
+        `(started at line ${hookStartLine}, expected '${endMarker}')`,
+    );
   }
 
   options["ftplugin"] = ftplugin;
@@ -433,6 +459,29 @@ Deno.test("parseHooksFile", () => {
   );
 });
 
+Deno.test("parseHooksFile: unterminated hook includes location details", () => {
+  let actualMessage = "";
+  try {
+    parseHooksFile(
+      "{{{,}}}",
+      [
+        '" comment',
+        "-- lua_source {{{",
+        "print('test')",
+      ],
+      "/tmp/dpp/hooks.vim",
+    );
+  } catch (e) {
+    actualMessage = e instanceof Error ? e.message : stringifyError(e);
+  }
+
+  assertEquals(
+    actualMessage,
+    "Unterminated hooks block: lua_source in '/tmp/dpp/hooks.vim' " +
+      "(started at line 2, expected '}}}')",
+  );
+});
+
 Deno.test("convert2List: undefined -> empty, single -> list, array -> same", () => {
   assertEquals(convert2List(undefined), []);
   assertEquals(convert2List(1 as unknown as number), [1]);
@@ -448,4 +497,20 @@ Deno.test("isDenoCacheIssueError: detects known messages", () => {
   assertEquals(isDenoCacheIssueError(e1), true);
   assertEquals(isDenoCacheIssueError(e2), true);
   assertEquals(isDenoCacheIssueError(e3), false);
+});
+
+Deno.test("stringifyError: supports common unknown cases", () => {
+  const err = new Error("failed");
+  err.stack = "Error: failed\nstack line";
+  assertEquals(stringifyError(err), "Error: failed\nstack line");
+
+  assertEquals(stringifyError("simple"), "simple");
+  assertEquals(stringifyError(null), "null");
+  assertEquals(stringifyError(undefined), "undefined");
+
+  assertEquals(stringifyError({ a: 1 }), '{"a":1}');
+
+  const circular: Record<string, unknown> = {};
+  circular.circular = circular;
+  assertEquals(stringifyError(circular), "[object Object]");
 });
