@@ -43,7 +43,11 @@ export function stringifyError(error: unknown): string {
 
   if (typeof error === "object") {
     try {
-      return JSON.stringify(error) ?? String(error);
+      const serialized = JSON.stringify(error);
+      if (serialized !== undefined) {
+        return serialized;
+      }
+      return String(error);
     } catch (_e: unknown) {
       return String(error);
     }
@@ -254,9 +258,9 @@ export function parseHooksFile(
   }
 
   if (hookName.length > 0) {
-    const path = hooksFilePath ? ` in '${hooksFilePath}'` : "";
+    const location = hooksFilePath ? ` in '${hooksFilePath}'` : "";
     throw new Error(
-      `Unterminated hooks block: ${hookName}${path} ` +
+      `Unterminated hooks block: ${hookName}${location} ` +
         `(started at line ${hookStartLine}, expected '${endMarker}')`,
     );
   }
