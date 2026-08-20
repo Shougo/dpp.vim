@@ -472,7 +472,7 @@ Deno.test("parseHooksFile: unterminated hook includes location details", () => {
       "/tmp/dpp/hooks.vim",
     );
   } catch (e) {
-    actualMessage = stringifyError(e);
+    actualMessage = e instanceof Error ? e.message : stringifyError(e);
   }
 
   assertEquals(
