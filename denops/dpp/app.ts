@@ -11,7 +11,11 @@ import type { BaseExt } from "./base/ext.ts";
 import type { BaseProtocol, Protocol } from "./base/protocol.ts";
 import { Loader } from "./loader.ts";
 import { extAction } from "./ext.ts";
-import { importPlugin, isDenoCacheIssueError, stringifyError } from "./utils.ts";
+import {
+  importPlugin,
+  isDenoCacheIssueError,
+  stringifyError,
+} from "./utils.ts";
 
 import type { Denops, Entrypoint } from "@denops/std";
 import * as vars from "@denops/std/variable";
