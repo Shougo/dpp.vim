@@ -35,6 +35,7 @@ import { join } from "@std/path/join";
 import { assertEquals } from "@std/assert/equals";
 import { is } from "@core/unknownutil/is";
 import { isAbsolute } from "@std/path/is-absolute";
+import { copy } from "@std/fs/copy";
 
 export class DppImpl implements Dpp {
   #loader: Loader;
@@ -553,11 +554,19 @@ export class DppImpl implements Dpp {
             // Skip exists tag file to avoid overwrite
             continue;
           }
-          await linkPath(
-            hasWindows,
-            join(srcDir, entry.name),
-            join(src == "doc" ? docDir : ftdetectDir, entry.name),
-          );
+
+          if (denops.meta.host === "nvim" && src === "doc") {
+            // NOTE: If link file is used, "helptags" does not work in Neovim.
+            await copy(join(srcDir, entry.name), join(docDir, entry.name), {
+              overwrite: true,
+            });
+          } else {
+            await linkPath(
+              hasWindows,
+              join(srcDir, entry.name),
+              join(src === "doc" ? docDir : ftdetectDir, entry.name),
+            );
+          }
         }
       }
     }
