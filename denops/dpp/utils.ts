@@ -362,6 +362,34 @@ export async function importPlugin(path: string): Promise<unknown> {
   }
 }
 
+type JsonValue =
+  | null
+  | boolean
+  | number
+  | string
+  | JsonValue[]
+  | { [key: string]: JsonValue };
+
+function canonicalize(value: JsonValue): JsonValue {
+  if (Array.isArray(value)) {
+    return value.map(canonicalize);
+  }
+
+  if (value !== null && typeof value === "object") {
+    return Object.fromEntries(
+      Object.entries(value)
+        .sort(([a], [b]) => a.localeCompare(b))
+        .map(([key, value]) => [key, canonicalize(value)]),
+    );
+  }
+
+  return value;
+}
+
+export function sameJson(a: JsonValue, b: JsonValue): boolean {
+  return JSON.stringify(canonicalize(a)) === JSON.stringify(canonicalize(b));
+}
+
 Deno.test("parseHooksFile", () => {
   assertEquals(
     parseHooksFile("{{{,}}}", [

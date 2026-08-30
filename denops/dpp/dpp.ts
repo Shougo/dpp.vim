@@ -23,6 +23,7 @@ import {
   printError,
   readHooksFile,
   safeStat,
+  sameJson,
 } from "./utils.ts";
 
 import type { Denops } from "@denops/std";
@@ -197,9 +198,16 @@ export class DppImpl implements Dpp {
     const dppRuntimepath = `${basePath}/${name}/.dpp`;
     if (await isDirectory(dppRuntimepath)) {
       // Remove old runtime files
-      await Deno.remove(dppRuntimepath, { recursive: true });
+      for await (const entry of Deno.readDir(dppRuntimepath)) {
+        if (entry.name !== "doc") {
+          await Deno.remove(join(dppRuntimepath, entry.name), {
+            recursive: true,
+          });
+        }
+      }
+    } else {
+      await Deno.mkdir(dppRuntimepath, { recursive: true });
     }
-    await Deno.mkdir(dppRuntimepath, { recursive: true });
 
     // Get runtimepath
     // NOTE: Use init_runtimepath.
@@ -494,6 +502,8 @@ export class DppImpl implements Dpp {
 
     await this.#mergePlugins(
       denops,
+      basePath,
+      name,
       dppRuntimepath,
       options.skipMergeFilenamePattern,
       availablePlugins,
@@ -527,6 +537,8 @@ export class DppImpl implements Dpp {
 
   async #mergePlugins(
     denops: Denops,
+    basePath: string,
+    name: string,
     dppRuntimepath: string,
     skipMergeFilenamePattern: string,
     recordPlugins: Record<string, Plugin>,
@@ -541,9 +553,20 @@ export class DppImpl implements Dpp {
       await Deno.mkdir(docDir, { recursive: true });
     }
 
+    const recordDocs = await getRecordDocs(
+      skipMergeFilenamePattern,
+      recordPlugins,
+    );
+    const mergeDocs = !sameJson(
+      await loadRecordDocs(basePath, name),
+      recordDocs,
+    );
+
+    const srcs = mergeDocs ? ["doc", "ftdetect"] : ["ftdetect"];
+
     // Merge both ftdetect and help files
     for (const plugin of Object.values(recordPlugins)) {
-      for (const src of ["doc", "ftdetect"]) {
+      for (const src of srcs) {
         const srcDir = `${plugin.path}/${src}`;
         if (!plugin.path || !await isDirectory(srcDir)) {
           continue;
@@ -571,38 +594,47 @@ export class DppImpl implements Dpp {
       }
     }
 
-    // Execute :helptags when docDir is not empty
-    for await (const _ of Deno.readDir(docDir)) {
-      try {
-        await denops.cmd(`silent helptags ${docDir}`);
-      } catch (e: unknown) {
-        await printError(
-          denops,
-          e,
-          `:helptags failed`,
-        );
+    if (mergeDocs) {
+      // Execute :helptags when docDir is not empty
+      for await (const _ of Deno.readDir(docDir)) {
+        try {
+          await denops.cmd(`silent helptags ${docDir}`);
+        } catch (e: unknown) {
+          await printError(
+            denops,
+            e,
+            `:helptags failed`,
+          );
+        }
+        break;
       }
-      break;
-    }
 
-    const tagsPath = `${dppRuntimepath}/doc/tags`;
-    let tagLines: string[] = [];
-    if (await safeStat(tagsPath)) {
-      const content = await Deno.readTextFile(`${dppRuntimepath}/doc/tags`);
-      tagLines = content.split("\n").filter(Boolean);
-    }
+      const tagsPath = `${dppRuntimepath}/doc/tags`;
+      let tagLines: string[] = [];
+      if (await safeStat(tagsPath)) {
+        const content = await Deno.readTextFile(`${dppRuntimepath}/doc/tags`);
+        tagLines = content.split("\n").filter(Boolean);
+      }
 
-    // NOTE: taglines must be sorted.
-    await Deno.writeTextFile(
-      `${dppRuntimepath}/doc/tags`,
-      Array.from(
-        new Set(
-          tagLines.concat(
-            await generateTaglines(Object.values(recordPlugins)),
+      // NOTE: taglines must be sorted.
+      await Deno.writeTextFile(
+        `${dppRuntimepath}/doc/tags`,
+        Array.from(
+          new Set(
+            tagLines.concat(
+              await generateTaglines(Object.values(recordPlugins)),
+            ),
           ),
-        ),
-      ).sort().join("\n"),
-    );
+        ).sort().join("\n"),
+      );
+
+      await cacheDocFiles(
+        denops,
+        basePath,
+        name,
+        recordDocs,
+      );
+    }
 
     // Merge plugin files
     const defaultSkipFilenames = [
@@ -855,6 +887,67 @@ async function generateTaglines(plugins: Plugin[]): Promise<string[]> {
   }
 
   return taglines;
+}
+
+async function cacheDocFiles(
+  denops: Denops,
+  basePath: string,
+  name: string,
+  recordDocs: Record<string, number>,
+): Promise<void> {
+  const hasWindows = await fn.has(denops, "win32");
+  const docJson = `${basePath}/${name}/doc.json`;
+
+  const docLines = [
+    JSON.stringify(recordDocs),
+  ];
+  await Deno.writeTextFile(docJson, docLines.join("\n"));
+  if (hasWindows) {
+    await denops.call("dpp#util#_dos2unix", docJson);
+  }
+}
+
+async function getRecordDocs(
+  skipMergeFilenamePattern: string,
+  recordPlugins: Record<string, Plugin>,
+): Promise<Record<string, number>> {
+  const recordDocs: Record<string, number> = {};
+
+  for (const plugin of Object.values(recordPlugins)) {
+    for (const src of ["doc"]) {
+      const srcDir = `${plugin.path}/${src}`;
+      if (!plugin.path || !await isDirectory(srcDir)) {
+        continue;
+      }
+
+      for await (const entry of Deno.readDir(srcDir)) {
+        if (entry.name.match(skipMergeFilenamePattern)) {
+          // Skip exists tag file to avoid overwrite
+          continue;
+        }
+
+        const fullPath = join(srcDir, entry.name);
+
+        const stat = await safeStat(fullPath);
+        if (!stat) continue;
+
+        recordDocs[fullPath] = stat.size;
+      }
+    }
+  }
+
+  return recordDocs;
+}
+
+async function loadRecordDocs(
+  basePath: string,
+  name: string,
+): Promise<Record<string, number>> {
+  const docJson = `${basePath}/${name}/doc.json`;
+  if (!await safeStat(docJson)) {
+    return {};
+  }
+  return JSON.parse(await Deno.readTextFile(docJson));
 }
 
 Deno.test("initPlugin", () => {
