@@ -914,6 +914,14 @@ async function getRecordDocs(
   const recordDocs: Record<string, number> = {};
 
   for (const plugin of Object.values(recordPlugins)) {
+    for (const file of ["README.md", "README.mkd"]) {
+      const fullPath = `${plugin.rtp}/${file}`;
+      const stat = await safeStat(fullPath);
+        if (!stat) continue;
+
+        recordDocs[fullPath] = stat.size;
+    }
+
     for (const src of ["doc"]) {
       const srcDir = `${plugin.path}/${src}`;
       if (!plugin.path || !await isDirectory(srcDir)) {
