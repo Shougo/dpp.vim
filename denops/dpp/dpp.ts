@@ -561,6 +561,14 @@ export class DppImpl implements Dpp {
       await loadRecordDocs(basePath, name),
       recordDocs,
     );
+    if (mergeDocs) {
+      // Remove old runtime files
+      for await (const entry of Deno.readDir(docDir)) {
+        await Deno.remove(join(docDir, entry.name), {
+          recursive: true,
+        });
+      }
+    }
 
     const srcs = mergeDocs ? ["doc", "ftdetect"] : ["ftdetect"];
 
