@@ -36,7 +36,6 @@ import { join } from "@std/path/join";
 import { assertEquals } from "@std/assert/equals";
 import { is } from "@core/unknownutil/is";
 import { isAbsolute } from "@std/path/is-absolute";
-import { copy } from "@std/fs/copy";
 
 export class DppImpl implements Dpp {
   #loader: Loader;
