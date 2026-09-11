@@ -586,18 +586,11 @@ export class DppImpl implements Dpp {
             continue;
           }
 
-          if (denops.meta.host === "nvim" && src === "doc") {
-            // NOTE: If link file is used, "helptags" does not work in Neovim.
-            await copy(join(srcDir, entry.name), join(docDir, entry.name), {
-              overwrite: true,
-            });
-          } else {
-            await linkPath(
-              hasWindows,
-              join(srcDir, entry.name),
-              join(src === "doc" ? docDir : ftdetectDir, entry.name),
-            );
-          }
+          await linkPath(
+            hasWindows,
+            join(srcDir, entry.name),
+            join(src === "doc" ? docDir : ftdetectDir, entry.name),
+          );
         }
       }
     }
