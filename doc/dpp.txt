@@ -131,7 +131,8 @@ skipMergeFilenamePattern (string)
 		NOTE: It is only effective for files directly under the
 		directory.
 
-		Default: "^tags(?:-\\w\\w)?$|^package.json$"
+		Default: >
+		"^tags(?:-\\w\\w)?$|^package\.json$|\.md$"
 
 ------------------------------------------------------------------------------
 FUNCTIONS                                                      *dpp-functions*
