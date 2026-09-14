@@ -534,6 +534,23 @@ Deno.test("convert2List: undefined -> empty, single -> list, array -> same", () 
   assertEquals(convert2List([1, 2] as unknown as number[]), [1, 2]);
 });
 
+Deno.test("hasHelpFiles: detects nested .txt files only", async () => {
+  const tempDir = await Deno.makeTempDir();
+  try {
+    assertEquals(await hasHelpFiles(tempDir), false);
+
+    await Deno.writeTextFile(join(tempDir, "README.md"), "");
+    assertEquals(await hasHelpFiles(tempDir), false);
+
+    const nestedDir = join(tempDir, "nested");
+    await Deno.mkdir(nestedDir);
+    await Deno.writeTextFile(join(nestedDir, "plugin.txt"), "");
+    assertEquals(await hasHelpFiles(tempDir), true);
+  } finally {
+    await Deno.remove(tempDir, { recursive: true });
+  }
+});
+
 Deno.test("isDenoCacheIssueError: detects known messages", () => {
   const e1 = new TypeError(
     "Could not find constraint in the list of versions: something",
