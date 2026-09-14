@@ -92,7 +92,7 @@ export async function isDirectory(path: string | undefined): Promise<boolean> {
 export async function hasHelpFiles(path: string): Promise<boolean> {
   for await (const entry of Deno.readDir(path)) {
     const entryPath = join(path, entry.name);
-    if (entry.name.endsWith(".txt")) {
+    if (entry.name.endsWith(".txt") || entry.name.endsWith(".jax")) {
       const stat = await safeStat(entryPath);
       if (stat?.isFile) {
         return true;
