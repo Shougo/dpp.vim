@@ -16,6 +16,7 @@ import type { Dpp } from "./base/dpp.ts";
 import { extAction, getExt, getProtocols } from "./ext.ts";
 import {
   convert2List,
+  hasHelpFiles,
   isDirectory,
   linkPath,
   mergeFtplugins,
@@ -595,8 +596,8 @@ export class DppImpl implements Dpp {
     }
 
     if (mergeDocs) {
-      // Execute :helptags when docDir is not empty
-      for await (const _ of Deno.readDir(docDir)) {
+      // Execute :helptags when docDir contains help files
+      if (await hasHelpFiles(docDir)) {
         try {
           await denops.cmd(`silent helptags ${docDir}`);
         } catch (e: unknown) {
@@ -606,7 +607,6 @@ export class DppImpl implements Dpp {
             `:helptags failed`,
           );
         }
-        break;
       }
 
       const tagsPath = `${dppRuntimepath}/doc/tags`;

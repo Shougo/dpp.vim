@@ -89,6 +89,24 @@ export async function isDirectory(path: string | undefined): Promise<boolean> {
   return false;
 }
 
+export async function hasHelpFiles(path: string): Promise<boolean> {
+  for await (const entry of Deno.readDir(path)) {
+    const entryPath = join(path, entry.name);
+    if (entry.name.endsWith(".txt") || entry.name.endsWith(".jax")) {
+      const stat = await safeStat(entryPath);
+      if (stat?.isFile) {
+        return true;
+      }
+    }
+
+    if (entry.isDirectory && await hasHelpFiles(entryPath)) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
 export async function safeStat(path: string): Promise<Deno.FileInfo | null> {
   // NOTE: Deno.stat() may be failed
   try {
@@ -514,6 +532,23 @@ Deno.test("convert2List: undefined -> empty, single -> list, array -> same", () 
   assertEquals(convert2List(undefined), []);
   assertEquals(convert2List(1 as unknown as number), [1]);
   assertEquals(convert2List([1, 2] as unknown as number[]), [1, 2]);
+});
+
+Deno.test("hasHelpFiles: detects nested .txt files only", async () => {
+  const tempDir = await Deno.makeTempDir();
+  try {
+    assertEquals(await hasHelpFiles(tempDir), false);
+
+    await Deno.writeTextFile(join(tempDir, "README.md"), "");
+    assertEquals(await hasHelpFiles(tempDir), false);
+
+    const nestedDir = join(tempDir, "nested");
+    await Deno.mkdir(nestedDir);
+    await Deno.writeTextFile(join(nestedDir, "plugin.txt"), "");
+    assertEquals(await hasHelpFiles(tempDir), true);
+  } finally {
+    await Deno.remove(tempDir, { recursive: true });
+  }
 });
 
 Deno.test("isDenoCacheIssueError: detects known messages", () => {
