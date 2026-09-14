@@ -89,6 +89,24 @@ export async function isDirectory(path: string | undefined): Promise<boolean> {
   return false;
 }
 
+export async function hasHelpFiles(path: string): Promise<boolean> {
+  for await (const entry of Deno.readDir(path)) {
+    const entryPath = join(path, entry.name);
+    if (entry.name.endsWith(".txt")) {
+      const stat = await safeStat(entryPath);
+      if (stat?.isFile) {
+        return true;
+      }
+    }
+
+    if (entry.isDirectory && await hasHelpFiles(entryPath)) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
 export async function safeStat(path: string): Promise<Deno.FileInfo | null> {
   // NOTE: Deno.stat() may be failed
   try {
