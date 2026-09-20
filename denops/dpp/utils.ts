@@ -92,7 +92,7 @@ export async function isDirectory(path: string | undefined): Promise<boolean> {
 export async function hasHelpFiles(path: string): Promise<boolean> {
   for await (const entry of Deno.readDir(path)) {
     const entryPath = join(path, entry.name);
-    if (entry.name.endsWith(".txt")) {
+    if (entry.name.endsWith(".txt") || entry.name.endsWith(".jax")) {
       const stat = await safeStat(entryPath);
       if (stat?.isFile) {
         return true;
@@ -534,7 +534,7 @@ Deno.test("convert2List: undefined -> empty, single -> list, array -> same", () 
   assertEquals(convert2List([1, 2] as unknown as number[]), [1, 2]);
 });
 
-Deno.test("hasHelpFiles: detects nested .txt files only", async () => {
+Deno.test("hasHelpFiles: detects nested help files", async () => {
   const tempDir = await Deno.makeTempDir();
   try {
     assertEquals(await hasHelpFiles(tempDir), false);
@@ -543,7 +543,7 @@ Deno.test("hasHelpFiles: detects nested .txt files only", async () => {
     assertEquals(await hasHelpFiles(tempDir), false);
 
     await Deno.writeTextFile(join(tempDir, "help.jax"), "");
-    assertEquals(await hasHelpFiles(tempDir), false);
+    assertEquals(await hasHelpFiles(tempDir), true);
 
     const nestedDir = join(tempDir, "nested");
     await Deno.mkdir(nestedDir);
