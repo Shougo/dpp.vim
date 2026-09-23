@@ -525,14 +525,14 @@ rtp		(String)
 
 		Default: Same of |dpp-plugin-option-path|.
 
-                                              *dpp-plugin-options-script_type*
+                                               *dpp-plugin-option-script_type*
 script_type	(String)
 		Specify the script type. It is useful for non-official
 		categorized plugins.
 		For example: "indent", "plugin", "ftplugin", ...
 		NOTE: You must not specify it for categorized plugins.
 
-                                                      *dpp-plugin-options-url*
+                                                       *dpp-plugin-option-url*
 url	(String)
 		Specify the webpage URL.
 		NOTE: It is set by protocol.
