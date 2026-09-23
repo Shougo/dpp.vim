@@ -768,7 +768,7 @@ EXAMPLES                                                        *dpp-examples*
 	const s:dpp_base = '~/.cache/dpp/'
 	
 	" Set dpp source path (required)
-	" NOTE: The plugins must be cloned before.
+	" NOTE: The plugins must be cloned beforehand.
 	const s:dpp_src = '~/.cache/dpp/repos/github.com/Shougo/dpp.vim'
 	const s:denops_src = '~/.cache/dpp/repos/github.com/denops/denops.vim'
 	"const s:denops_installer =
@@ -784,15 +784,11 @@ EXAMPLES                                                        *dpp-examples*
 	  "execute 'set runtimepath^=' .. s:denops_installer
 	  autocmd User DenopsReady
 	  \ : echohl WarningMsg
-	  \ | echomsg 'dpp load_state() is failed'
+	  \ | echomsg 'dpp load_state() failed'
 	  \ | echohl NONE
 	  \ | call dpp#make_state(s:dpp_base, '{TypeScript config file path}')
 	endif
 	
-	" Attempt to determine the type of a file based on its name and
-	" possibly its " contents. Use this to allow intelligent
-	" auto-indenting " for each filetype, and for plugins that are
-	" filetype specific.
 	filetype indent plugin on
 	
 	" Enable syntax highlighting
@@ -1023,7 +1019,7 @@ FAQ 5:                                                             |dpp-faq-5|
 	I want to use dpp functions in lua.
 
 FAQ 6:                                                             |dpp-faq-6|
-	|DenopsReady| is not executed when |dpp#min#load_state()| is failed.
+	|DenopsReady| is not executed when |dpp#min#load_state()| failed.
 
 FAQ 7:                                                             |dpp-faq-7|
 	How to remove the disabled plugins?
@@ -1095,7 +1091,7 @@ A: You can use |dpp-lua-functions| like this.
     vim.api.nvim_create_autocmd("User", {
       pattern = "DenopsReady",
       callback = function()
-        vim.notify("dpp load_state() is failed")
+        vim.notify("dpp load_state() failed")
         dpp.make_state(dppBase, {TypeScript config file path})
       end,
     })
@@ -1110,7 +1106,7 @@ A: You can use |dpp-lua-functions| like this.
 <
 
                                                                    *dpp-faq-6*
-Q: |DenopsReady| is not executed when |dpp#min#load_state()| is failed.
+Q: |DenopsReady| is not executed when |dpp#min#load_state()| failed.
 
 A: "plugin/denops.vim" is not loaded.  I think you have enabled "--noplugin".
 You need to execute "plugin/denops.vim" manually by |:runtime| command.

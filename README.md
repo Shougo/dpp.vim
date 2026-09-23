@@ -64,7 +64,7 @@ set nocompatible
 const s:dpp_base = '~/.cache/dpp/'
 
 " Set dpp source path (required)
-" NOTE: The plugins must be cloned before.
+" NOTE: The plugins must be cloned beforehand.
 const s:dpp_src = '~/.cache/dpp/repos/github.com/Shougo/dpp.vim'
 const s:denops_src = '~/.cache/dpp/repos/github.com/denops/denops.vim'
 "const s:denops_installer =
@@ -81,7 +81,7 @@ if s:dpp_base->dpp#min#load_state()
 
   autocmd User DenopsReady
   \ : echohl WarningMsg
-  \ | echomsg 'dpp load_state() is failed'
+  \ | echomsg 'dpp load_state() failed'
   \ | echohl NONE
   \ | call dpp#make_state(s:dpp_base, '{TypeScript config file path}')
 endif
@@ -91,10 +91,6 @@ autocmd User Dpp:makeStatePost
       \ | echomsg 'dpp make_state() is done'
       \ | echohl NONE
 
-" Attempt to determine the type of a file based on its name and
-" possibly its " contents. Use this to allow intelligent
-" auto-indenting " for each filetype, and for plugins that are
-" filetype specific.
 filetype indent plugin on
 
 " Enable syntax highlighting
@@ -129,7 +125,7 @@ if dpp.load_state(dppBase) then
   vim.api.nvim_create_autocmd("User", {
     pattern = "DenopsReady",
     callback = function()
-      vim.notify("dpp load_state() is failed")
+      vim.notify("dpp load_state() failed")
       dpp.make_state(dppBase, {TypeScript config file path})
     end,
   })
