@@ -156,7 +156,7 @@ dpp#check_clean()
                                                            *dpp#check_files()*
 dpp#check_files([{base-path}[, {name}]])
 		Check dpp.vim cache file is outdated.
-		If it is outdated or not found, it retuns plugin names.
+		If it is outdated or not found, it returns plugin names.
 		It should be called when |BufWritePost| autocmd.
 
 		{base-path} is where your downloaded plugins will be placed.
@@ -210,13 +210,13 @@ dpp#make_state([{base-path}[, {config-path}[, {name}[, {extra-args}]]]])
 		NOTE: Import maps from "deno.json[c]" or "import_map.json[c]"
 		file in the same directory will also be loaded.
 
-		The TypeScript configuration script must returns following
+		The TypeScript configuration script must return following
 		object.
 
 		checkFiles	(string[])	(Optional)
 			Check file paths when update timestamp.
 			It is used when |dpp#check_files()|.
-			NOTE: The files must be exists.
+			NOTE: The files must exist.
 			Default: []
 
 		ftplugins	(Record<string, string>) (Optional)
