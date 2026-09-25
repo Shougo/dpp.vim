@@ -301,7 +301,7 @@ extAttrs	(Dictionary)
                                          *dpp-plugin-option-external_commands*
 external_commands (List) or (String)
 		It is external commands dependency.
-		If they are not |executable()|, the source is ignored.
+		If the commands are not |executable()|, the plugin is ignored.
 
                                                   *dpp-plugin-option-ftplugin*
 ftplugin	(Dictionary)
@@ -363,15 +363,14 @@ name		(String)
 		Specify the name of the plugin.  This is used for dpp
 		management and other functions.  If it is omitted, the tail of
 		the repository name will be used.
-		NOTE: Must be unique across the all plugin.  If the plugin
-		name conflicts with another plugin, dpp will overwrite the
-		previous settings with the new one.  If the repo tail is bound
-		to conflict, you can set the "name" option manually to prevent
-		overwriting an existing plugin setting.
+		NOTE: Must be unique across the all plugin. If the commands
+		are not executable, the plugin is ignored. If the repo tail is
+		bound to conflict, you can set the "name" option manually to
+		prevent overwriting an existing plugin setting.
 
                                                     *dpp-plugin-option-on_cmd*
 on_cmd		(List) or (String)
-		If it is matched to the executed command name, dpp will call
+		If it matches the executed command name, dpp will call
 		|dpp#source()|.
 		NOTE: It must be unique.
 		NOTE: To use the feature, you need to install "dpp-ext-lazy".
@@ -387,8 +386,8 @@ on_event	(String) or (List)
 
                                                    *dpp-plugin-option-on_func*
 on_func		(List) or (String)
-		If it is matched to the called undefined function name, dpp
-		will call |dpp#source()|.
+		If it matches the called undefined function name, dpp will
+		call |dpp#source()|.
 		NOTE: It does not work when Vim initialized.
 		NOTE: It does not work for Vim9 script. It is |FuncUndefined|
 		limitation.
@@ -399,8 +398,7 @@ on_func		(List) or (String)
 
                                                      *dpp-plugin-option-on_ft*
 on_ft		(List) or (String)
-		If it is matched to 'filetype', dpp will call
-		|dpp#source()|.
+		If it matches 'filetype', dpp will call |dpp#source()|.
 		NOTE: To use the feature, you need to install "dpp-ext-lazy".
 		https://github.com/Shougo/dpp-ext-lazy
 
@@ -417,8 +415,8 @@ on_if		(String)
 
                                                     *dpp-plugin-option-on_lua*
 on_lua		(List) or (String)
-		If it is matched to the required lua module root, dpp will
-		call |dpp#source()|.
+		If it matches the required lua module root, dpp will call
+		|dpp#source()|.
 		NOTE: It is for Neovim only.
 		NOTE: It does not work for Neovim standard modules and require
 		in |vim.loop| modules.
