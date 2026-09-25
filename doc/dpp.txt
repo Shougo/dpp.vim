@@ -289,7 +289,7 @@ depends		(list or string)
 		Specify a list of plugins a plugin depends on.
 		List items are '{plugin-name}'.
 		Those specified in the list are NOT installed automatically.
-		NOTE: The loading order is not guaranteed in non lazy plugins.
+		NOTE: The loading order is not guaranteed in non-lazy plugins.
 
                                                *dpp-plugin-option-description*
 description	(string)
@@ -462,7 +462,7 @@ on_root		(list) or (string)
 		Load the plugin when current directory has specified root
 		files.
 		It is useful to load project specific plugins.
-		NOTE: It must be file instead of directory.
+		NOTE: It must be a file rather than a directory.
 
 		NOTE: To use the feature, you need to install "dpp-ext-lazy".
 		https://github.com/Shougo/dpp-ext-lazy
@@ -541,7 +541,7 @@ HOOKS                                                              *dpp-hooks*
 		It is useful for the plugins initialization.
 
 		NOTE: You cannot use function hooks in |dpp#make_state()|.
-		NOTE: The loading order is not guaranteed in non lazy plugins.
+		NOTE: The loading order is not guaranteed in non-lazy plugins.
 		NOTE: The string is executed as Ex commands.
 
 		You can use |Vim9| script for hooks.  But you cannot use
@@ -616,7 +616,7 @@ hook_done_update (string)
                                           *dpp-plugin-option-hook_post_source*
 hook_post_source (string)
 		It is executed after the plugin script files are sourced.
-		It does not work for non lazy plugins.
+		It does not work for non-lazy plugins.
 
 		NOTE: In Vim initializing, you must call the
 		"hook_post_source" hooks manually in |VimEnter| if needed.
@@ -665,7 +665,7 @@ hook_pre_update (string)
 hook_source	(string) or (function)
 		It is executed after plugin runtimepath is added and before
 		the plugin script files are sourced.
-		It also works for non lazy plugins.
+		It also works for non-lazy plugins.
 		It is mainly used for plugin configure.
 		NOTE: The "sourced" means after |dpp#min#load_state()| or
 		autoloaded.
@@ -699,7 +699,7 @@ dpp.clear_state([{name}])
 dpp.get([{plugin-name}])
 		Same as |dpp#get()|.
                                                             *dpp.load_state()*
-dpp.load_state({base-path}, {name})
+dpp.load_state({base-path}[, {name}])
 		Same as |dpp#min#load_state()|.
 
                                                             *dpp.make_state()*
@@ -832,7 +832,7 @@ documentation.
 ------------------------------------------------------------------------------
 EXT OPTIONS                                                  *dpp-ext-options*
 
-NOTE: The Exts cannot set default options.  If they need to specify the
+NOTE: Extensions cannot define default options.  If they need to specify the
 recommended configuration, you should write it in the documentation instead.
 
 
@@ -860,7 +860,7 @@ Protocol documentation.
 ------------------------------------------------------------------------------
 PROTOCOL OPTIONS                                        *dpp-protocol-options*
 
-NOTE: The Protocols cannot set default options.  If they need to specify the
+NOTE: Protocols cannot define default options. If they need to specify the
 recommended configuration, you should write it in the documentation instead.
 
 ------------------------------------------------------------------------------
@@ -899,7 +899,7 @@ The ext class must extend the "BaseExt" class.
 
 NOTE: It must be written in TypeScript language.
 
-NOTE: If you call Vim functions, it is not asynchronous.
+NOTE: Calling Vim functions makes the operation synchronous.
 
 
 ------------------------------------------------------------------------------
@@ -929,7 +929,7 @@ The protocol class must extend the "BaseProtocol" class.
 
 NOTE: It must be written in TypeScript language.
 
-NOTE: If you call Vim functions, it is not asynchronous.
+NOTE: Calling Vim functions makes the operation synchronous.
 
 
 ------------------------------------------------------------------------------
@@ -958,7 +958,7 @@ getHistories		(function)			(Optional)
 
                                         *dpp-protocol-attribute-getLogCommand*
 getLogCommand		(function)			(Optional)
-		Called to get repository synchronous command.
+		Called to get log command.
 
                                *dpp-protocol-attribute-getCheckRemoteCommands*
 getCheckRemoteCommands	(function)			(Optional)
@@ -982,7 +982,7 @@ getRollbackCommands	(function)			(Optional)
 
                                        *dpp-protocol-attribute-getSyncCommand*
 getSyncCommand		(function)			(Optional)
-		Called to get repository synchronous command.
+		Called to get a synchronous command for the repository.
 
                                                *dpp-protocol-attribute-getUrl*
 getUrl		(function)			(Optional)
