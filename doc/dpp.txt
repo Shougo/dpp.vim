@@ -12,7 +12,7 @@ Interface		|dpp-interface|
   Hooks			  |dpp-hooks|
   Functions		  |dpp-functions|
   Plugin options	  |dpp-plugin-options|
-  Lua functions.	  |dpp-lua-functions|
+  Lua functions		  |dpp-lua-functions|
 Variables		|dpp-variables|
 Ddu Sources		|dpp-ddu-sources|
 Examples		|dpp-examples|
@@ -273,39 +273,39 @@ PLUGIN OPTIONS                                            *dpp-plugin-options*
 		The {plugin-options} accepts the following keys:
 
                                                    *dpp-plugin-option-augroup*
-augroup		(String)
+augroup		(string)
 		An augroup name that the plugin uses for |VimEnter| or
 		|GUIEnter| autocmd events.
 
                                                *dpp-plugin-option-denops_wait*
-denops_wait	(Bool)
+denops_wait	(bool)
 		If set to v:false, dpp doesn't wait until the denops plugin
 		is loaded.
 
 		NOTE: It is danger option.  The plugin does not work well.
 
                                                    *dpp-plugin-option-depends*
-depends		(List or String)
+depends		(list or string)
 		Specify a list of plugins a plugin depends on.
 		List items are '{plugin-name}'.
 		Those specified in the list are NOT installed automatically.
 		NOTE: The loading order is not guaranteed in non lazy plugins.
 
                                                *dpp-plugin-option-description*
-description	(String)
+description	(string)
 		Describe the plugin.
                                                   *dpp-plugin-option-extAttrs*
-extAttrs	(Dictionary)
+extAttrs	(dictionary)
 		It is a dictionary that exts specific attributes.
 		See also |dpp-ext-attrs|.
 
                                          *dpp-plugin-option-external_commands*
-external_commands (List) or (String)
+external_commands (list) or (string)
 		It is external commands dependency.
 		If the commands are not |executable()|, the plugin is ignored.
 
                                                   *dpp-plugin-option-ftplugin*
-ftplugin	(Dictionary)
+ftplugin	(dictionary)
 		"_" key is executed after all ftplugin.
 		"{filetype}" key is executed {filetype} ftplugin.
 		"lua_{filetype}" key is executed {filetype} ftplugin as
@@ -317,11 +317,11 @@ ftplugin	(Dictionary)
 		NOTE: It is not executed when the plugin is not installed.
 
                                                      *dpp-plugin-option-group*
-group		(List) or (String)
+group		(list) or (string)
 		It is group name.
 
                                                         *dpp-plugin-option-if*
-if		(Bool) or (String)
+if		(bool) or (string)
 		If set to |v:false|, dpp doesn't load the plugin.
 		If it is |String|, dpp will eval it.
 		If you don't set it, dpp will register (enable) the plugin.
@@ -329,7 +329,7 @@ if		(Bool) or (String)
 		the option.
 
                                                       *dpp-plugin-option-lazy*
-lazy		(Bool)
+lazy		(bool)
 		If set to v:true, dpp doesn't add the path to 'runtimepath'
 		automatically.
 		If you don't set it, dpp will set it automatically when the
@@ -342,25 +342,25 @@ lazy		(Bool)
 		https://github.com/Shougo/dpp-ext-lazy
 
                                                      *dpp-plugin-option-local*
-local		(Bool)
+local		(bool)
 		If set to v:true, it is local installed plugin.
 
                                                     *dpp-plugin-option-merged*
-merged		(Bool)
+merged		(bool)
 		If set to v:false, dpp doesn't merge the plugin directory.
 		It is useful for the plugin files conflicts.
 
 		Default: See |dpp-merge|.
 
                                             *dpp-plugin-option-merge_ftdetect*
-merge_ftdetect	(Bool)
+merge_ftdetect	(bool)
 		If set to v:true, dpp merge the plugin "ftdetect" directory.
 		It is useful to enable file detection when lazy loaded plugin.
 		NOTE: It does not work if ftdetect script depends on lazy
 		plugin functions.
 
                                                       *dpp-plugin-option-name*
-name		(String)
+name		(string)
 		Specify the name of the plugin.  This is used for dpp
 		management and other functions.  If it is omitted, the tail of
 		the repository name will be used.
@@ -370,7 +370,7 @@ name		(String)
 		prevent overwriting an existing plugin setting.
 
                                                     *dpp-plugin-option-on_cmd*
-on_cmd		(List) or (String)
+on_cmd		(list) or (string)
 		If it matches the executed command name, dpp will call
 		|dpp#source()|.
 		NOTE: It must be unique.
@@ -380,13 +380,13 @@ on_cmd		(List) or (String)
 		Default: Prefix match name from |dpp-plugin-option-name|.
 
                                                   *dpp-plugin-option-on_event*
-on_event	(String) or (List)
+on_event	(string) or (list)
 		dpp will call |dpp#source()| on the events.
 		NOTE: To use the feature, you need to install "dpp-ext-lazy".
 		https://github.com/Shougo/dpp-ext-lazy
 
                                                    *dpp-plugin-option-on_func*
-on_func		(List) or (String)
+on_func		(list) or (string)
 		If it matches the called undefined function name, dpp will
 		call |dpp#source()|.
 		NOTE: It does not work when Vim initialized.
@@ -398,13 +398,13 @@ on_func		(List) or (String)
 		Default: Prefix match name from |dpp-plugin-option-name|.
 
                                                      *dpp-plugin-option-on_ft*
-on_ft		(List) or (String)
+on_ft		(list) or (string)
 		If it matches 'filetype', dpp will call |dpp#source()|.
 		NOTE: To use the feature, you need to install "dpp-ext-lazy".
 		https://github.com/Shougo/dpp-ext-lazy
 
                                                      *dpp-plugin-option-on_if*
-on_if		(String)
+on_if		(string)
 		If it evaluates to a non-zero value, dpp will call
 		|dpp#source()|.
 		The default evaluate timings are "BufRead", "BufNewFile",
@@ -415,7 +415,7 @@ on_if		(String)
 		https://github.com/Shougo/dpp-ext-lazy
 
                                                     *dpp-plugin-option-on_lua*
-on_lua		(List) or (String)
+on_lua		(list) or (string)
 		If it matches the required lua module root, dpp will call
 		|dpp#source()|.
 		NOTE: It is for Neovim only.
@@ -428,7 +428,7 @@ on_lua		(List) or (String)
 		https://github.com/Shougo/dpp-ext-lazy
 
                                                     *dpp-plugin-option-on_map*
-on_map		(Dictionary) or (List) or (String)
+on_map		(Dictionary) or (list) or (string)
 		If it is the Dictionary, the key is {mode} and the items are
 		{mapping} or [{mapping1}, {mapping2}, ...].
 		If it is the List, the items are {mapping} or [{mode},
@@ -442,7 +442,7 @@ on_map		(Dictionary) or (List) or (String)
 		https://github.com/Shougo/dpp-ext-lazy
 
                                                    *dpp-plugin-option-on_path*
-on_path		(List) or (String)
+on_path		(list) or (string)
 		If set to ".*", dpp will call |dpp#source()| on editing all
 		files.  Otherwise, dpp will call |dpp#source()| if the
 		buffer name is matched to the string pattern.
@@ -451,14 +451,14 @@ on_path		(List) or (String)
 		https://github.com/Shougo/dpp-ext-lazy
 
                                             *dpp-plugin-option-on_post_source*
-on_post_source	(List) or (String)
+on_post_source	(list) or (string)
 		Load the plugin after the listed plugins are loaded.
 		NOTE: The plugins must be lazy loaded plugins.
 		NOTE: To use the feature, you need to install "dpp-ext-lazy".
 		https://github.com/Shougo/dpp-ext-lazy
 
                                                    *dpp-plugin-option-on_root*
-on_root		(List) or (String)
+on_root		(list) or (string)
 		Load the plugin when current directory has specified root
 		files.
 		It is useful to load project specific plugins.
@@ -468,14 +468,14 @@ on_root		(List) or (String)
 		https://github.com/Shougo/dpp-ext-lazy
 
                                                  *dpp-plugin-option-on_source*
-on_source	(List) or (String)
+on_source	(list) or (string)
 		Load the plugin before the listed plugins are loaded.
 		NOTE: The plugins must be lazy loaded plugins.
 		NOTE: To use the feature, you need to install "dpp-ext-lazy".
 		https://github.com/Shougo/dpp-ext-lazy
 
                                                       *dpp-plugin-option-path*
-path		(String)
+path		(string)
 		Specify the plugin downloaded path.
 		If it is not an absolute path, it is converted to under the
 		plugin "base-path".
@@ -489,7 +489,7 @@ priority	(Number)
 		Plugin load priority.
 
                                                   *dpp-plugin-option-protocol*
-protocol	(String)
+protocol	(string)
 		User specified protocol.
 
                                              *dpp-plugin-option-protocolAttrs*
@@ -498,18 +498,18 @@ protocolAttrs	(Dictionary)
 		See also |dpp-protocol-attrs|.
 
                                                       *dpp-plugin-option-repo*
-repo		(String)
+repo		(string)
 		Specify the plugin repository.
 
                                                        *dpp-plugin-option-rev*
-rev		(String)
+rev		(string)
 		Specify a revision number or branch/tag name.
 		If it is "*" in "git" type, dpp will use latest released tag.
 		You can specify the wildcards like "0.*".
 		NOTE: If the type is "raw", rev must be hash number.
 
                                                        *dpp-plugin-option-rtp*
-rtp		(String)
+rtp		(string)
 		Specify the runtime path.
 		You can use it when the repository has the Vim plugin in a
 		subdirectory.
@@ -523,14 +523,14 @@ rtp		(String)
 		Default: Same as |dpp-plugin-option-path|.
 
                                                *dpp-plugin-option-script_type*
-script_type	(String)
+script_type	(string)
 		Specify the script type. It is useful for non-official
 		categorized plugins.
 		For example: "indent", "plugin", "ftplugin", ...
 		NOTE: You must not specify it for categorized plugins.
 
                                                        *dpp-plugin-option-url*
-url	(String)
+url	(string)
 		Specify the webpage URL.
 		NOTE: It is set by protocol.
 
@@ -561,7 +561,7 @@ HOOKS                                                              *dpp-hooks*
 <
 
                                                 *dpp-plugin-option-hooks_file*
-hooks_file	(String) or (List)
+hooks_file	(string) or (list)
 		Hooks file path.  It must be valid path.
 		It is useful to define long hooks.
 
@@ -591,7 +591,7 @@ hooks_file	(String) or (List)
 		" }}}
 <
                                                   *dpp-plugin-option-hook_add*
-hook_add	(String)
+hook_add	(string)
 		It is executed after the plugin is added.
 		It is mainly used for defining mappings.
 		NOTE: You cannot call plugin function in "hook_add".
@@ -599,7 +599,7 @@ hook_add	(String)
 		NOTE: It is not executed when the plugin is not installed.
 
                                        *dpp-plugin-option-hook_depends_update*
-hook_depends_update (String)
+hook_depends_update (string)
 		It is executed after |dpp-plugin-option-depends| plugins are
 		updated.
 		NOTE: To use the feature, you need to install
@@ -607,14 +607,14 @@ hook_depends_update (String)
 		https://github.com/Shougo/dpp-ext-installer
 
                                           *dpp-plugin-option-hook_done_update*
-hook_done_update (String)
+hook_done_update (string)
 		It is executed after plugins are updated.
 		NOTE: To use the feature, you need to install
 		"dpp-ext-installer".
 		https://github.com/Shougo/dpp-ext-installer
 
                                           *dpp-plugin-option-hook_post_source*
-hook_post_source (String)
+hook_post_source (string)
 		It is executed after the plugin script files are sourced.
 		It does not work for non lazy plugins.
 
@@ -625,7 +625,7 @@ hook_post_source (String)
 		autocmd VimEnter * call dpp#call_hook('post_source')
 <
                                     *dpp-plugin-option-hook_post_check_update*
-hook_post_check_update (String)
+hook_post_check_update (string)
 		It is executed after checking for updates.
 		If it set |g:dpp#hook_result| to |v:true|, the update will be
 		skipped.
@@ -645,7 +645,7 @@ hook_post_check_update (String)
 		https://github.com/Shougo/dpp-ext-installer
 
                                           *dpp-plugin-option-hook_post_update*
-hook_post_update (String)
+hook_post_update (string)
 		It is executed after updated and before
 		|dpp-ext-installer-action-build|.
 		NOTE: The plugin may not be sourced.
@@ -654,7 +654,7 @@ hook_post_update (String)
 		https://github.com/Shougo/dpp-ext-installer
 
                                            *dpp-plugin-option-hook_pre_update*
-hook_pre_update (String)
+hook_pre_update (string)
 		It is executed before updated.
 		NOTE: The plugin may not be sourced.
 		NOTE: To use the feature, you need to install
@@ -662,7 +662,7 @@ hook_pre_update (String)
 		https://github.com/Shougo/dpp-ext-installer
 
                                                *dpp-plugin-option-hook_source*
-hook_source	(String) or (Function)
+hook_source	(string) or (function)
 		It is executed after plugin runtimepath is added and before
 		the plugin script files are sourced.
 		It also works for non lazy plugins.
@@ -672,7 +672,7 @@ hook_source	(String) or (Function)
 		NOTE: |dpp-plugin-option-rtp| must not be empty string.
 
                                                    *dpp-plugin-option-lua_xxx*
-lua_xxx		(String)
+lua_xxx		(string)
 		Lua language string hook instead of Vim script.
 		It is converted to "hook_xxx" key.
 
