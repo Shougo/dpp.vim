@@ -73,8 +73,7 @@ OPTIONS                                                          *dpp-options*
                                                        *dpp-option-extOptions*
 extOptions		(dictionary)
 		It is a dictionary that maps ext names to its options.
-		The options with the name "_" is used as the options for all
-		names.
+		The option with the name "_" is used for all names.
 		See also |dpp-ext-options|.
 
 		Default: {}
@@ -90,7 +89,7 @@ extParams		(dictionary)
 hooksFileMarker		(string)
 		The marker is used in |dpp-plugin-option-hooks_file|.
 
-		Defaults: "{{{,}}}"
+		Default: "{{{,}}}"
 
                                                      *dpp-option-inlineVimrcs*
 inlineVimrcs		(string[])
@@ -100,13 +99,12 @@ inlineVimrcs		(string[])
 		document).  It breaks the parser.
 		NOTE: It also supports ".lua" file for Neovim.
 
-		Defaults: []
+		Default: []
 
                                                   *dpp-option-protocolOptions*
 protocolOptions		(dictionary)
 		It is a dictionary that maps protocol names to its options.
-		The options with the name "_" is used as the options for all
-		names.
+		The option with the name "_" is used for all names.
 		See also |dpp-protocol-options|.
 
 		Default: {}
