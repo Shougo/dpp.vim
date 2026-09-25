@@ -404,7 +404,7 @@ on_ft		(List) or (String)
 
                                                      *dpp-plugin-option-on_if*
 on_if		(String)
-		If it is evaluated and it is non-zero, dpp will call
+		If it evaluates to a non-zero value, dpp will call
 		|dpp#source()|.
 		The default evaluate timings are "BufRead", "BufNewFile",
 		"VimEnter" and "FileType".
@@ -476,7 +476,7 @@ on_source	(List) or (String)
                                                       *dpp-plugin-option-path*
 path		(String)
 		Specify the plugin downloaded path.
-		If it is not absolute path, it is converted to under the
+		If it is not an absolute path, it is converted to under the
 		plugin "base-path".
 		NOTE: It is set by protocol.
 
@@ -514,12 +514,12 @@ rtp		(String)
 		subdirectory.
 		For example: https://github.com/rstacruz/sparkup
 		If it is empty string, dpp will not add the path to
-		'runtimepath'.  It is useful to manage non plugin repostories
+		'runtimepath'.  It is useful to manage non-plugin repositories
 		or already added to 'runtimepath' plugin manually.
 		NOTE: If it is empty string, |dpp-plugin-option-hook_source|
 		and |dpp-plugin-option-hook_post_source| hooks are not called.
 
-		Default: Same of |dpp-plugin-option-path|.
+		Default: Same as |dpp-plugin-option-path|.
 
                                                *dpp-plugin-option-script_type*
 script_type	(String)
