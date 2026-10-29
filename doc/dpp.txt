@@ -277,13 +277,6 @@ augroup		(string)
 		An augroup name that the plugin uses for |VimEnter| or
 		|GUIEnter| autocmd events.
 
-                                               *dpp-plugin-option-denops_wait*
-denops_wait	(bool)
-		If set to v:false, dpp doesn't wait until the denops plugin
-		is loaded.
-
-		NOTE: It is danger option.  The plugin does not work well.
-
                                                    *dpp-plugin-option-depends*
 depends		(list or string)
 		Specify a list of plugins a plugin depends on.
@@ -1136,6 +1129,9 @@ https://github.com/Shougo/dpp-protocol-http
 
 ==============================================================================
 COMPATIBILITY                                              *dpp-compatibility*
+
+2026.10.29
+* Remove "denops_wait" option.
 
 2025.11.29
 * |dpp-plugin-option-path| must be set.
